@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "debug.h"
 
 #include "Mario.h"
@@ -14,9 +14,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
-
+	
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
-
+	
+	if (state == MARIO_STATE_SLIP_RIGHT)
+	{
+		if (vx <= 0) 
+		{
+			SetState(MARIO_STATE_IDLE);  
+		}
+	}
+	if (state == MARIO_STATE_SLIP_LEFT)
+	{
+		if (vx >= 0)
+		{
+			SetState(MARIO_STATE_IDLE);
+		}
+	}
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -32,6 +46,16 @@ void CMario::OnNoCollision(DWORD dt)
 	x += vx * dt;
 	y += vy * dt;
 	isOnPlatform = false;
+}
+int CMario::GetDirection()
+{
+	if (vx > 0)
+	{
+		return 1;
+	}
+	else
+		return 0;
+
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -287,6 +311,11 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_RELEASE_JUMP:
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+		if (vy == 0)
+		{
+			vx = 0;
+		}
+	
 		break;
 
 	case MARIO_STATE_SIT:
@@ -318,7 +347,25 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+	case MARIO_STATE_SLIP_RIGHT:
+		if (isOnPlatform)  
+		{
+			maxVx = MARIO_SLIP_SPEED;  
+			ax = -MARIO_SLIP_DECEL;    
+			nx = 1;                   
+		}
+		break;
+	case MARIO_STATE_SLIP_LEFT:
+		if (isOnPlatform)  
+		{
+			maxVx = -MARIO_SLIP_SPEED; 
+			ax = MARIO_SLIP_DECEL;      
+			nx = 1;                    
+		}
+		break;
+		
 	}
+	
 
 	CGameObject::SetState(state);
 }

@@ -1,4 +1,4 @@
-#include "SampleKeyEventHandler.h"
+﻿#include "SampleKeyEventHandler.h"
 
 #include "debug.h"
 #include "Game.h"
@@ -70,5 +70,9 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
 	else
-		mario->SetState(MARIO_STATE_IDLE);
+	{
+		if (mario->GetDirection() == 1)
+			mario->SetState(MARIO_STATE_SLIP_RIGHT);
+		else
+			mario->SetState(MARIO_STATE_SLIP_LEFT);	}
 }

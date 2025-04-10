@@ -100,13 +100,15 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
-					level = MARIO_LEVEL_SMALL;
+					
+					level = level-1;
 					StartUntouchable();
 				}
 				else
 				{
 					DebugOut(L">>> Mario DIE >>> \n");
 					SetState(MARIO_STATE_DIE);
+				
 				}
 			}
 		}
@@ -247,6 +249,63 @@ int CMario::GetAniIdBig()
 
 	return aniId;
 }
+int CMario::GetAniIdMax()
+{
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_MAX_JUMP_RUN_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_MAX_JUMP_RUN_LEFT;
+		}
+		else
+		{
+			if (nx >= 0)
+				aniId = ID_ANI_MARIO_MAX_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_MAX_JUMP_WALK_LEFT;
+		}
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = ID_ANI_MARIO_SIT_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_SIT_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = ID_ANI_MARIO_MAX_IDLE_RIGHT;
+				else aniId = ID_ANI_MARIO_MAX_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = ID_ANI_MARIO_MAX_BRACE_RIGHT;
+				else if (ax == MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_MAX_RUNNING_RIGHT;
+				else if (ax == MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_MAX_WALKING_RIGHT;
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = ID_ANI_MARIO_MAX_BRACE_LEFT;
+				else if (ax == -MARIO_ACCEL_RUN_X)
+					aniId = ID_ANI_MARIO_MAX_RUNNING_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = ID_ANI_MARIO_MAX_WALKING_LEFT;
+			}
+
+	if (aniId == -1) aniId = ID_ANI_MARIO_MAX_IDLE_RIGHT;
+
+	return aniId;
+}
 
 void CMario::Render()
 {
@@ -259,6 +318,8 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
+	else if (level == MARIO_LEVEL_MAX)
+		aniId = GetAniIdMax();
 
 	animations->Get(aniId)->Render(x, y);
 
@@ -385,6 +446,23 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		{
 			left = x - MARIO_BIG_BBOX_WIDTH/2;
 			top = y - MARIO_BIG_BBOX_HEIGHT/2;
+			right = left + MARIO_BIG_BBOX_WIDTH;
+			bottom = top + MARIO_BIG_BBOX_HEIGHT;
+		}
+	}
+	else if(level == MARIO_LEVEL_MAX)
+	{
+		if (isSitting)
+		{
+			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
+			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
+			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
+			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
+		}
+		else
+		{
+			left = x - MARIO_BIG_BBOX_WIDTH / 2;
+			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
 			right = left + MARIO_BIG_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}

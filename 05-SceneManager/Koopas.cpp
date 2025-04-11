@@ -1,9 +1,13 @@
 ﻿#include "Koopas.h"
 #include "Game.h"
+#include "debug.h"
+#include "Goomba.h"
+#include "Mario.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
+	this->nx = -1;
 	SetState(KOOPAS_STATE_WALKING);
 
 }
@@ -33,7 +37,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
-
+	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -44,12 +48,27 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			SetState(KOOPAS_STATE_WALKING_RIGHT); // Từ trái sang phải
 		else if (state == KOOPAS_STATE_WALKING_RIGHT)
 			SetState(KOOPAS_STATE_WALKING); // Từ phải sang trái
+		else if (state == KOOPAS_STATE_SHELL_MOVING)
+		{
+			if (dynamic_cast<CGoomba*>(e->obj))
+			{
+				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+				
+				goomba->SetState(GOOMBA_STATE_DIE); // Mai rùa tiêu diệt Goomba
+			}
+			else if (e->obj->IsBlocking())
+			{
+				vx = -vx; 
+				nx = -nx; 
+			}
+		}
 	}
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -65,7 +84,16 @@ void CKoopas::Render()
 	else if (state == KOOPAS_STATE_SHELL_MOVING)
 		aniId = ID_ANI_KOOPAS_SHELL_MOVING;
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+
+	LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
+	if (ani == nullptr)
+	{
+		DebugOut(L"[ERROR] Animation ID %d not found!\n", aniId);
+		return; // Thoát nếu animation không tồn tại
+	}
+
+	ani->Render(x, y);
+
 	
 }
 void CKoopas::SetState(int state)
@@ -75,10 +103,11 @@ void CKoopas::SetState(int state)
 	{
 	case KOOPAS_STATE_WALKING:
 		vx = -KOOPAS_WALKING_SPEED;
+		nx=-nx;
 		break;
 	case KOOPAS_STATE_WALKING_RIGHT:
 		vx = KOOPAS_WALKING_SPEED; 
-		nx = 1;
+		nx = -nx;
 		break;
 	case KOOPAS_STATE_SHELL:
 		vx = 0;
@@ -87,7 +116,7 @@ void CKoopas::SetState(int state)
 		 y += (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_SHELL) / 2;
 		break;
 	case KOOPAS_STATE_SHELL_MOVING:
-		vx = (nx > 0) ? 0.2f : -0.2f; // Tốc độ mai rùa khi bị đá
+		vx = (nx > 0) ? 0.2f : -0.2f; 
 		ay = KOOPAS_GRAVITY;
 		break;
 	}

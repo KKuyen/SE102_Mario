@@ -36,6 +36,8 @@
 #define MARIO_STATE_SIT_RELEASE		601
 #define MARIO_STATE_SLIP_RIGHT      700
 #define MARIO_STATE_SLIP_LEFT       701
+#define MARIO_STATE_HOLD 800
+#define MARIO_STATE_HOLD_RELEASE 801
 
 
 #pragma region ANIMATION_ID
@@ -62,6 +64,9 @@
 #define ID_ANI_MARIO_BRACE_LEFT 1001
 
 #define ID_ANI_MARIO_DIE 999
+#define ID_ANI_MARIO_HOLD_RIGHT 1002
+#define ID_ANI_MARIO_HOLD_LEFT 1003
+
 
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
@@ -81,6 +86,8 @@
 
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
+#define ID_ANI_MARIO_SMALL_HOLD_RIGHT 1602
+#define ID_ANI_MARIO_SMALL_HOLD_LEFT 1603
 // MAX MARIO
 #define ID_ANI_MARIO_MAX_IDLE_RIGHT 1700
 #define ID_ANI_MARIO_MAX_IDLE_LEFT 1702
@@ -99,6 +106,8 @@
 
 #define ID_ANI_MARIO_MAX_JUMP_RUN_RIGHT 2200
 #define ID_ANI_MARIO_MAX_JUMP_RUN_LEFT 2201
+#define ID_ANI_MARIO_MAX_HOLD_RIGHT 2202
+#define ID_ANI_MARIO_MAX_HOLD_LEFT 2203
 
 #pragma endregion
 
@@ -136,6 +145,8 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
+	BOOLEAN isHolding; 
+	LPGAMEOBJECT heldObject; 
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -159,6 +170,8 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		isHolding = false; 
+		heldObject = NULL; 
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -179,5 +192,11 @@ public:
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetDirection();
+	BOOLEAN IsHolding() { return isHolding; } 
+	void SetHolding(BOOLEAN holding, LPGAMEOBJECT obj = NULL) 
+	{
+		isHolding = holding;
+		heldObject = obj;
+	}
 
 };

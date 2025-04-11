@@ -13,7 +13,7 @@ CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 }
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_SHELL_MOVING)
+	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_SHELL_MOVING || state == KOOPAS_STATE_HELD)
 	{
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT_SHELL / 2;
@@ -70,6 +70,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+	if (state == KOOPAS_STATE_HELD)
+	{
+		vx = 0;
+		vy = 0;
+		ay = 0;
+		return;
+	}
 
 
 	CGameObject::Update(dt, coObjects);
@@ -81,7 +88,7 @@ void CKoopas::Render()
 	int aniId = ID_ANI_KOOPAS_WALKING;
 	if (state == KOOPAS_STATE_WALKING_RIGHT)
 		aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
-	if (state == KOOPAS_STATE_SHELL)
+	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD|| state == KOOPAS_STATE_FALL)
 		aniId = ID_ANI_KOOPAS_SHELL;
 	else if (state == KOOPAS_STATE_SHELL_MOVING)
 		aniId = ID_ANI_KOOPAS_SHELL_MOVING;
@@ -118,9 +125,25 @@ void CKoopas::SetState(int state)
 		ay = 0;
 		 y += (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_SHELL) / 2;
 		break;
+	case KOOPAS_STATE_HELD:
+		vx = 0;
+		vy = 0;
+		ax = 0;
+		ay = 0;
+		
+		break;
 	case KOOPAS_STATE_SHELL_MOVING:
 		vx = nx * KOOPAS_SHELL_MOVING_SPEED;
 		ay = KOOPAS_GRAVITY;
+		break;
+	case KOOPAS_STATE_FALL:
+		vx = 0;              
+		vy = KOOPAS_FALL_SPEED;
+	
+		
+
+		
+		
 		break;
 	}
 }

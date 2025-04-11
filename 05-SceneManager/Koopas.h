@@ -3,6 +3,7 @@
 #define KOOPAS_GRAVITY 0.002f
 #define KOOPAS_WALKING_SPEED 0.05f
 #define KOOPAS_SHELL_MOVING_SPEED 0.2f
+#define KOOPAS_FALL_SPEED 0.01f
 #define KOOPAS_BBOX_WIDTH 16
 #define KOOPAS_BBOX_HEIGHT 26
 #define KOOPAS_BBOX_HEIGHT_SHELL 16
@@ -11,6 +12,8 @@
 #define KOOPAS_STATE_WALKING_RIGHT 101
 #define KOOPAS_STATE_SHELL 200
 #define KOOPAS_STATE_SHELL_MOVING 300
+#define KOOPAS_STATE_HELD 202
+#define KOOPAS_STATE_FALL 203
 
 
 #define ID_ANI_KOOPAS_WALKING 6000
@@ -27,8 +30,9 @@ protected:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 1; }
+	virtual int IsCollidable() { return state != KOOPAS_STATE_HELD; } // No collisions when held
+	virtual int IsBlocking() { return state == KOOPAS_STATE_SHELL_MOVING; }
+
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);

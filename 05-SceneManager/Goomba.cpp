@@ -39,6 +39,8 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
 	if (dynamic_cast<CKoopas*>(e->obj))
 	{
+		CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+		if(koopas->GetState()==KOOPAS_STATE_SHELL_MOVING|| koopas->GetState() == KOOPAS_STATE_HELD)
 		SetState(GOOMBA_STATE_DIE);
 	
 	}

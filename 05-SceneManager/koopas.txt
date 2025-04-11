@@ -3,6 +3,9 @@
 # WALKING
 61000	0	125	25	156	10     # Koopas walking frame 1
 61001	25	125	47	156	10    # Koopas walking frame 2
+# WALKING RIGHT
+61002 	300	128	320	153	10     # Koopas walking frame 1
+61003	320	128	342	153	10    # Koopas walking frame 2
 # SHELL
 62000	36	10	52	26	10   # Koopas shell idle
 # SHELL MOVING
@@ -14,3 +17,4 @@
 6000	61000	200	61001	200   # Walking animation
 6001	62000	100             # Shell idle animation
 6002	62001	100	62002	100   # Shell moving animation
+6003 	61002 	200 	61003 	200  #animation walking right

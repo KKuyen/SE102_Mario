@@ -40,7 +40,10 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0)
 	{
-		vx = -vx; // Đổi hướng khi va chạm ngang
+		if (state == KOOPAS_STATE_WALKING)
+			SetState(KOOPAS_STATE_WALKING_RIGHT); // Từ trái sang phải
+		else if (state == KOOPAS_STATE_WALKING_RIGHT)
+			SetState(KOOPAS_STATE_WALKING); // Từ phải sang trái
 	}
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -55,6 +58,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CKoopas::Render()
 {
 	int aniId = ID_ANI_KOOPAS_WALKING;
+	if (state == KOOPAS_STATE_WALKING_RIGHT)
+		aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 	if (state == KOOPAS_STATE_SHELL)
 		aniId = ID_ANI_KOOPAS_SHELL;
 	else if (state == KOOPAS_STATE_SHELL_MOVING)
@@ -70,6 +75,10 @@ void CKoopas::SetState(int state)
 	{
 	case KOOPAS_STATE_WALKING:
 		vx = -KOOPAS_WALKING_SPEED;
+		break;
+	case KOOPAS_STATE_WALKING_RIGHT:
+		vx = KOOPAS_WALKING_SPEED; 
+		nx = 1;
 		break;
 	case KOOPAS_STATE_SHELL:
 		vx = 0;

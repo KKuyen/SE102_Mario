@@ -38,6 +38,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
+		
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -52,6 +53,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		{
 			if (dynamic_cast<CGoomba*>(e->obj))
 			{
+			
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 				
 				goomba->SetState(GOOMBA_STATE_DIE); // Mai rùa tiêu diệt Goomba
@@ -93,6 +95,7 @@ void CKoopas::Render()
 	}
 
 	ani->Render(x, y);
+	RenderBoundingBox();
 
 	
 }
@@ -116,7 +119,7 @@ void CKoopas::SetState(int state)
 		 y += (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_SHELL) / 2;
 		break;
 	case KOOPAS_STATE_SHELL_MOVING:
-		vx = (nx > 0) ? 0.2f : -0.2f; 
+		vx = nx * KOOPAS_SHELL_MOVING_SPEED;
 		ay = KOOPAS_GRAVITY;
 		break;
 	}

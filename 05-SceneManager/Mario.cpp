@@ -88,40 +88,17 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
+		
 		if (koopas->GetState() != KOOPAS_STATE_SHELL)
-		{
 			koopas->SetState(KOOPAS_STATE_SHELL);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
-		}
+		
 	}
-	else if(e->nx != 0) // hit by Goomba
+	else 
 	{
 		if (untouchable == 0)
 		{
-			if (koopas->GetState() == KOOPAS_STATE_WALKING)
-			{
-				
-					if (level > MARIO_LEVEL_SMALL)
-					{
-
-						level = level - 1;
-						StartUntouchable();
-					}
-					else
-					{
-						DebugOut(L">>> Mario DIE >>> \n");
-						SetState(MARIO_STATE_DIE);
-
-					}
-				
-			}
-			else if (koopas->GetState() == KOOPAS_STATE_SHELL)
-			{
-				
-				koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
-				koopas->nx = (e->nx > 0) ? -1 : 1; 
-			}
-			else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
+			if (koopas->GetState() != KOOPAS_STATE_SHELL)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
@@ -136,7 +113,11 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 
 				}
 			}
-			
+			else
+			{
+				koopas->nx = this->nx;
+				koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+			}
 		}
 	}
 }
@@ -477,7 +458,7 @@ void CMario::SetState(int state)
 		{
 			maxVx = MARIO_SLIP_SPEED;  
 			ax = -MARIO_SLIP_DECEL;    
-			nx = 1;                   
+			                  
 		}
 		break;
 	case MARIO_STATE_SLIP_LEFT:
@@ -485,7 +466,7 @@ void CMario::SetState(int state)
 		{
 			maxVx = -MARIO_SLIP_SPEED; 
 			ax = MARIO_SLIP_DECEL;      
-			nx = 1;                    
+			                  
 		}
 		break;
 		

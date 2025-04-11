@@ -1,4 +1,5 @@
 #include "Goomba.h"
+#include "Koopas.h"
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
@@ -36,14 +37,22 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
-
-	if (e->ny != 0 )
+	if (dynamic_cast<CKoopas*>(e->obj))
 	{
-		vy = 0;
+		SetState(GOOMBA_STATE_DIE);
+	
 	}
-	else if (e->nx != 0)
+	else
 	{
-		vx = -vx;
+
+		if (e->ny != 0)
+		{
+			vy = 0;
+		}
+		else if (e->nx != 0)
+		{
+			vx = -vx;
+		}
 	}
 }
 

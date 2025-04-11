@@ -409,6 +409,7 @@ void CMario::SetState(int state)
 		ax = 0;
 		break;
 	case MARIO_STATE_SLIP_RIGHT:
+		
 		if (isOnPlatform)  
 		{
 			maxVx = MARIO_SLIP_SPEED;  

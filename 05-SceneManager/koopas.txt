@@ -7,10 +7,11 @@
 61002 	300	128	320	153	10     # Koopas walking frame 1
 61003	320	128	342	153	10    # Koopas walking frame 2
 # SHELL
-62000	36	10	52	26	10   # Koopas shell idle
+62000	127	48	143	61	30   # Koopas shell idle
 # SHELL MOVING
-62001	54	10	70	26	10   # Koopas shell moving frame 1
-62002	72	10	88	26	10   # Koopas shell moving frame 2
+62000	127	48	143	61	30   # Koopas shell idle
+62001	144	48	160	61	30   # Koopas shell moving frame 1
+62002	160	48	191	61	30   # Koopas shell moving frame 2
 
 # ani_id sprite1_id time1 sprite2_id time2 ...
 [ANIMATIONS]

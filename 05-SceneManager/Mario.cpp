@@ -461,7 +461,7 @@ void CMario::SetState(int state)
 		{
 			maxVx = -MARIO_SLIP_SPEED; 
 			ax = MARIO_SLIP_DECEL;      
-			nx = -1;                    
+			nx = 1;                    
 		}
 		break;
 		

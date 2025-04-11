@@ -66,7 +66,7 @@ void CKoopas::Render()
 		aniId = ID_ANI_KOOPAS_SHELL_MOVING;
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	
 }
 void CKoopas::SetState(int state)
 {
@@ -84,6 +84,7 @@ void CKoopas::SetState(int state)
 		vx = 0;
 		vy = 0;
 		ay = 0;
+		 y += (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_SHELL) / 2;
 		break;
 	case KOOPAS_STATE_SHELL_MOVING:
 		vx = (nx > 0) ? 0.2f : -0.2f; // Tốc độ mai rùa khi bị đá

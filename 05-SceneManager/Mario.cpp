@@ -10,6 +10,7 @@
 
 #include "Collision.h"
 #include "Koopas.h"
+#include "WIngedGoomba.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -100,7 +101,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKooPas(e);
+	else if (dynamic_cast<CWingedGoomba*>(e->obj))
+		OnCollisionWithWingedGoomba(e);
+
+	
 }
+
 void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 {
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
@@ -196,6 +202,51 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 					DebugOut(L">>> Mario DIE >>> \n");
 					SetState(MARIO_STATE_DIE);
 				
+				}
+			}
+		}
+	}
+}
+void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
+{
+	CWingedGoomba* goomba = dynamic_cast<CWingedGoomba*>(e->obj);
+
+	// jump on top >> kill Goomba and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		{
+
+			goomba->SetState(GOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else if (isHolding && heldObject != NULL)
+	{
+		goomba->SetState(GOOMBA_STATE_DIE);
+		CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+		SetHolding(false, nullptr);
+		koopas->SetState(KOOPAS_STATE_FALL);
+
+
+	}
+	else // hit by Goomba
+	{
+		if (untouchable == 0)
+		{
+			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+
+					level = level - 1;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-#include "WingedGoomba.h"
+﻿#include "WingedGoomba.h"
 #include "Koopas.h"
 
 CWingedGoomba::CWingedGoomba(float x, float y) :CGameObject(x, y)
@@ -6,7 +6,8 @@ CWingedGoomba::CWingedGoomba(float x, float y) :CGameObject(x, y)
 	this->ax = 0;
 	this->ay = WINGED_GOOMBA_GRAVITY;
 	die_start = -1;
-	SetState(WINGED_GOOMBA_STATE_WALKING);
+	jump_start = GetTickCount64();
+	SetState(WINGED_GOOMBA_STATE_FLYING);
 }
 
 void CWingedGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -50,8 +51,14 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny != 0)
 		{
 			vy = 0;
+			if (e->ny < 0 && isJumping)
+			{
+				isJumping = false; 
+				jump_start = GetTickCount64(); 
+				vx = -WINGED_GOOMBA_WALKING_SPEED; // Tiếp tục đi bộ
+			}
 		}
-		else if (e->nx != 0)
+		else if (e->nx != 0 && !isJumping)
 		{
 			vx = -vx;
 		}
@@ -67,6 +74,13 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		isDeleted = true;
 		return;
+	}
+	// Kiểm tra thời gian để nhảy trong trạng thái fly
+	if (state == WINGED_GOOMBA_STATE_FLYING && !isJumping && GetTickCount64() - jump_start > WINGED_GOOMBA_JUMP_INTERVAL)
+	{
+		isJumping = true;
+		vy = -WINGED_GOOMBA_JUMP_SPEED_Y; // Nhảy lên
+		
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -100,5 +114,13 @@ void CWingedGoomba::SetState(int state)
 	case WINGED_GOOMBA_STATE_WALKING:
 		vx = -WINGED_GOOMBA_WALKING_SPEED;
 		break;
+	case WINGED_GOOMBA_STATE_FLYING:
+		vx = -WINGED_GOOMBA_WALKING_SPEED;
+		ay = WINGED_GOOMBA_GRAVITY;
+		isJumping = false;
+		jump_start = GetTickCount64();
+		break;
+	
 	}
+
 }

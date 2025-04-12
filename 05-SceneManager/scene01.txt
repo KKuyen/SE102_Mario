@@ -5,10 +5,13 @@ brick.txt
 coin.txt
 goomba.txt
 cloud.txt
+
 background.txt
 colorBox.txt
 chimney.txt
 giftBox.txt
+koopas.txt
+
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -352,6 +355,7 @@ giftBox.txt
 #Platform
 5	0	184	16	16	39	20001	20002	20003
 
+
 5	624	168	16	16	29	20001	20002	20003
 5	624	184	16	16	29	20004	20005	20006
 
@@ -360,4 +364,8 @@ giftBox.txt
 5	1664	184	16	16	36	20001	20002	20003
 5	2256	184	16	16	35	20001	20002	20003
 
- 
+
+
+# KOOPAS 
+3	350	10
+

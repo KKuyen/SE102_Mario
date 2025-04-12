@@ -17,6 +17,7 @@ height	240
 0	textures\mario.png
 10	textures\enemies.png
 20	textures\misc.png
+
 30	textures\sprite01.png
 40	textures\sprite02.png
 50	textures\sprite03.png
@@ -30,3 +31,4 @@ height	240
 130	textures\sprite10.png
 140	textures\sprite11.png
 150	textures\sprite12.png
+

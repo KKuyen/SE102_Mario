@@ -9,7 +9,11 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
+#include "Brick.h"
 #include "Background.h"
+
+#include "Koopas.h" 
+
 #include "SampleKeyEventHandler.h"
 #include "ColorBox.h"
 #include "Chimney.h"
@@ -124,7 +128,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrick(x, y, spriteId); break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+
 	case OBJECT_TYPE_GIFTBOX: obj = new CGiftBox(x, y); break;
+
+	case OBJECT_TYPE_KOOPAS:
+		obj = new CKoopas(x, y);
+		break;
+
 
 	case OBJECT_TYPE_BACKGROUND: {
 		float width = (float)atof(tokens[3].c_str());

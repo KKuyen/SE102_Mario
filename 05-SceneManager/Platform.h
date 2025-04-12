@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
+#include "Koopas.h"
 
 // 
 // The most popular type of object in Mario! 
@@ -30,6 +31,12 @@ public:
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();
+	virtual int IsBlocking(LPGAMEOBJECT other) {
+		CKoopas* koopas = dynamic_cast<CKoopas*>(other);
+		if (koopas && koopas->GetState() == KOOPAS_STATE_FALL)
+			return 0; 
+		return 1;
+	}
 
 	int IsDirectionColliable(float nx, float ny);
 };

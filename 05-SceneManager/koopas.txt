@@ -1,0 +1,25 @@
+# id left top right bottom texture_id
+[SPRITES]
+# WALKING
+31000	0	125	25	156	10     # Koopas walking frame 1
+31001	25	125	47	156	10    # Koopas walking frame 2
+# WALKING RIGHT
+31002 	300	128	320	153	10     # Koopas walking frame 1
+31003	320	128	342	153	10    # Koopas walking frame 2
+# SHELL
+32000	127	48	143	61	70   # Koopas shell idle
+# SHELL MOVING
+32001	127	48	143	61	70   # Koopas shell idle
+32002	144	48	160	61	70   # Koopas shell moving frame 1
+32003	160	48	175	61	70   # Koopas shell moving frame 2
+32004	175	48	191	61	70   # Koopas shell idle
+# SHELL FALL
+33000	143	64	159	79	70   # Koopas shell idle
+
+# ani_id sprite1_id time1 sprite2_id time2 ...
+[ANIMATIONS]
+6000	31000	200	31001	200   # Walking animation
+6001	32000	100             # Shell idle animation
+6002	32001	100	32002	100	32003	100	32004	100  # Shell moving animation
+6003 	31002 	200 	31003 	200  #animation walking right
+6004	33000	100             # Shell fall animation

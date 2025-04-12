@@ -12,11 +12,12 @@ protected:
 	float cellWidth;
 	float cellHeight;
 	int spriteIdBegin, spriteIdMiddle, spriteIdEnd;
+	int isVertical;	// 1: vertical, 0: horizontal
 
 public:
 	CColorBox(float x, float y,
 		float cell_width, float cell_height, int length,
-		int sprite_id_begin, int sprite_id_middle, int sprite_id_end) :CGameObject(x, y)
+		int sprite_id_begin, int sprite_id_middle, int sprite_id_end,int isVertical) :CGameObject(x, y)
 	{
 		this->length = length;
 		this->cellWidth = cell_width;
@@ -24,13 +25,20 @@ public:
 		this->spriteIdBegin = sprite_id_begin;
 		this->spriteIdMiddle = sprite_id_middle;
 		this->spriteIdEnd = sprite_id_end;
+		this->isVertical = isVertical;
 	}
 
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
+ 
 	int IsDirectionColliable(float nx, float ny);
+	int IsBlocking() {
+		if (this->spriteIdBegin % 10 == 1 && this->spriteIdMiddle % 10 == 2 && this->spriteIdEnd % 10 == 3)
+			return 1;
+		return 0;
+	}
 };
 
  

@@ -13,6 +13,7 @@
 #include "SampleKeyEventHandler.h"
 #include "ColorBox.h"
 #include "Chimney.h"
+#include "GiftBox.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -123,6 +124,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrick(x, y, spriteId); break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_GIFTBOX: obj = new CGiftBox(x, y); break;
+
 	case OBJECT_TYPE_BACKGROUND: {
 		float width = (float)atof(tokens[3].c_str());
 		float height = (float)atof(tokens[4].c_str());

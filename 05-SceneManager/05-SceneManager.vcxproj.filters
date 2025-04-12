@@ -84,6 +84,9 @@
     <ClCompile Include="Chimney.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GiftBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -164,6 +167,9 @@
     <ClInclude Include="Chimney.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GiftBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="brick.txt" />
@@ -178,5 +184,6 @@
     <Text Include="background.txt" />
     <Text Include="colorBox.txt" />
     <Text Include="chimney.txt" />
+    <Text Include="giftBox.txt" />
   </ItemGroup>
 </Project>

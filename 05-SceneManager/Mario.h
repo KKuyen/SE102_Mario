@@ -156,7 +156,7 @@ class CMario : public CGameObject
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdMax();
-
+	ULONGLONG hold_start;
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -197,6 +197,12 @@ public:
 	{
 		isHolding = holding;
 		heldObject = obj;
+		if (isHolding)
+			StartHoldTimer(); 
+		else
+			ResetHoldTimer(); 
 	}
+	void StartHoldTimer() { hold_start = GetTickCount64(); } 
+	void ResetHoldTimer() { hold_start = 0; } 
 
 };

@@ -45,6 +45,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		GetPosition(mx, my);
 		
 		heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH/2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
+		// Kiểm tra thời gian cầm Koopas
+		CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+		if (koopas && hold_start != 0 && GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
+		{
+		
+			koopas->SetVy(KOOPAS_JUMP_SPEED);
+			koopas->ay = KOOPAS_GRAVITY;    
+			koopas->SetState(KOOPAS_STATE_WALKING);
+			SetHolding(false, nullptr); 
+		}
 	}
 
 	isOnPlatform = false; 
@@ -98,7 +108,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 	if (e->ny < 0)
 	{
 		
-		if (koopas->GetState() != KOOPAS_STATE_SHELL)
+		if (koopas->GetState() != KOOPAS_STATE_SHELL&&koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
 			koopas->SetState(KOOPAS_STATE_SHELL);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		

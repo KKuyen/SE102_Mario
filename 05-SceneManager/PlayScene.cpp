@@ -9,9 +9,9 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Platform.h"
-
+#include "Background.h"
 #include "SampleKeyEventHandler.h"
-
+#include "ColorBox.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -119,7 +119,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-
+	case OBJECT_TYPE_BACKGROUND: {
+		float width = (float)atof(tokens[3].c_str());
+		float height = (float)atof(tokens[4].c_str());
+		float spriteId = (float)atof(tokens[5].c_str());
+		obj = new CBackground(x, y,width, height, spriteId); break;
+	}
+	case OBJECT_TYPE_COLORBOX: {
+		float width = (float)atof(tokens[3].c_str());
+		float height = (float)atof(tokens[4].c_str());
+		float spriteId = (float)atof(tokens[5].c_str());
+		obj = new CColorBox(x, y, width, height, spriteId); break;
+	}
 	case OBJECT_TYPE_PLATFORM:
 	{
 

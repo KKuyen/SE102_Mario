@@ -1,5 +1,5 @@
 [SETTINGS]
-start	5
+start	1
 width	320
 height	240
 
@@ -17,3 +17,16 @@ height	240
 0	textures\mario.png
 10	textures\enemies.png
 20	textures\misc.png
+30	textures\sprite01.png
+40	textures\sprite02.png
+50	textures\sprite03.png
+60	textures\sprite04.png
+70	textures\sprite05.png
+80	textures\sprite06.png
+90	textures\sprite07.png
+100	textures\sprite08.png
+110	textures\mariobros3.png
+120	textures\sprite09.png
+130	textures\sprite10.png
+140	textures\sprite11.png
+150	textures\sprite12.png

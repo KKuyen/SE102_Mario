@@ -115,9 +115,23 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 	if (e->ny < 0)
 	{
 		
-		if (koopas->GetState() != KOOPAS_STATE_SHELL&&koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+
+
+		if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+		{
 			koopas->SetState(KOOPAS_STATE_SHELL);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopas->GetState() == KOOPAS_STATE_SHELL)
+		{
+			koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+			koopas->SetVy(KOOPAS_JUMP_SPEED/2);
+			if(vx>0)
+				koopas->nx = 1;
+			else
+				koopas->nx = -1;
+		}
+			
 		
 	}
 	else 

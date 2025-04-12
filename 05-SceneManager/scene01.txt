@@ -5,7 +5,7 @@ brick.txt
 coin.txt
 goomba.txt
 cloud.txt
-
+wingedgoomba.txt
 background.txt
 colorBox.txt
 chimney.txt
@@ -349,8 +349,7 @@ koopas.txt
 9	704	121
 9	1472	137
 
-#Goomba
-2	300	10
+
 
 #Platform
 5	0	184	16	16	39	20001	20002	20003
@@ -368,4 +367,5 @@ koopas.txt
 
 # KOOPAS 
 3	350	10
-
+# WINGEDGOOMBA
+10	320	10

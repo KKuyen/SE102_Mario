@@ -13,6 +13,7 @@
 #include "Background.h"
 
 #include "Koopas.h" 
+#include "WingedGoomba.h"
 
 #include "SampleKeyEventHandler.h"
 #include "ColorBox.h"
@@ -123,6 +124,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_WINGED_GOOMBA: {
+		obj = new CWingedGoomba(x, y);
+		break;
+
+	}
 	case OBJECT_TYPE_BRICK: {
 		float spriteId = (float)atof(tokens[3].c_str());
 		obj = new CBrick(x, y, spriteId); break;
@@ -158,8 +164,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			isVertical
 		);
 
-		break;
+		break; 
 	}
+	
 	case OBJECT_TYPE_CHIMNEY: {
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());

@@ -241,6 +241,7 @@ int CMario::GetAniIdSmall()
 					aniId = ID_ANI_MARIO_SIT_LEFT;
 			}
 			else
+
 				if (vx == 0)
 				{
 					if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
@@ -248,21 +249,37 @@ int CMario::GetAniIdSmall()
 				}
 				else if (vx > 0)
 				{
-					if (ax < 0)
-						aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
-					else if (ax == MARIO_ACCEL_RUN_X)
-						aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
-					else if (ax == MARIO_ACCEL_WALK_X)
+					if (state != MARIO_STATE_SLIP_RIGHT)
+					{
+						if (ax < 0)
+							aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
+						else if (ax == MARIO_ACCEL_RUN_X)
+							aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+						else if (ax == MARIO_ACCEL_WALK_X)
+							aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
+					}
+					else
+					{
 						aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
+					}
+				
 				}
 				else // vx < 0
 				{
-					if (ax > 0)
-						aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
-					else if (ax == -MARIO_ACCEL_RUN_X)
-						aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
-					else if (ax == -MARIO_ACCEL_WALK_X)
+
+					if (state != MARIO_STATE_SLIP_LEFT)
+					{
+						if (ax > 0)
+							aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
+						else if (ax == -MARIO_ACCEL_RUN_X)
+							aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
+						else if (ax == -MARIO_ACCEL_WALK_X)
+							aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
+					}
+					else
+					{
 						aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
+					}
 				}
 	}
 	if (aniId == -1) aniId = ID_ANI_MARIO_SMALL_IDLE_RIGHT;
@@ -320,21 +337,37 @@ int CMario::GetAniIdBig()
 				}
 				else if (vx > 0)
 				{
-					if (ax < 0)
-						aniId = ID_ANI_MARIO_BRACE_RIGHT;
-					else if (ax == MARIO_ACCEL_RUN_X)
-						aniId = ID_ANI_MARIO_RUNNING_RIGHT;
-					else if (ax == MARIO_ACCEL_WALK_X)
+					if (state != MARIO_STATE_SLIP_RIGHT)
+					{
+						if (ax < 0)
+							aniId = ID_ANI_MARIO_BRACE_RIGHT;
+						else if (ax == MARIO_ACCEL_RUN_X)
+							aniId = ID_ANI_MARIO_RUNNING_RIGHT;
+						else if (ax == MARIO_ACCEL_WALK_X)
+							aniId = ID_ANI_MARIO_WALKING_RIGHT;
+					}
+					else
+					{
 						aniId = ID_ANI_MARIO_WALKING_RIGHT;
+					}
+				
 				}
 				else // vx < 0
 				{
-					if (ax > 0)
-						aniId = ID_ANI_MARIO_BRACE_LEFT;
-					else if (ax == -MARIO_ACCEL_RUN_X)
-						aniId = ID_ANI_MARIO_RUNNING_LEFT;
-					else if (ax == -MARIO_ACCEL_WALK_X)
+
+					if (state != MARIO_STATE_SLIP_LEFT)
+					{
+						if (ax > 0)
+							aniId = ID_ANI_MARIO_BRACE_LEFT;
+						else if (ax == -MARIO_ACCEL_RUN_X)
+							aniId = ID_ANI_MARIO_RUNNING_LEFT;
+						else if (ax == -MARIO_ACCEL_WALK_X)
+							aniId = ID_ANI_MARIO_WALKING_LEFT;
+					}
+					else
+					{
 						aniId = ID_ANI_MARIO_WALKING_LEFT;
+					}
 				}
 
 		if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
@@ -386,21 +419,38 @@ int CMario::GetAniIdMax()
 				}
 				else if (vx > 0)
 				{
-					if (ax < 0)
-						aniId = ID_ANI_MARIO_MAX_BRACE_RIGHT;
-					else if (ax == MARIO_ACCEL_RUN_X)
-						aniId = ID_ANI_MARIO_MAX_RUNNING_RIGHT;
-					else if (ax == MARIO_ACCEL_WALK_X)
+					if (state != MARIO_STATE_SLIP_RIGHT)
+					{
+						if (ax < 0)
+							aniId = ID_ANI_MARIO_MAX_BRACE_RIGHT;
+						else if (ax == MARIO_ACCEL_RUN_X)
+							aniId = ID_ANI_MARIO_MAX_RUNNING_RIGHT;
+						else if (ax == MARIO_ACCEL_WALK_X)
+							aniId = ID_ANI_MARIO_MAX_WALKING_RIGHT;
+					}
+					else
+					{
 						aniId = ID_ANI_MARIO_MAX_WALKING_RIGHT;
+					}
+				
 				}
 				else // vx < 0
 				{
-					if (ax > 0)
-						aniId = ID_ANI_MARIO_MAX_BRACE_LEFT;
-					else if (ax == -MARIO_ACCEL_RUN_X)
-						aniId = ID_ANI_MARIO_MAX_RUNNING_LEFT;
-					else if (ax == -MARIO_ACCEL_WALK_X)
+
+					if (state != MARIO_STATE_SLIP_LEFT)
+					{
+						if (ax > 0)
+							aniId = ID_ANI_MARIO_MAX_BRACE_LEFT;
+						else if (ax == -MARIO_ACCEL_RUN_X)
+							aniId = ID_ANI_MARIO_MAX_RUNNING_LEFT;
+						else if (ax == -MARIO_ACCEL_WALK_X)
+							aniId = ID_ANI_MARIO_MAX_WALKING_LEFT;
+					}
+					else
+					{
 						aniId = ID_ANI_MARIO_MAX_WALKING_LEFT;
+					}
+
 				}
 	}
 	if (aniId == -1) aniId = ID_ANI_MARIO_MAX_IDLE_RIGHT;

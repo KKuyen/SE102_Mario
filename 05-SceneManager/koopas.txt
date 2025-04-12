@@ -13,7 +13,8 @@
 62002	144	48	160	61	30   # Koopas shell moving frame 1
 62003	160	48	175	61	30   # Koopas shell moving frame 2
 62004	175	48	191	61	30   # Koopas shell idle
-
+# SHELL FALL
+63000	143	64	159	79	30   # Koopas shell idle
 
 # ani_id sprite1_id time1 sprite2_id time2 ...
 [ANIMATIONS]
@@ -21,3 +22,4 @@
 6001	62000	100             # Shell idle animation
 6002	62001	100	62002	100	62003	100	62004	100  # Shell moving animation
 6003 	61002 	200 	61003 	200  #animation walking right
+6004	63000	100             # Shell fall animation

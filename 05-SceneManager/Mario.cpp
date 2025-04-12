@@ -107,6 +107,8 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
+			if (koopas->GetState() == KOOPAS_STATE_FALL)
+				return;
 			if (koopas->GetState() != KOOPAS_STATE_SHELL&& koopas->GetState() != KOOPAS_STATE_HELD)
 			{
 				if (level > MARIO_LEVEL_SMALL)
@@ -124,6 +126,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 			}
 			else
 			{
+				
 				CGame* game = CGame::GetInstance();
 				if (game->IsKeyDown(DIK_A)) // Run key
 				{

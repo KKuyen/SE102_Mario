@@ -40,7 +40,11 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
-		
+	if (state == KOOPAS_STATE_FALL &&
+		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+	{
+		return;
+	}
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -79,53 +83,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		ay = 0;
 		return;
 	}
-	// Kiểm tra rìa mặt phẳng
-	if (state == KOOPAS_STATE_WALKING || state == KOOPAS_STATE_WALKING_RIGHT)
-	{
-		bool isOnPlatform = false;
-		float platformLeft, platformRight;
 
-		// Tìm đối tượng mà Koopas đang đứng
-		for (LPGAMEOBJECT obj : *coObjects)
-		{
-			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBrick*>(obj))
-			{
-				float l, t, r, b;
-				obj->GetBoundingBox(l, t, r, b);
-
-
-				float koopasLeft, koopasTop, koopasRight, koopasBottom;
-				GetBoundingBox(koopasLeft, koopasTop, koopasRight, koopasBottom);
-				// Kiểm tra xem Koopas có đang đứng trên đối tượng này không
-				if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
-					koopasLeft <= r && koopasRight >= l)
-				{
-					isOnPlatform = true;
-					platformLeft = l;
-					platformRight = r;
-					break;
-				}
-			}
-		}
-
-		// Nếu đang trên mặt phẳng, kiểm tra rìa
-		if (isOnPlatform)
-		{
-			float nextX = x + vx * dt; // Vị trí tiếp theo của Koopas
-
-			if (state == KOOPAS_STATE_WALKING && nextX <= platformLeft + KOOPAS_BBOX_WIDTH / 2)
-			{
-				// Gặp rìa trái, quay sang phải
-				SetState(KOOPAS_STATE_WALKING_RIGHT);
-			}
-			else if (state == KOOPAS_STATE_WALKING_RIGHT && nextX >= platformRight - KOOPAS_BBOX_WIDTH / 2)
-			{
-				// Gặp rìa phải, quay sang trái
-				SetState(KOOPAS_STATE_WALKING);
-			}
-		}
-	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -136,10 +94,13 @@ void CKoopas::Render()
 	int aniId = ID_ANI_KOOPAS_WALKING;
 	if (state == KOOPAS_STATE_WALKING_RIGHT)
 		aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
-	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD|| state == KOOPAS_STATE_FALL)
+	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
 		aniId = ID_ANI_KOOPAS_SHELL;
 	else if (state == KOOPAS_STATE_SHELL_MOVING)
 		aniId = ID_ANI_KOOPAS_SHELL_MOVING;
+	else if (state == KOOPAS_STATE_FALL)
+		aniId = ID_ANI_KOOPAS_FALL;
+
 
 
 	LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
@@ -186,7 +147,10 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_FALL:
 		vx = 0;              
-		vy = KOOPAS_FALL_SPEED;
+		vx = 0;
+		vy = KOOPAS_FALL_SPEED; // Nảy lên
+		ay = KOOPAS_GRAVITY; // Trọng lực sẽ kéo xuống
+		
 	
 		
 

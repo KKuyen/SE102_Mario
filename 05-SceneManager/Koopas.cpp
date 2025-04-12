@@ -3,6 +3,8 @@
 #include "debug.h"
 #include "Goomba.h"
 #include "Mario.h"
+#include "Platform.h"
+#include "Brick.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -77,7 +79,53 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		ay = 0;
 		return;
 	}
+	// Kiểm tra rìa mặt phẳng
+	if (state == KOOPAS_STATE_WALKING || state == KOOPAS_STATE_WALKING_RIGHT)
+	{
+		bool isOnPlatform = false;
+		float platformLeft, platformRight;
 
+		// Tìm đối tượng mà Koopas đang đứng
+		for (LPGAMEOBJECT obj : *coObjects)
+		{
+			// Truyền vào các loại đối tượng
+			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBrick*>(obj))
+			{
+				float l, t, r, b;
+				obj->GetBoundingBox(l, t, r, b);
+
+
+				float koopasLeft, koopasTop, koopasRight, koopasBottom;
+				GetBoundingBox(koopasLeft, koopasTop, koopasRight, koopasBottom);
+				// Kiểm tra xem Koopas có đang đứng trên đối tượng này không
+				if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
+					koopasLeft <= r && koopasRight >= l)
+				{
+					isOnPlatform = true;
+					platformLeft = l;
+					platformRight = r;
+					break;
+				}
+			}
+		}
+
+		// Nếu đang trên mặt phẳng, kiểm tra rìa
+		if (isOnPlatform)
+		{
+			float nextX = x + vx * dt; // Vị trí tiếp theo của Koopas
+
+			if (state == KOOPAS_STATE_WALKING && nextX <= platformLeft + KOOPAS_BBOX_WIDTH / 2)
+			{
+				// Gặp rìa trái, quay sang phải
+				SetState(KOOPAS_STATE_WALKING_RIGHT);
+			}
+			else if (state == KOOPAS_STATE_WALKING_RIGHT && nextX >= platformRight - KOOPAS_BBOX_WIDTH / 2)
+			{
+				// Gặp rìa phải, quay sang trái
+				SetState(KOOPAS_STATE_WALKING);
+			}
+		}
+	}
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

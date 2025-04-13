@@ -51,8 +51,20 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
 	case DIK_A: 
+		if(mario->isOnPlatform)
+		mario->StopRunning();
 		mario->SetState(MARIO_STATE_HOLD_RELEASE);
 		break;
+	case DIK_RIGHT:
+		if (mario->isOnPlatform)
+		mario->StopRunning();
+		break;
+	case DIK_LEFT:
+		if (mario->isOnPlatform)
+		mario->StopRunning();
+		break;
+
+
 	}
 }
 
@@ -66,13 +78,26 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	}	
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
+		mario->maxVx = MARIO_RUNNING_SPEED;
+		mario->ax = MARIO_ACCEL_RUN_X;
+		if(mario->isFlying ==true)
+		/*mario->ay = MARIO_GRAVITY_FLY;*/
+		mario->nx = 1;
 		if (game->IsKeyDown(DIK_A))
+		{
+
+			
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+		}
 		else
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
+		mario->maxVx = -MARIO_RUNNING_SPEED;
+		mario->ax = -MARIO_ACCEL_RUN_X;
+		mario->nx = 1;
+		
 		if (game->IsKeyDown(DIK_A))
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		else

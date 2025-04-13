@@ -16,8 +16,11 @@
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
+#define MARIO_JUMP_FLY_SPEED_Y 0.75f
+#define MARIO_FLY_ACTIVATION_TIME 1500
 
 #define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY_FLY		0.0008f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -66,6 +69,8 @@
 #define ID_ANI_MARIO_DIE 999
 #define ID_ANI_MARIO_HOLD_RIGHT 1002
 #define ID_ANI_MARIO_HOLD_LEFT 1003
+#define ID_ANI_MARIO_HOLD_IDLE_RIGHT 1004
+#define ID_ANI_MARIO_HOLD_IDLE_LEFT 1005
 
 
 // SMALL MARIO
@@ -88,6 +93,8 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 #define ID_ANI_MARIO_SMALL_HOLD_RIGHT 1602
 #define ID_ANI_MARIO_SMALL_HOLD_LEFT 1603
+#define ID_ANI_MARIO_SMALL_HOLD_IDLE_RIGHT 1604
+#define ID_ANI_MARIO_SMALL_HOLD_IDLE_LEFT 1605
 // MAX MARIO
 #define ID_ANI_MARIO_MAX_IDLE_RIGHT 1700
 #define ID_ANI_MARIO_MAX_IDLE_LEFT 1702
@@ -110,6 +117,12 @@
 #define ID_ANI_MARIO_MAX_HOLD_LEFT 2203
 #define ID_ANI_MARIO_MAX_SIT_RIGHT 2301
 #define ID_ANI_MARIO_MAX_SIT_LEFT 2302
+#define ID_ANI_MARIO_MAX_HOLD_IDLE_RIGHT 2204
+#define ID_ANI_MARIO_MAX_HOLD_IDLE_LEFT 2205
+#define ID_ANI_MARIO_MAX_FLYING_RUNNING_RIGHT 3001 
+#define ID_ANI_MARIO_MAX_FLYING_RUNNING_LEFT 3002
+#define ID_ANI_MARIO_MAX_FLYING_RIGHT 3003 
+#define ID_ANI_MARIO_MAX_FLYING_LEFT 3004
 
 #pragma endregion
 
@@ -143,17 +156,18 @@
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
-	float maxVx;
-	float ax;				// acceleration on x 
-	float ay;				// acceleration on y 
+	
+
 
 	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
-	BOOLEAN isOnPlatform;
+
 	int coin; 
 	BOOLEAN isHolding; 
 	LPGAMEOBJECT heldObject; 
+	
+	bool beforeLand;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -166,6 +180,12 @@ class CMario : public CGameObject
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 public:
+	BOOLEAN isOnPlatform;
+	bool isFlying;
+	float ax;				// acceleration on x 
+	float ay;				// acceleration on y 
+	float maxVx;
+	ULONGLONG run_start;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -181,6 +201,9 @@ public:
 		isHolding = false; 
 		heldObject = NULL; 
 		hold_start = 0;
+		isFlying = false; 
+		run_start = 0;
+		beforeLand = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -213,5 +236,13 @@ public:
 	}
 	void StartHoldTimer() { hold_start = GetTickCount64(); } 
 	void ResetHoldTimer() { hold_start = 0; } 
+	void StartRunning() { 
+		if(run_start==0)
+		run_start = GetTickCount64(); }
+	void StopRunning() { run_start = 0; isFlying = false; }
+	bool IsFlying() { return isFlying; }
+	int getLevel() {
+		return level;
+	}
 
 };

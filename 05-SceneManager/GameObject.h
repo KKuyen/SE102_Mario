@@ -24,16 +24,19 @@ protected:
 	float vx;
 	float vy;
 
-	int nx;	 
+
 
 	int state;
 
 	bool isDeleted; 
 
 public: 
+	int nx;
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void SetVy(float vy) { this->vy = vy; }
+	void SetVx(float vx) { this->vx = vx; }
+	float GetVx() { return vx; }
 	void SetY(float y) { this->y = y; }	
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }

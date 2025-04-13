@@ -8,7 +8,7 @@
 #define KOOPAS_FALL_SPEED_HORIZONTAL 0.2f
 #define KOOPAS_BBOX_WIDTH 16
 #define KOOPAS_BBOX_HEIGHT 26
-#define KOOPAS_BBOX_HEIGHT_SHELL 16
+#define KOOPAS_BBOX_HEIGHT_SHELL 12
 
 #define KOOPAS_STATE_WALKING 100
 #define KOOPAS_STATE_WALKING_RIGHT 101
@@ -48,6 +48,7 @@ public:
 	float ax;
 	float ay;
 	int nx;
+	
 	CKoopas(float x, float y);
 	virtual void SetState(int state);
 };

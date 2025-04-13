@@ -120,6 +120,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 		if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
 		{
 			koopas->SetState(KOOPAS_STATE_SHELL);
+			
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (koopas->GetState() == KOOPAS_STATE_SHELL)
@@ -492,9 +493,9 @@ int CMario::GetAniIdMax()
 			if (isSitting)
 			{
 				if (nx > 0)
-					aniId = ID_ANI_MARIO_SIT_RIGHT;
+					aniId = ID_ANI_MARIO_MAX_SIT_RIGHT;
 				else
-					aniId = ID_ANI_MARIO_SIT_LEFT;
+					aniId = ID_ANI_MARIO_MAX_SIT_LEFT;
 			}
 			else
 				if (vx == 0)
@@ -716,17 +717,17 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	{
 		if (isSitting)
 		{
-			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
-			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
-			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
-			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
+			left = x - MARIO_MAX_SITTING_BBOX_WIDTH / 2;
+			top = y - MARIO_MAX_SITTING_BBOX_HEIGHT / 2;
+			right = left + MARIO_MAX_SITTING_BBOX_WIDTH;
+			bottom = top + MARIO_MAX_SITTING_BBOX_HEIGHT;
 		}
 		else
 		{
-			left = x - MARIO_BIG_BBOX_WIDTH / 2;
-			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
-			right = left + MARIO_BIG_BBOX_WIDTH;
-			bottom = top + MARIO_BIG_BBOX_HEIGHT;
+			left = x - MARIO_MAX_BBOX_WIDTH / 2;
+			top = y - MARIO_MAX_BBOX_HEIGHT / 2;
+			right = left + MARIO_MAX_BBOX_WIDTH;
+			bottom = top + MARIO_MAX_BBOX_HEIGHT;
 		}
 	}
 	else

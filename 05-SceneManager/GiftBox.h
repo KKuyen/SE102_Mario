@@ -21,11 +21,14 @@ protected:
 	int initY;
 	//0: coin, 1 : mushroom
 	int type; 
+	//0: Not hidden, 1: Hidden, 2: Null
+	int isBoxHidden;
 public:
  	CGiftBox(float x, float y, int animationId, int type);
 	void Render();
 	void Open();
-	void OpenGiftBox();
+	void OpenCoinBox();
+	void OpenMushroomBox();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };

@@ -8,6 +8,7 @@ CGiftBox::CGiftBox(float x, float y, int animationId, int type) :CGameObject(x, 
 	this->animationId = animationId;
 	this->initY = y;
 	this->type = type;
+	this->isBoxHidden = 0;
 	this->SetState(GIFTBOX_STATE_SHOWING);
 }
 void CGiftBox::Render()
@@ -17,6 +18,10 @@ void CGiftBox::Render()
 	{
 		CSprites* s = CSprites::GetInstance();
 		s->Get( SPRITE_ID_HIDDEN)->Draw(x, y);
+		if (type == 1 && isBoxHidden==0)
+		{
+			isBoxHidden = 1;
+ 		}
 		return;
 	}
 	animations->Get(this->animationId)->Render(x, y);
@@ -32,8 +37,14 @@ void CGiftBox::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		SetState(GIFTBOX_STATE_HIDDEN);
 		y = initY;
 	}
+	if (type == 1 && state == GIFTBOX_STATE_HIDDEN && isBoxHidden == 1)
+	{
+		OpenMushroomBox();
+		isBoxHidden = 2;
+	}
+	 
 	CGameObject::Update(dt);
-	//CCollision::GetInstance()->Process(this, dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 }
 void CGiftBox::Open()
@@ -42,27 +53,29 @@ void CGiftBox::Open()
 	{
 		return;
 	}
-	OpenGiftBox();
-	SetState(GIFTBOX_STATE_BOUNCE);
+	if (type == 0)
+	{
+		OpenCoinBox();
+	}
+ 	SetState(GIFTBOX_STATE_BOUNCE);
 	vy = -GIFTBOX_BOUNCE_SPEED;
 }
-void CGiftBox::OpenGiftBox()
+void CGiftBox::OpenCoinBox()
 {
-	if (this->type == 0){
-		LPGAMEOBJECT effectCoinBox = new CEffectGiftBoxCoin(x, y - 16);
+ 		LPGAMEOBJECT effectCoinBox = new CEffectGiftBoxCoin(x, y -16 );
 		LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 		LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 		p->AddGameObject(effectCoinBox);
-	}
-	else if (this->type == 1)
-	{
-		LPGAMEOBJECT mushroom = new CMushroom(x, y - 16);
-		LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-		LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-		p->AddGameObject(mushroom);
-	}
+ 
 	
 		
+}
+void CGiftBox::OpenMushroomBox()
+{
+	LPGAMEOBJECT mushroom = new CMushroom(x, y);
+	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+	p->AddGameObject(mushroom);
 }
 void CGiftBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

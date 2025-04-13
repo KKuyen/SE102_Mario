@@ -109,8 +109,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
-	
-	
+	DebugOut(L"[INFO] Mario collided with Mushroom, nx = %f, ny = %f\n", e->nx, e->ny);
+	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+	mushroom->SetState(MUSHROOM_STATE_EATEN);
+	if (level == MARIO_LEVEL_SMALL)
+		SetLevel(MARIO_LEVEL_BIG);
+
 	
 }
 void CMario::OnCollisionWithGiftBox(LPCOLLISIONEVENT e)

@@ -10,6 +10,7 @@
 
 #include "Collision.h"
 #include "Koopas.h"
+#include "GiftBox.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -100,6 +101,17 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKooPas(e);
+	else if (dynamic_cast<CGiftBox*>(e->obj))
+		OnCollisionWithGiftBox(e);
+}
+void CMario::OnCollisionWithGiftBox(LPCOLLISIONEVENT e)
+{
+	CGiftBox* giftbox = dynamic_cast<CGiftBox*>(e->obj);
+
+	if (e->ny > 0) {
+		giftbox->Open();
+	}
+	 
 }
 void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 {

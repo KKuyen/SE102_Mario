@@ -155,7 +155,11 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorBox.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="EffectGiftBoxCoin.cpp" />
+    <ClCompile Include="EffectPoint.cpp" />
+    <ClCompile Include="EffectPoint.h" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GiftBox.cpp" />
     <ClCompile Include="Goomba.cpp" />
@@ -183,7 +187,10 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorBox.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="Effect.h" />
+    <ClInclude Include="EffectGiftBoxCoin.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GiftBox.h" />
     <ClInclude Include="Goomba.h" />
@@ -208,6 +215,7 @@
     <Text Include="cloud.txt" />
     <Text Include="coin.txt" />
     <Text Include="colorBox.txt" />
+    <Text Include="effect.txt" />
     <Text Include="giftBox.txt" />
     <Text Include="goomba.txt" />
     <Text Include="mario-sample.txt" />

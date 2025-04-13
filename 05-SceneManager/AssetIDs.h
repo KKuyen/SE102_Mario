@@ -24,6 +24,10 @@
 
 #define OBJECT_TYPE_PORTAL	50
 
+// Effect 
+#define OBJECT_TYPE_EFFECTCOINBOX 60
+#define OBJECT_TYPE_EFFECTPOINT 61
+
 
 #pragma region MARIO 
 

@@ -62,7 +62,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 				
-				goomba->SetState(GOOMBA_STATE_DIE); // Mai rùa tiêu diệt Goomba
+				goomba->SetState(GOOMBA_STATE_FALL); // Mai rùa tiêu diệt Goomba
 			}
 			else if (e->obj->IsBlocking())
 			{

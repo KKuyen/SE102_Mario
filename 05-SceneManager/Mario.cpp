@@ -192,7 +192,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	else if(isHolding&&heldObject!=NULL)
 	{
-		goomba->SetState(GOOMBA_STATE_DIE);
+		goomba->SetState(GOOMBA_STATE_FALL);
 		CKoopas* koopas= dynamic_cast<CKoopas*>(heldObject);
 		SetHolding(false, nullptr);
 		koopas->SetState(KOOPAS_STATE_FALL);
@@ -203,7 +203,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			if (goomba->GetState() != GOOMBA_STATE_DIE|| GOOMBA_STATE_FALL)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
@@ -254,7 +254,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != WINGED_GOOMBA_STATE_DIE)
+			if (goomba->GetState() != WINGED_GOOMBA_STATE_DIE|| WINGED_GOOMBA_STATE_FALL)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{

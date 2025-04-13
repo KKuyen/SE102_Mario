@@ -1,4 +1,4 @@
-#include "Goomba.h"
+﻿#include "Goomba.h"
 #include "Koopas.h"
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
@@ -41,7 +41,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 		if(koopas->GetState()==KOOPAS_STATE_SHELL_MOVING|| koopas->GetState() == KOOPAS_STATE_HELD)
-		SetState(GOOMBA_STATE_DIE);
+		SetState(GOOMBA_STATE_FALL);
 	
 	}
 	else
@@ -81,6 +81,11 @@ void CGoomba::Render()
 	{
 		aniId = ID_ANI_GOOMBA_DIE;
 	}
+	else if (state == GOOMBA_STATE_FALL)
+	{
+		aniId = ID_ANI_GOOMBA_FALL;
+	}
+	
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
 }
@@ -99,6 +104,12 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_WALKING: 
 			vx = -GOOMBA_WALKING_SPEED;
+			break;
+		case GOOMBA_STATE_FALL:
+			die_start = GetTickCount64();
+			vx = GOOMBA_FALL_SPEED_HORIZONTAL;
+			vy = GOOMBA_FALL_SPEED; // Nảy lên
+			ay = GOOMBA_GRAVITY; // Trọng lực sẽ kéo xuống
 			break;
 	}
 }

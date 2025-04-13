@@ -228,16 +228,22 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
-		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		if (goomba->GetState() == WINGED_GOOMBA_STATE_WALKING)
+		{
+			
+			goomba->SetState(WINGED_GOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		if (goomba->GetState() == WINGED_GOOMBA_STATE_FLYING)
 		{
 
-			goomba->SetState(GOOMBA_STATE_DIE);
+			goomba->SetState(WINGED_GOOMBA_STATE_WALKING);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 	else if (isHolding && heldObject != NULL)
 	{
-		goomba->SetState(GOOMBA_STATE_DIE);
+		goomba->SetState(WINGED_GOOMBA_STATE_DIE);
 		CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
 		SetHolding(false, nullptr);
 		koopas->SetState(KOOPAS_STATE_FALL);
@@ -248,7 +254,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			if (goomba->GetState() != WINGED_GOOMBA_STATE_DIE)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{

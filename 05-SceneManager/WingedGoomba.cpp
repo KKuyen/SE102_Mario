@@ -96,7 +96,23 @@ void CWingedGoomba::Render()
 		aniId = ID_ANI_WINGED_GOOMBA_DIE;
 	}
 
+
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+//render canhs phai
+	if (state == WINGED_GOOMBA_STATE_FLYING)
+	{
+		aniId = ID_ANI_WINGED_GOOMBA_FLYING;
+		CAnimations::GetInstance()->Get(aniId)->Render(x+WINGED_GOOMBA_BBOX_WIDTH/2, y-WINGED_GOOMBA_BBOX_HEIGHT/2);
+	}
+	
+	//render canh trai
+	if (state == WINGED_GOOMBA_STATE_FLYING)
+	{
+		aniId = ID_ANI_WINGED_GOOMBA_FLYING_LEFT;
+		CAnimations::GetInstance()->Get(aniId)->Render(x -WINGED_GOOMBA_BBOX_WIDTH / 2, y - WINGED_GOOMBA_BBOX_HEIGHT / 2);
+	}
+
+
 }
 
 void CWingedGoomba::SetState(int state)

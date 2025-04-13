@@ -1,11 +1,13 @@
 #include "GiftBox.h"
 #include "PlayScene.h"
 #include "EffectGiftBoxCoin.h"
+#include "Mushroom.h"
 
-CGiftBox::CGiftBox(float x, float y, int animationId) :CGameObject(x, y)
+CGiftBox::CGiftBox(float x, float y, int animationId, int type) :CGameObject(x, y)
 {
 	this->animationId = animationId;
 	this->initY = y;
+	this->type = type;
 	this->SetState(GIFTBOX_STATE_SHOWING);
 }
 void CGiftBox::Render()
@@ -46,15 +48,26 @@ void CGiftBox::Open()
 }
 void CGiftBox::OpenGiftBox()
 {
+	if (this->type == 0){
 		LPGAMEOBJECT effectCoinBox = new CEffectGiftBoxCoin(x, y - 16);
 		LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 		LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 		p->AddGameObject(effectCoinBox);
+	}
+	else if (this->type == 1)
+	{
+		LPGAMEOBJECT mushroom = new CMushroom(x, y - 16);
+		LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+		LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+		p->AddGameObject(mushroom);
+	}
+	
+		
 }
 void CGiftBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BOX_BBOX_WIDTH / 2 + 2;
-	t = y - BOX_BBOX_HEIGHT / 2;
+	t = y - BOX_BBOX_HEIGHT / 2+1;
 	r = l + BOX_BBOX_WIDTH;
 	b = t + BOX_BBOX_HEIGHT;
 }

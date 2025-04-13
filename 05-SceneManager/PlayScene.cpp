@@ -21,6 +21,7 @@
 #include "EffectGiftBoxCoin.h"
 #include "Effect.h"
 #include "EffectPoint.h"
+#include "Mushroom.h"
 
 using namespace std;
 
@@ -135,21 +136,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_GIFTBOX: {
 		float animationId = (float)atof(tokens[3].c_str());
-		obj = new CGiftBox(x, y, animationId); break;
+		int type = atoi(tokens[4].c_str());
+		obj = new CGiftBox(x, y, animationId, type); break;
 	}
-	case OBJECT_TYPE_EFFECTCOINBOX:
-	{
-		obj = new CEffectGiftBoxCoin(x, y);
-		objects.push_back(obj);
-	}
-	break;
-	case OBJECT_TYPE_EFFECTPOINT:
-	{
-		int point = atoi(tokens[3].c_str());
-		obj = new CEffectPoint(x, y, point);
-		objects.push_back(obj);
-	}
-	break;
+	case OBJECT_TYPE_MUSHROOM:obj = new CMushroom(x, y); break;
 	case OBJECT_TYPE_KOOPAS:
 		obj = new CKoopas(x, y);
 		break;
@@ -399,6 +389,7 @@ void CPlayScene::PurgeDeletedObjects()
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
 }
-void CPlayScene::AddGameObject(LPGAMEOBJECT obj) {
-	objects.insert(objects.begin(), obj);
+void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
+{
+	objects.push_back(obj); 
 }

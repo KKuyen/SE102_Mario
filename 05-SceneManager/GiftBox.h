@@ -19,8 +19,10 @@ class CGiftBox : public CGameObject {
 protected:
 	int animationId;
 	int initY;
+	//0: coin, 1 : mushroom
+	int type; 
 public:
- 	CGiftBox(float x, float y, int animationId);
+ 	CGiftBox(float x, float y, int animationId, int type);
 	void Render();
 	void Open();
 	void OpenGiftBox();

@@ -11,6 +11,7 @@
 #include "Collision.h"
 #include "Koopas.h"
 #include "GiftBox.h"
+#include "Mushroom.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -103,6 +104,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKooPas(e);
 	else if (dynamic_cast<CGiftBox*>(e->obj))
 		OnCollisionWithGiftBox(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
+}
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	
+	
+	
 }
 void CMario::OnCollisionWithGiftBox(LPCOLLISIONEVENT e)
 {

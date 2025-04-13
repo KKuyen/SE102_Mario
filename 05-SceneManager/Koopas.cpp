@@ -215,8 +215,8 @@ void CKoopas::SetState(int state)
 		StartReviveTimer(); 
 		break;
 	case KOOPAS_STATE_FALL:
-		vx = 0;              
-		vx = 0;
+		vx = KOOPAS_FALL_SPEED_HORIZONTAL;
+		
 		vy = KOOPAS_FALL_SPEED; // Nảy lên
 		ay = KOOPAS_GRAVITY; // Trọng lực sẽ kéo xuống
 		revive_start = 0; 

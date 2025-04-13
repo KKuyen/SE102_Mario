@@ -243,7 +243,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 	}
 	else if (isHolding && heldObject != NULL)
 	{
-		goomba->SetState(WINGED_GOOMBA_STATE_DIE);
+		goomba->SetState(WINGED_GOOMBA_STATE_FALL);
 		CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
 		SetHolding(false, nullptr);
 		koopas->SetState(KOOPAS_STATE_FALL);

@@ -42,7 +42,7 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 		if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING || koopas->GetState() == KOOPAS_STATE_HELD)
-			SetState(WINGED_GOOMBA_STATE_DIE);
+			SetState(WINGED_GOOMBA_STATE_FALL);
 
 	}
 	else
@@ -95,6 +95,11 @@ void CWingedGoomba::Render()
 	{
 		aniId = ID_ANI_WINGED_GOOMBA_DIE;
 	}
+	else if (state == WINGED_GOOMBA_STATE_FALL)
+	{
+		aniId = ID_ANI_WINGED_GOOMBA_FALL;
+	
+	}
 
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
@@ -136,6 +141,13 @@ void CWingedGoomba::SetState(int state)
 		isJumping = false;
 		jump_start = GetTickCount64();
 		break;
+	case WINGED_GOOMBA_STATE_FALL:
+		die_start = GetTickCount64();
+		vx = WINGED_GOOMBA_FALL_SPEED_HORIZONTAL;
+		vy = WINGED_GOOMBA_FALL_SPEED; // Nảy lên
+		ay = WINGED_GOOMBA_GRAVITY; // Trọng lực sẽ kéo xuống
+		break;
+
 	
 	}
 

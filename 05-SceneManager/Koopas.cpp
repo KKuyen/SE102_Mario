@@ -215,6 +215,7 @@ void CKoopas::SetState(int state)
 		StartReviveTimer(); 
 		break;
 	case KOOPAS_STATE_FALL:
+	
 		vx = KOOPAS_FALL_SPEED_HORIZONTAL;
 		
 		vy = KOOPAS_FALL_SPEED; // Nảy lên

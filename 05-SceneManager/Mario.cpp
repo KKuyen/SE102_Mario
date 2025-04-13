@@ -40,22 +40,41 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable = 0;
 	}
 	// Update held object position
-	if (isHolding && heldObject != NULL)
+	if (heldObject != NULL)
 	{
 		float mx, my;
 		GetPosition(mx, my);
-		
-		heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH/2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
-		// Kiểm tra thời gian cầm Koopas
 		CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
-		if (koopas && hold_start != 0 && GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
+		if ( GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
 		{
-		
+
 			koopas->SetVy(KOOPAS_JUMP_SPEED);
-			koopas->ay = KOOPAS_GRAVITY;    
+			koopas->ay = KOOPAS_GRAVITY;
 			koopas->SetState(KOOPAS_STATE_WALKING);
-			SetHolding(false, nullptr); 
+			SetHolding(false, nullptr);
+			hold_start = 0;
+			if (level > MARIO_LEVEL_SMALL)
+			{
+
+				level = level - 1;
+				StartUntouchable();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+
+			}
+
 		}
+		else
+		{
+			heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
+			// Kiểm tra thời gian cầm Koopas
+		}
+	
+	
+		
 	}
 
 	isOnPlatform = false; 
@@ -162,6 +181,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 				CGame* game = CGame::GetInstance();
 				if (game->IsKeyDown(DIK_A)) // Run key
 				{
+					hold_start = GetTickCount64();
 					SetHolding(true, koopas);
 					koopas->SetState(KOOPAS_STATE_HELD); 
 				}
@@ -573,10 +593,12 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_HOLD:
+		
 		if (!isHolding) break;
 		
 		break;
 	case MARIO_STATE_HOLD_RELEASE:
+		hold_start = 0;
 		if (isHolding && heldObject != NULL)
 		{
 			CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);

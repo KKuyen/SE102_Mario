@@ -133,7 +133,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_SHELL_MOVING || state == KOOPAS_STATE_HELD) &&
+	if ((state == KOOPAS_STATE_SHELL ||state == KOOPAS_STATE_HELD) &&
 		revive_start != 0 && GetTickCount64() - revive_start >= KOOPAS_REVIVE_TIME)
 	{
 		vy = KOOPAS_JUMP_SPEED; // Nảy lên

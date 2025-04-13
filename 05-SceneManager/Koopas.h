@@ -24,7 +24,7 @@
 #define ID_ANI_KOOPAS_SHELL 6001
 #define ID_ANI_KOOPAS_SHELL_MOVING 6002
 #define ID_ANI_KOOPAS_FALL 6004
-#define KOOPAS_REVIVE_TIME 5000 
+#define KOOPAS_REVIVE_TIME 4000 
 class CKoopas : public CGameObject
 {
 protected:

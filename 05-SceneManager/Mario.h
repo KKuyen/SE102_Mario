@@ -180,6 +180,7 @@ public:
 		coin = 0;
 		isHolding = false; 
 		heldObject = NULL; 
+		hold_start = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

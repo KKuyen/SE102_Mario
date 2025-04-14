@@ -13,7 +13,7 @@ giftBox.txt
 koopas.txt
 effect.txt
 mushroom.txt
-
+flower.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -404,4 +404,6 @@ mushroom.txt
 #3	350	10
 
 #11	300	10
- 
+
+13	100	100	1
+13	150	100	2

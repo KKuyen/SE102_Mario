@@ -23,6 +23,7 @@
 #include "Effect.h"
 #include "EffectPoint.h"
 #include "Mushroom.h"
+#include "Flower.h"
 
 using namespace std;
 
@@ -192,6 +193,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			isVertical
 		);
 
+		break;
+	}
+	case OBJECT_TYPE_FLOWER: {
+		int flowerType = atoi(tokens[3].c_str());
+		obj = new CFlower(x, y);
+		if (flowerType == 1) {
+			obj->SetState(FLOWER_STATE_RIGHT_POP_UP);
+		}
+		else if (flowerType == 2) {
+			obj->SetState(FLOWER_STATE_LEFT_POP_UP);
+		}
 		break;
 	}
 	case OBJECT_TYPE_PLATFORM:

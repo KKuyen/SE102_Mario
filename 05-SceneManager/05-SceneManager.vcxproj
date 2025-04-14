@@ -158,6 +158,7 @@
     <ClCompile Include="EffectGiftBoxCoin.cpp" />
     <ClCompile Include="EffectPoint.cpp" />
     <ClCompile Include="EffectPoint.h" />
+    <ClCompile Include="Flower.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectGiftBoxCoin.h" />
+    <ClInclude Include="Flower.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
@@ -220,6 +222,7 @@
     <Text Include="coin.txt" />
     <Text Include="colorBox.txt" />
     <Text Include="effect.txt" />
+    <Text Include="flower.txt" />
     <Text Include="giftBox.txt" />
     <Text Include="goomba.txt" />
     <Text Include="mario-sample.txt" />

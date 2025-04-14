@@ -1,0 +1,16 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#Coin box
+600000	301	26	308	39	60
+600001	310	26	317	39	60
+600002	319	26	326	39	60
+600003	328	26	335	39	60
+
+#Point effect
+# 100
+610000	446	25	457	32	60
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#ani coin
+600000	600000	100	600001	100	600002	100	600003	100

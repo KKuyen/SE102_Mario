@@ -32,6 +32,7 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	void AddGameObject(LPGAMEOBJECT obj);
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 

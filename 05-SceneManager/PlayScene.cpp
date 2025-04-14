@@ -19,6 +19,11 @@
 #include "ColorBox.h"
 #include "Chimney.h"
 #include "GiftBox.h"
+#include "EffectGiftBoxCoin.h"
+#include "Effect.h"
+#include "EffectPoint.h"
+#include "Mushroom.h"
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -135,8 +140,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 
-	case OBJECT_TYPE_GIFTBOX: obj = new CGiftBox(x, y); break;
-
+	case OBJECT_TYPE_GIFTBOX: {
+		float animationId = (float)atof(tokens[3].c_str());
+		int type = atoi(tokens[4].c_str());
+		obj = new CGiftBox(x, y, animationId, type); break;
+	}
+	case OBJECT_TYPE_MUSHROOM:obj = new CMushroom(x, y); break;
 	case OBJECT_TYPE_KOOPAS:
 		obj = new CKoopas(x, y);
 		break;
@@ -386,4 +395,10 @@ void CPlayScene::PurgeDeletedObjects()
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+}
+void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
+{
+
+ 
+	objects.insert(objects.begin() + 200, obj);
 }

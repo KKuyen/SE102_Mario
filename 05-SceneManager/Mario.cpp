@@ -11,7 +11,9 @@
 #include "Collision.h"
 #include "Koopas.h"
 #include "WIngedGoomba.h"
-
+#include "GiftBox.h"
+#include "Mushroom.h"
+ 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	vy += ay * dt;
@@ -142,10 +144,32 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKooPas(e);
-	else if (dynamic_cast<CWingedGoomba*>(e->obj))
+ 	else if (dynamic_cast<CWingedGoomba*>(e->obj))
 		OnCollisionWithWingedGoomba(e);
+	else if (dynamic_cast<CGiftBox*>(e->obj))
+		OnCollisionWithGiftBox(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
+}
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	DebugOut(L"[INFO] Mario collided with Mushroom, nx = %f, ny = %f\n", e->nx, e->ny);
+	CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+	mushroom->SetState(MUSHROOM_STATE_EATEN);
+	if (level == MARIO_LEVEL_SMALL)
+		SetLevel(MARIO_LEVEL_BIG);
 
 	
+}
+void CMario::OnCollisionWithGiftBox(LPCOLLISIONEVENT e)
+{
+	CGiftBox* giftbox = dynamic_cast<CGiftBox*>(e->obj);
+
+	if (e->ny > 0) {
+		giftbox->Open();
+	}
+	 
+ 
 }
 
 void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)

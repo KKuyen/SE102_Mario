@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 #define FLOWER_POP_UP_SPEED 0.03f
-#define FLOWER_POP_UP_HEIGHT 16
+#define FLOWER_POP_UP_HEIGHT 32
 
 #define FLOWER_BBOX_WIDTH 16
 #define FLOWER_BBOX_HEIGHT 32
@@ -23,6 +23,8 @@
 class CFlower : public CGameObject
 {
 protected:
+	int initY;
+	DWORD start;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -32,6 +34,7 @@ protected:
 
 public:
 	CFlower(float x, float y) :CGameObject(x, y) {
-		SetState(FLOWER_STATE_LEFT_POP_UP);
+		initY = y;
+		start = 0;
 	}
 };

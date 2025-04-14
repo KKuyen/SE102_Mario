@@ -13,13 +13,74 @@ void CFlower::GetBoundingBox(float& left, float& top, float& right, float& botto
 
 void CFlower::OnNoCollision(DWORD dt)
 {
- 
+	x += vx * dt;
+	y += vy * dt;
+
 };
 
 
 void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
- 
+	switch (state)
+	{
+	case FLOWER_STATE_LEFT_POP_UP:
+		vy = -FLOWER_POP_UP_SPEED;
+ 		if (this->initY - y >= FLOWER_POP_UP_HEIGHT) {
+			vy = 0;
+			SetState(FLOWER_STATE_LEFT_FIRE);
+		}
+		break;
+	case FLOWER_STATE_LEFT_POP_DOWN:
+		vy = FLOWER_POP_UP_SPEED;
+		if (y >= initY) {
+			vy = 0;
+			if (start == 0)
+				start = GetTickCount64();
+			if (GetTickCount64() - start > 1700) {
+				SetState(FLOWER_STATE_LEFT_POP_UP);
+				start = 0;
+			}
+		}
+		break;
+    case FLOWER_STATE_LEFT_FIRE:
+ 		if (start == 0)
+			start = GetTickCount64();
+
+		if (GetTickCount64() - start > 1700) {
+			SetState(FLOWER_STATE_LEFT_POP_DOWN);
+			start = 0;
+		}
+		break;
+	case FLOWER_STATE_RIGHT_POP_UP:
+		vy = -FLOWER_POP_UP_SPEED;
+		if (this->initY - y >= FLOWER_POP_UP_HEIGHT) {
+			SetState(FLOWER_STATE_RIGHT_FIRE);
+		}
+		break;
+	case FLOWER_STATE_RIGHT_POP_DOWN:
+		vy = FLOWER_POP_UP_SPEED;
+		if (y >= initY) {
+			vy = 0;
+			if (start == 0)
+				start = GetTickCount64();
+			if (GetTickCount64() - start > 1700) {
+				SetState(FLOWER_STATE_RIGHT_POP_UP);
+				start = 0;
+			}
+		}
+		break;
+	case FLOWER_STATE_RIGHT_FIRE:
+		vy = 0;
+		if (start == 0)
+			start = GetTickCount64();
+		if (GetTickCount64() - start > 1700) {
+			SetState(FLOWER_STATE_RIGHT_POP_DOWN);
+			start = 0;
+		}
+		break;
+	default:
+		break;
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }

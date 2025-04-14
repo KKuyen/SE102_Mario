@@ -1,6 +1,8 @@
 #include "Flower.h"
 #include "Mario.h"
-
+#include "Bullet.h"
+#include "PlayScene.h"
+#include "Game.h"
 void CFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 
@@ -83,14 +85,29 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		break;
     case FLOWER_STATE_LEFT_UP_FIRE:
- 		if (start == 0)
+	{
+		if (start == 0)
 			start = GetTickCount64();
-
+		if (mario != nullptr && isFired==false)
+		{
+			DebugOut(L"[INFO] Fire bullet \n");
+			float mario_x, mario_y;
+			mario->GetPosition(mario_x, mario_y);
+			LPGAMEOBJECT bullet = new CBullet(x, y-6, mario_x, mario_y);
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			p->AddGameObject(bullet);
+			isFired = true;
+ 		}
 		if (GetTickCount64() - start > 1700) {
+			
 			SetState(FLOWER_STATE_LEFT_POP_DOWN);
+			isFired = false;
 			start = 0;
 		}
-		break;
+		
+	}
+	break;
 	case FLOWER_STATE_LEFT_DOWN_FIRE:
 		if (start == 0)
 			start = GetTickCount64();

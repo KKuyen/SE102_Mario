@@ -1,0 +1,12 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#Bullet 
+150000	4	274	11	282	90
+150001	20	275	27	282	90
+150002	4	291	11	299	90
+150003	20	291	27	298	90
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#ani bullet
+150000	150000	100	150001	100	150002	100	150003	100

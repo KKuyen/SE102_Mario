@@ -31,6 +31,7 @@ protected:
 	int initY;
 	DWORD start;
 	CMario* mario; 
+	bool isFired;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -43,6 +44,7 @@ public:
 		initY = y;
 		start = 0;
 		mario = nullptr;
+		isFired = false;
 	}
 	void SetMario(CMario* m) { mario = m; } 
 };

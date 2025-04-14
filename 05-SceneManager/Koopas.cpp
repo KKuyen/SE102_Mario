@@ -216,7 +216,7 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_FALL:
 	
-		vx = KOOPAS_FALL_SPEED_HORIZONTAL;
+		vx = nx*KOOPAS_FALL_SPEED_HORIZONTAL;
 		
 		vy = KOOPAS_FALL_SPEED; // Nảy lên
 		ay = KOOPAS_GRAVITY; // Trọng lực sẽ kéo xuống

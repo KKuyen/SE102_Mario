@@ -225,20 +225,49 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
 	// jump on top >> kill Goomba and deflect a bit 
+	float goomba_vx, goomba_vy;
+	goomba->GetSpeed(goomba_vx, goomba_vy);
+	bool areFacingEachOther = (nx == 1 && goomba_vx < 0) || (nx == -1 && goomba_vx > 0);
+
+	
 	if (e->ny < 0)
 	{
+	
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
-	else if(isHolding&&heldObject!=NULL)
-	{
+	else if (isHolding && heldObject != NULL ) {
+
 		goomba->SetState(GOOMBA_STATE_FALL);
+		
 		CKoopas* koopas= dynamic_cast<CKoopas*>(heldObject);
 		SetHolding(false, nullptr);
+		koopas->nx = nx;
 		koopas->SetState(KOOPAS_STATE_FALL);
+		if (!areFacingEachOther)
+		{
+			if (untouchable == 0)
+			{
+				if (goomba->GetState() != GOOMBA_STATE_DIE || GOOMBA_STATE_FALL)
+				{
+					if (level > MARIO_LEVEL_SMALL)
+					{
+
+						level = level - 1;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+
+					}
+				}
+			}
+		}
 		
 		
 	}
@@ -267,7 +296,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 {
 	CWingedGoomba* goomba = dynamic_cast<CWingedGoomba*>(e->obj);
-
+	float goomba_vx, goomba_vy;
+	goomba->GetSpeed(goomba_vx, goomba_vy);
+	bool areFacingEachOther = (nx == 1 && goomba_vx < 0) || (nx == -1 && goomba_vx > 0);
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
@@ -290,7 +321,27 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 		CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
 		SetHolding(false, nullptr);
 		koopas->SetState(KOOPAS_STATE_FALL);
+		if (!areFacingEachOther)
+		{
+			if (untouchable == 0)
+			{
+				if (goomba->GetState() != GOOMBA_STATE_DIE || GOOMBA_STATE_FALL)
+				{
+					if (level > MARIO_LEVEL_SMALL)
+					{
 
+						level = level - 1;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+
+					}
+				}
+			}
+		}
 
 	}
 	else // hit by Goomba

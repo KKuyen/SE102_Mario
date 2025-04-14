@@ -369,5 +369,5 @@ koopas.txt
 3	350	10
 # WINGEDGOOMBA
 
-2	500	10
 10	500	10
+

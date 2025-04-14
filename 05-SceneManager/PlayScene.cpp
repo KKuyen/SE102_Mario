@@ -115,8 +115,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float y = (float)atof(tokens[2].c_str());
 
 	CGameObject *obj = NULL;
-
-	switch (object_type)
+ 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
 		if (player!=NULL) 
@@ -126,7 +125,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CMario(x,y); 
 		player = (CMario*)obj;  
-
+ 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
@@ -203,6 +202,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		else if (flowerType == 2) {
 			obj->SetState(FLOWER_STATE_LEFT_POP_UP);
+		}
+		if (player != nullptr && dynamic_cast<CMario*>(player)) {
+ 			((CFlower*)obj)->SetMario((CMario*)player);
 		}
 		break;
 	}
@@ -346,7 +348,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx,0.0f  /*cy*/);
 
 	PurgeDeletedObjects();
 }

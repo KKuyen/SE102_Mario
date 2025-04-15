@@ -7,7 +7,7 @@ void CFlower::GetBoundingBox(float& left, float& top, float& right, float& botto
 {
 
 	left = x - FLOWER_BBOX_WIDTH / 2;
-	top = y - FLOWER_BBOX_HEIGHT / 2;
+	top = y +2 - FLOWER_BBOX_HEIGHT / 2;
 	right = left + FLOWER_BBOX_WIDTH;
 	bottom = top + FLOWER_BBOX_HEIGHT - 1;
 
@@ -251,6 +251,6 @@ void CFlower::Render()
 		break;
 			
 	}
-	//RenderBoundingBox();
+	RenderBoundingBox();
 
 }

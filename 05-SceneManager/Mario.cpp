@@ -13,6 +13,8 @@
 #include "WIngedGoomba.h"
 #include "GiftBox.h"
 #include "Mushroom.h"
+#include "Bullet.h"
+#include "Flower.h"
  
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -150,6 +152,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGiftBox(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CBullet*>(e->obj))
+		OnCollisionWithBullet(e);	
+	else if (dynamic_cast<CFlower*>(e->obj))
+		OnCollisionWithFlower(e);
+
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
@@ -158,8 +165,40 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	mushroom->SetState(MUSHROOM_STATE_EATEN);
 	if (level == MARIO_LEVEL_SMALL)
 		SetLevel(MARIO_LEVEL_BIG);
-
-	
+}
+void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
+{
+	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
+	if (untouchable == 0)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			StartUntouchable();
+			level = level - 1;
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
+}
+void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
+{
+	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
+	if (untouchable == 0)
+	{
+		if (level > MARIO_LEVEL_SMALL)
+		{
+			StartUntouchable();
+			level = level - 1;
+		}
+		else
+		{
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
+	}
 }
 void CMario::OnCollisionWithGiftBox(LPCOLLISIONEVENT e)
 {
@@ -877,7 +916,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		left = x - MARIO_SMALL_BBOX_WIDTH/2;
 		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
-		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+		bottom = top + MARIO_SMALL_BBOX_HEIGHT+1;
 	}
 }
 

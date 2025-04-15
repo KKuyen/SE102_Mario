@@ -176,7 +176,9 @@ class CMario : public CGameObject
  	void OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e);
  	void OnCollisionWithGiftBox(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
- 
+	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
+	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
+
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdMax();

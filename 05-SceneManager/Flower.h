@@ -25,6 +25,10 @@
 #define ID_FLOWER_RIGHT_UP_FIRE_SPRITE 130005
 #define ID_FLOWER_RIGHT_DOWN_FIRE_SPRITE 130006
 
+#define TOO_FAR 1
+#define IN_RANGE 2
+#define TOO_CLOSE 3
+
 class CFlower : public CGameObject
 {
 protected:
@@ -32,6 +36,7 @@ protected:
 	DWORD start;
 	CMario* mario; 
 	bool isFired;
+	int isMarioInRange;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -45,6 +50,7 @@ public:
 		start = 0;
 		mario = nullptr;
 		isFired = false;
+		isMarioInRange = TOO_FAR;
 	}
 	void SetMario(CMario* m) { mario = m; } 
 };

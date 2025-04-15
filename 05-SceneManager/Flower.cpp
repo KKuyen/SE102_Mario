@@ -29,6 +29,19 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		mario->GetPosition(mario_x, mario_y);
 		bool isMarioRight = (mario_x > x);  
 		bool isUpFire = (mario_y < 117);
+		if(mario_x< 240 || mario_x> 470)
+		{
+			isMarioInRange = TOO_FAR;
+		}
+		else if (352-mario_x <= 16 && mario_x -384<= 10)
+		{
+			isMarioInRange = TOO_CLOSE;
+
+		}
+		else {
+			isMarioInRange = IN_RANGE;
+		}
+
 		if (isMarioRight)
 		{
 			if (state == FLOWER_STATE_LEFT_POP_UP)
@@ -78,7 +91,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy = 0;
 			if (start == 0)
 				start = GetTickCount64();
-			if (GetTickCount64() - start > 1700) {
+			if (GetTickCount64() - start > 1700 && isMarioInRange != TOO_CLOSE) {
 				SetState(FLOWER_STATE_LEFT_POP_UP);
 				start = 0;
 			}
@@ -88,15 +101,15 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (start == 0)
 			start = GetTickCount64();
-		if (mario != nullptr && isFired==false)
+		if (mario != nullptr && isFired==false && GetTickCount64() - start>1000 && isMarioInRange == IN_RANGE)
 		{
 			DebugOut(L"[INFO] Fire bullet \n");
 			float mario_x, mario_y;
 			mario->GetPosition(mario_x, mario_y);
-			LPGAMEOBJECT bullet = new CBullet(x, y-6, mario_x, mario_y);
+			LPGAMEOBJECT bullet = new CBullet(x-5, y-10, mario_x, mario_y);
 			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-			p->AddGameObject(bullet);
+			p->PushBackGameObject(bullet);
 			isFired = true;
  		}
 		if (GetTickCount64() - start > 1700) {
@@ -109,13 +122,28 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	break;
 	case FLOWER_STATE_LEFT_DOWN_FIRE:
+	{
 		if (start == 0)
 			start = GetTickCount64();
-
+		if (mario != nullptr && isFired == false && GetTickCount64() - start > 1000 && isMarioInRange == IN_RANGE)
+		{
+			DebugOut(L"[INFO] Fire bullet \n");
+			float mario_x, mario_y;
+			mario->GetPosition(mario_x, mario_y);
+			LPGAMEOBJECT bullet = new CBullet(x - 5, y-5 , mario_x, mario_y);
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			p->PushBackGameObject(bullet);
+			isFired = true;
+		}
 		if (GetTickCount64() - start > 1700) {
+
 			SetState(FLOWER_STATE_LEFT_POP_DOWN);
+			isFired = false;
 			start = 0;
 		}
+
+	}
 		break;
 	case FLOWER_STATE_RIGHT_POP_UP:
 		vy = -FLOWER_POP_UP_SPEED;
@@ -129,27 +157,56 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy = 0;
 			if (start == 0)
 				start = GetTickCount64();
-			if (GetTickCount64() - start > 1700) {
+			if (GetTickCount64() - start > 1700 && isMarioInRange !=TOO_CLOSE ) {
 				SetState(FLOWER_STATE_RIGHT_POP_UP);
 				start = 0;
 			}
 		}
 		break;
 	case FLOWER_STATE_RIGHT_UP_FIRE:
+	{
 		vy = 0;
 		if (start == 0)
 			start = GetTickCount64();
+		if (mario != nullptr && isFired == false && GetTickCount64() - start > 1000 && isMarioInRange == IN_RANGE)
+		{
+			DebugOut(L"[INFO] Fire bullet \n");
+			float mario_x, mario_y;
+			mario->GetPosition(mario_x, mario_y);
+			LPGAMEOBJECT bullet = new CBullet(x + 5, y - 10, mario_x, mario_y);
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			p->PushBackGameObject(bullet);
+			isFired = true;
+		}
 		if (GetTickCount64() - start > 1700) {
+
 			SetState(FLOWER_STATE_RIGHT_POP_DOWN);
+			isFired = false;
 			start = 0;
 		}
+
+	}
 		break;
 	case FLOWER_STATE_RIGHT_DOWN_FIRE:
 		vy = 0;
 		if (start == 0)
 			start = GetTickCount64();
+		if (mario != nullptr && isFired == false && GetTickCount64() - start > 1000 && isMarioInRange == IN_RANGE)
+		{
+			DebugOut(L"[INFO] Fire bullet \n");
+			float mario_x, mario_y;
+			mario->GetPosition(mario_x, mario_y);
+			LPGAMEOBJECT bullet = new CBullet(x + 5, y -5, mario_x, mario_y);
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			p->PushBackGameObject(bullet);
+			isFired = true;
+		}
 		if (GetTickCount64() - start > 1700) {
+
 			SetState(FLOWER_STATE_RIGHT_POP_DOWN);
+			isFired = false;
 			start = 0;
 		}
 		break;

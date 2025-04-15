@@ -36,35 +36,35 @@ void CBullet::SetUpAngle(float marioX, float marioY)
 	float angle = atan2(deltaY, deltaX) * 180.0f / M_PI;
 	float angleFire;
 
-	if (angle >= -90 && angle <= -10) // 1
+	if (angle >= -90 && angle <= -10)
 	{
 		angleFire = -45;
 	}
-	else if (angle > -10 && angle <= 0) // 2
+	else if (angle > -10 && angle <= 0) 
 	{
 		angleFire = -20;
 	}
-	else if (angle > 0 && angle <= 30) //3
+	else if (angle > 0 && angle <= 30) 
 	{
 		angleFire = 20;
 	}
-	else if (angle > 30 && angle <= 90) //4
+	else if (angle > 30 && angle <= 90) 
 	{
 		angleFire = 45;
 	}
-	else if (angle > 90 && angle <= 160) //5
+	else if (angle > 90 && angle <= 160) 
 	{
 		angleFire = 135;
 	}
-	else if (angle > 160 && angle <= 180) //6
+	else if (angle > 160 && angle <= 180) 
 	{
 		angleFire = 160;
 	}
-	else if (angle > -180 && angle <= -145) //7
+	else if (angle > -180 && angle <= -145) 
 	{
 		angleFire = -160;
 	}
-	else // 8
+	else
 	{
 		angleFire = -135;
 	}

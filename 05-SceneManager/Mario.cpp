@@ -749,7 +749,7 @@ int CMario::GetAniIdMax()
 							}
 							else
 							{
-								aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+								aniId = ID_ANI_MARIO_MAX_WHIP_RIGHT;
 								isWhip = 1;
 							}
 						}
@@ -781,7 +781,8 @@ int CMario::GetAniIdMax()
 							}
 							else
 							{
-								aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
+								aniId = aniId = ID_ANI_MARIO_MAX_WHIP_RIGHT;
+								;
 								isWhip = 1;
 							}
 						}

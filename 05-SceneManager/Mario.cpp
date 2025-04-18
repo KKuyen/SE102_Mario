@@ -15,6 +15,9 @@
 #include "Mushroom.h"
 #include "Bullet.h"
 #include "Flower.h"
+#include "PlayScene.h"
+#include "EffectGiftBoxCoin.h"
+#include "EffectPoint.h"
  
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -165,6 +168,10 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	mushroom->SetState(MUSHROOM_STATE_EATEN);
 	if (level == MARIO_LEVEL_SMALL)
 		SetLevel(MARIO_LEVEL_BIG);
+	LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
+	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+	p->AddGameObject(effectPoint);
 }
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
 {

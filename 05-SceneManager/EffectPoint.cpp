@@ -13,6 +13,9 @@ void CEffectPoint::Render()
 	case 0:
 		ani->Get(ID_ANI_MUSHROOM_EF)->Render(x, y);
 		break;
+	case 1000:
+		sprites->Get(ID_ANI_POINT_1000)->Draw(x, y);
+		break;
 	default:
 		sprites->Get(ID_ANI_POINT_100)->Draw(x, y);
 		break;

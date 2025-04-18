@@ -5,6 +5,7 @@
 #include "Mario.h"
 #include "Platform.h"
 #include "Brick.h"
+#include "ColorBox.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -41,7 +42,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (state == KOOPAS_STATE_FALL &&
-		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
 	{
 		return;
 	}
@@ -93,7 +94,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBrick*>(obj))
+			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CColorBox*>(obj) || dynamic_cast<CBrick*>(obj))
 			{
 				float l, t, r, b;
 				obj->GetBoundingBox(l, t, r, b);
@@ -107,7 +108,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					isOnPlatform = true;
 					platformLeft = l;
-					platformRight = r;
+					platformRight = r+16;
 					break;
 				}
 			}
@@ -133,7 +134,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == KOOPAS_STATE_SHELL ||state == KOOPAS_STATE_HELD) &&
+	if ((state == KOOPAS_STATE_SHELL ||state == KOOPAS_STATE_HELD ) &&
 		revive_start != 0 && GetTickCount64() - revive_start >= KOOPAS_REVIVE_TIME)
 	{
 		vy = KOOPAS_JUMP_SPEED; // Nảy lên

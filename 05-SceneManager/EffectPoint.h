@@ -6,6 +6,7 @@
 #include "GameManager.h"
 
 #define ID_ANI_POINT_100 610000
+#define ID_ANI_POINT_1000 610001
 
 #define ID_ANI_MUSHROOM_EF 120000
  

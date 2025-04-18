@@ -192,8 +192,13 @@ public:
 	float ay;				// acceleration on y 
 	float maxVx;
 	ULONGLONG run_start;
+	bool isVisible;
+	bool isWaitingForLevelUp = false;
+	DWORD timeWaitingStart = 0;
+	float saved_x, saved_y;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		isVisible = true;
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;

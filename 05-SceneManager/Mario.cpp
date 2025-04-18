@@ -19,6 +19,7 @@
 #include "EffectGiftBoxCoin.h"
 #include "EffectPoint.h"
 #include "Leaf.h"
+#include "EffectSmoke.h"
  
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -103,7 +104,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	
 		
 	}
-
+	// Kiểm tra thời gian chờ để biến thành Mario chồn
+	if (isWaitingForLevelUp && GetTickCount() - timeWaitingStart >= 400)
+	{
+		SetLevel(MARIO_LEVEL_MAX);
+		isVisible = true;
+		isWaitingForLevelUp = false;
+	}
+	// Không cập nhật vị trí nếu Mario đang hóa chồn
+	if (!isVisible)
+	{
+		vx = 0;
+		vy = 0;
+		x = saved_x;
+		y = saved_y;
+		return; 
+	}
 	isOnPlatform = false; 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -180,17 +196,26 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	DebugOut(L"[INFO] Mario collided with Leaf, nx = %f, ny = %f\n", e->nx, e->ny);
 	CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
-	if (level == MARIO_LEVEL_BIG)
+	//Lưu tạm x,y khi invisible
+	saved_x = x;
+	saved_y = y;
+	if (level == MARIO_LEVEL_BIG && !isWaitingForLevelUp)
 	{
-		SetLevel(MARIO_LEVEL_MAX);
 		leaf->Delete();
+		isVisible = false;
+		isWaitingForLevelUp = true;
+		timeWaitingStart = GetTickCount();
 	}
 
 	LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
+	LPGAMEOBJECT effectSoke = new CEffectSmoke(x, y);
+
 	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 	p->AddGameObject(effectPoint);
+	p->PushBackGameObject(effectSoke);
 }
+
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e)
 {
 	CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
@@ -239,6 +264,7 @@ void CMario::OnCollisionWithGiftBox(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 {
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+	koopas->mario = this;
 
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
@@ -726,6 +752,8 @@ int CMario::GetAniIdMax()
 
 void CMario::Render()
 {
+	if (isVisible == false)
+		return;
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 

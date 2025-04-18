@@ -100,6 +100,9 @@
     <ClCompile Include="Leaf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EffectSmoke.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="Coin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EffectSmoke.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -233,7 +239,7 @@
     <Text Include="scene02.txt" />
     <Text Include="wingedgoomba.txt" />
     <Text Include="coin.txt" />
-    <Text Include="Leaf.txt" />
+    <Text Include="leaf.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

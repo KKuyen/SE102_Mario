@@ -5,6 +5,8 @@
 #include "Mario.h"
 #include "Platform.h"
 #include "Brick.h"
+#include "ColorBox.h"
+#include "GiftBox.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -41,7 +43,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) return;
 	if (state == KOOPAS_STATE_FALL &&
-		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
 	{
 		return;
 	}
@@ -64,11 +66,20 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 				
 				goomba->SetState(GOOMBA_STATE_FALL); // Mai rùa tiêu diệt Goomba
 			}
+			else if (dynamic_cast<CGiftBox*>(e->obj))
+			{
+				CGiftBox* gb = dynamic_cast<CGiftBox*>(e->obj);
+				gb->SetState(GIFTBOX_STATE_BOUNCE);
+						vx = -vx;
+				nx = -nx;
+
+			}
 			else if (e->obj->IsBlocking())
 			{
 				vx = -vx; 
 				nx = -nx; 
 			}
+			
 		}
 	}
 }
@@ -93,8 +104,9 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBrick*>(obj))
+			if (dynamic_cast<CPlatform*>(obj) || (dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1) || dynamic_cast<CBrick*>(obj))
 			{
+
 				float l, t, r, b;
 				obj->GetBoundingBox(l, t, r, b);
 
@@ -102,14 +114,16 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				float koopasLeft, koopasTop, koopasRight, koopasBottom;
 				GetBoundingBox(koopasLeft, koopasTop, koopasRight, koopasBottom);
 				// Kiểm tra xem Koopas có đang đứng trên đối tượng này không
-				if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
-					koopasLeft <= r && koopasRight >= l)
-				{
-					isOnPlatform = true;
-					platformLeft = l;
-					platformRight = r;
-					break;
-				}
+					if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
+						koopasLeft <= r && koopasRight >= l)
+					{
+
+
+						isOnPlatform = true;
+						platformLeft = l;
+						platformRight = r + 16;
+						break;
+					}
 			}
 		}
 
@@ -133,7 +147,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == KOOPAS_STATE_SHELL ||state == KOOPAS_STATE_HELD) &&
+	if ((state == KOOPAS_STATE_SHELL ||state == KOOPAS_STATE_HELD ) &&
 		revive_start != 0 && GetTickCount64() - revive_start >= KOOPAS_REVIVE_TIME)
 	{
 		vy = KOOPAS_JUMP_SPEED; // Nảy lên

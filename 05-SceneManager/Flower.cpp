@@ -251,6 +251,6 @@ void CFlower::Render()
 		break;
 			
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 }

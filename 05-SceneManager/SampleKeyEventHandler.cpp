@@ -53,6 +53,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_A: 
 		if(mario->isOnPlatform)
 		mario->StopRunning();
+		mario->StopWhip();
 		mario->SetState(MARIO_STATE_HOLD_RELEASE);
 		break;
 	case DIK_RIGHT:

@@ -49,6 +49,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// Kiểm tra thời gian giữ nút chạy để kích hoạt bay
 	if (level == MARIO_LEVEL_MAX && run_start != 0)
 	{
+
 		if (GetTickCount64() - run_start >= MARIO_FLY_ACTIVATION_TIME)
 		{
 			isFlying = true;
@@ -239,6 +240,10 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 			
 		
 	}
+	else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+	{
+		koopas->SetState(KOOPAS_STATE_FALL);
+	}
 	else 
 	{
 		if (untouchable == 0)
@@ -334,6 +339,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		
 		
 	}
+	else if (level == MARIO_LEVEL_MAX && whip_start!=0 && GetTickCount64()- whip_start<= MARIO_WHIP_TIME)
+	{
+		goomba->SetState(GOOMBA_STATE_DIE);
+	}
 	else // hit by Goomba
 	{
 		if (untouchable == 0)
@@ -378,6 +387,10 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
+	else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+	{
+		goomba->SetState(GOOMBA_STATE_DIE);
+	}
 	else if (isHolding && heldObject != NULL)
 	{
 		goomba->SetState(WINGED_GOOMBA_STATE_FALL);
@@ -406,6 +419,10 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 			}
 		}
 
+	}
+	else if (level == MARIO_LEVEL_MAX)
+	{
+		goomba->SetState(WINGED_GOOMBA_STATE_FALL);
 	}
 	else // hit by Goomba
 	{
@@ -506,7 +523,9 @@ int CMario::GetAniIdSmall()
 						if (ax < 0)
 							aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
 						else if (ax == MARIO_ACCEL_RUN_X)
+						{
 							aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+						}
 						else if (ax == MARIO_ACCEL_WALK_X)
 							aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
 					}
@@ -714,9 +733,20 @@ int CMario::GetAniIdMax()
 					if (state != MARIO_STATE_SLIP_RIGHT)
 					{
 						if (ax < 0)
+						{
+							/*whip_start = 0;
+							StartWhip();*/
 							aniId = ID_ANI_MARIO_MAX_BRACE_RIGHT;
+						}
 						else if (ax == MARIO_ACCEL_RUN_X)
+
+						{
+							if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+								aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+							else
 							aniId = ID_ANI_MARIO_MAX_RUNNING_RIGHT;
+						}
+							
 						else if (ax == MARIO_ACCEL_WALK_X)
 							aniId = ID_ANI_MARIO_MAX_WALKING_RIGHT;
 					}
@@ -732,9 +762,19 @@ int CMario::GetAniIdMax()
 					if (state != MARIO_STATE_SLIP_LEFT)
 					{
 						if (ax > 0)
+						{
+						/*	whip_start = 0;
+							StartWhip();*/
 							aniId = ID_ANI_MARIO_MAX_BRACE_LEFT;
+						}
 						else if (ax == -MARIO_ACCEL_RUN_X)
-							aniId = ID_ANI_MARIO_MAX_RUNNING_LEFT;
+						{
+							if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+								aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
+							else
+								aniId = ID_ANI_MARIO_MAX_RUNNING_LEFT;
+						}
+					
 						else if (ax == -MARIO_ACCEL_WALK_X)
 							aniId = ID_ANI_MARIO_MAX_WALKING_LEFT;
 					}
@@ -813,7 +853,7 @@ void CMario::SetState(int state)
 		ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
 		StartRunning();
-		
+		StartWhip();
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		
@@ -822,6 +862,7 @@ void CMario::SetState(int state)
 		ax = -MARIO_ACCEL_RUN_X;
 		nx = -1;
 		StartRunning();
+		StartWhip();
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
 		
@@ -874,6 +915,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_SIT:
 		isFlying = false;
 		StopRunning();
+		StopWhip();
 		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
 		{
 			state = MARIO_STATE_IDLE;

@@ -18,7 +18,7 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 #define MARIO_JUMP_FLY_SPEED_Y 0.75f
 #define MARIO_FLY_ACTIVATION_TIME 1500
-#define MARIO_WHIP_TIME 200 
+#define MARIO_WHIP_TIME 250 
 
 
 
@@ -195,6 +195,7 @@ public:
 	float ay;				// acceleration on y 
 	float maxVx;
 	ULONGLONG run_start;
+	ULONGLONG whip_start;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -212,6 +213,7 @@ public:
 		hold_start = 0;
 		isFlying = false; 
 		run_start = 0;
+		whip_start = 0;
 		beforeLand = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -248,6 +250,11 @@ public:
 	void StartRunning() { 
 		if(run_start==0)
 		run_start = GetTickCount64(); }
+	void StartWhip() {
+		if (whip_start == 0)
+			whip_start = GetTickCount64();
+	}
+	void StopWhip() { whip_start = 0; }
 	void StopRunning() { run_start = 0; isFlying = false; }
 	bool IsFlying() { return isFlying; }
 	int getLevel() {

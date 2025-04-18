@@ -24,6 +24,7 @@
 #include "EffectPoint.h"
 #include "Mushroom.h"
 #include "Flower.h"
+#include "Leaf.h"
 
 using namespace std;
 
@@ -208,6 +209,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	}
+	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 

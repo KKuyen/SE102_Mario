@@ -6,6 +6,7 @@
 #include "Platform.h"
 #include "Brick.h"
 #include "ColorBox.h"
+#include "GiftBox.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -40,7 +41,9 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
-	if (dynamic_cast<CMario*>(e->obj)) return;
+	if (dynamic_cast<CMario*>(e->obj)) {
+		mario = dynamic_cast<CMario*>(e->obj);
+	}
 	if (state == KOOPAS_STATE_FALL &&
 		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
 	{
@@ -70,6 +73,14 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 				vx = -vx; 
 				nx = -nx; 
 			}
+			 if (dynamic_cast<CGiftBox*>(e->obj)) {
+				CGiftBox* giftbox = dynamic_cast<CGiftBox*>(e->obj);
+				if (giftbox->GetState() == GIFTBOX_STATE_SHOWING)
+				{
+					giftbox->Open(mario);
+				}
+			}
+			
 		}
 	}
 }

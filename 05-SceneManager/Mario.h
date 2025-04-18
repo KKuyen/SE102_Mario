@@ -159,7 +159,6 @@ class CMario : public CGameObject
 	
 
 
-	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
 
@@ -178,12 +177,15 @@ class CMario : public CGameObject
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 public:
+	int level;
+
 	BOOLEAN isOnPlatform;
 	bool isFlying;
 	float ax;				// acceleration on x 

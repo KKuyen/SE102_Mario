@@ -2,6 +2,7 @@
 #include "PlayScene.h"
 #include "EffectGiftBoxCoin.h"
 #include "Mushroom.h"
+#include "Leaf.h"
 
 CGiftBox::CGiftBox(float x, float y, int animationId, int type) :CGameObject(x, y)
 {
@@ -47,6 +48,30 @@ void CGiftBox::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 }
+void CGiftBox::Open(CMario* mario)
+{
+	if (state == GIFTBOX_STATE_HIDDEN || state==GIFTBOX_STATE_BOUNCE)
+	{
+		return;
+	}
+	if (type == 0)
+	{
+		OpenCoinBox();
+	}
+	else if (type == 2)
+	{
+		if (mario->level == MARIO_LEVEL_SMALL)
+		{
+			OpenMushroomBox();
+		}
+		else
+		{
+			OpenLeafBox();
+		}
+ 	}
+ 	SetState(GIFTBOX_STATE_BOUNCE);
+	vy = -GIFTBOX_BOUNCE_SPEED;
+}
 void CGiftBox::Open()
 {
 	if (state == GIFTBOX_STATE_HIDDEN || state==GIFTBOX_STATE_BOUNCE)
@@ -57,7 +82,7 @@ void CGiftBox::Open()
 	{
 		OpenCoinBox();
 	}
- 	SetState(GIFTBOX_STATE_BOUNCE);
+	SetState(GIFTBOX_STATE_BOUNCE);
 	vy = -GIFTBOX_BOUNCE_SPEED;
 }
 void CGiftBox::OpenCoinBox()
@@ -69,6 +94,13 @@ void CGiftBox::OpenCoinBox()
  
 	
 		
+}
+void CGiftBox::OpenLeafBox()
+{
+	LPGAMEOBJECT leaf = new CLeaf(x, y);
+	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+	p->PushBackGameObject(leaf);
 }
 void CGiftBox::OpenMushroomBox()
 {

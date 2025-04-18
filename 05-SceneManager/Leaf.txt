@@ -1,0 +1,4 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+170001	55	24	70	37	100
+170002	71	66	86	79	100

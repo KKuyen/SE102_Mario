@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
+#include "Mario.h"
 #define KOOPAS_GRAVITY 0.002f
 #define KOOPAS_WALKING_SPEED 0.03f
 #define KOOPAS_SHELL_MOVING_SPEED 0.2f
@@ -48,7 +49,7 @@ public:
 	float ax;
 	float ay;
 	int nx;
-	
+	CMario* mario;
 	CKoopas(float x, float y);
 	virtual void SetState(int state);
 };

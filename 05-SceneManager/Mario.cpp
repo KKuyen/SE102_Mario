@@ -18,6 +18,7 @@
 #include "PlayScene.h"
 #include "EffectGiftBoxCoin.h"
 #include "EffectPoint.h"
+#include "Leaf.h"
  
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -159,6 +160,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBullet(e);	
 	else if (dynamic_cast<CFlower*>(e->obj))
 		OnCollisionWithFlower(e);
+	else if (dynamic_cast<CLeaf*>(e->obj))
+		OnCollisionWithLeaf(e);
 
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
@@ -168,6 +171,21 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	mushroom->SetState(MUSHROOM_STATE_EATEN);
 	if (level == MARIO_LEVEL_SMALL)
 		SetLevel(MARIO_LEVEL_BIG);
+	LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
+	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+	p->AddGameObject(effectPoint);
+}
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
+{
+	DebugOut(L"[INFO] Mario collided with Leaf, nx = %f, ny = %f\n", e->nx, e->ny);
+	CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
+	if (level == MARIO_LEVEL_BIG)
+	{
+		SetLevel(MARIO_LEVEL_MAX);
+		leaf->Delete();
+	}
+
 	LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
 	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);

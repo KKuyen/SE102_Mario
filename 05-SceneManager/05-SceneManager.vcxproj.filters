@@ -97,9 +97,11 @@
     <ClCompile Include="WingedGoomba.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Leaf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Coin.h" />
     <ClInclude Include="Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -202,6 +204,12 @@
     <ClInclude Include="WIngedGoomba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Leaf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -225,6 +233,7 @@
     <Text Include="scene02.txt" />
     <Text Include="wingedgoomba.txt" />
     <Text Include="coin.txt" />
+    <Text Include="Leaf.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

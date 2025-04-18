@@ -15,6 +15,7 @@ effect.txt
 mushroom.txt
 flower.txt
 bullet.txt
+leaf.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -350,13 +351,13 @@ bullet.txt
 1	2272	137	21000
 
 
-#[?] Gift Box: x, y, animationId, type(0: coin, 1 : mushroom)
+#[?] Gift Box: x, y, animationId, type(0: coin, 1 : mushroom, 2: leaf)
 9	176	121	91000	0
 9	192	121	91000	0
 9	224	73	91000	0
 9	240	73	91000	1
 9	416	89	91000	0
-9	656	153	91000	0
+9	656	153	91000	2
 9	704	121	91000	0
 9	1472	137	91000	0
 
@@ -403,7 +404,7 @@ bullet.txt
 # KOOPAS 
 3	590	130
 # WINGEDGOOMBA
-10	800	10
+#10	800	10
 #GOOMBA
 2	224	168
 2	560	168

@@ -150,6 +150,7 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Chimney.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="EffectGiftBoxCoin.cpp" />
     <ClCompile Include="EffectPoint.cpp" />
     <ClCompile Include="EffectPoint.h" />
+    <ClCompile Include="Flower.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -184,6 +186,7 @@
     <ClInclude Include="AssetIDs.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Chimney.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
@@ -191,6 +194,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectGiftBoxCoin.h" />
+    <ClInclude Include="Flower.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
@@ -215,11 +219,13 @@
   <ItemGroup>
     <Text Include="background.txt" />
     <Text Include="brick.txt" />
+    <Text Include="bullet.txt" />
     <Text Include="chimney.txt" />
     <Text Include="cloud.txt" />
     <Text Include="coin.txt" />
     <Text Include="colorBox.txt" />
     <Text Include="effect.txt" />
+    <Text Include="flower.txt" />
     <Text Include="giftBox.txt" />
     <Text Include="goomba.txt" />
     <Text Include="mario-sample.txt" />

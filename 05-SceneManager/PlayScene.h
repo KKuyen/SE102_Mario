@@ -33,6 +33,7 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	void AddGameObject(LPGAMEOBJECT obj);
+	void PushBackGameObject(LPGAMEOBJECT obj);
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 

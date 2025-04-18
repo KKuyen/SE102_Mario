@@ -23,6 +23,7 @@
 #include "Effect.h"
 #include "EffectPoint.h"
 #include "Mushroom.h"
+#include "Flower.h"
 
 using namespace std;
 
@@ -114,8 +115,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float y = (float)atof(tokens[2].c_str());
 
 	CGameObject *obj = NULL;
-
-	switch (object_type)
+ 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
 		if (player!=NULL) 
@@ -125,7 +125,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CMario(x,y); 
 		player = (CMario*)obj;  
-
+ 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
@@ -192,6 +192,20 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			isVertical
 		);
 
+		break;
+	}
+	case OBJECT_TYPE_FLOWER: {
+		int flowerType = atoi(tokens[3].c_str());
+		obj = new CFlower(x, y);
+		if (flowerType == 1) {
+			obj->SetState(FLOWER_STATE_RIGHT_POP_UP);
+		}
+		else if (flowerType == 2) {
+			obj->SetState(FLOWER_STATE_LEFT_POP_UP);
+		}
+		if (player != nullptr && dynamic_cast<CMario*>(player)) {
+ 			((CFlower*)obj)->SetMario((CMario*)player);
+		}
 		break;
 	}
 	case OBJECT_TYPE_PLATFORM:
@@ -334,7 +348,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx,0.0f  /*cy*/);
 
 	PurgeDeletedObjects();
 }
@@ -398,7 +412,9 @@ void CPlayScene::PurgeDeletedObjects()
 }
 void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 {
-
- 
 	objects.insert(objects.begin() + 200, obj);
+}
+void CPlayScene::PushBackGameObject(LPGAMEOBJECT obj)
+{
+	objects.push_back(obj);
 }

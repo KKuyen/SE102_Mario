@@ -18,7 +18,7 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 #define MARIO_JUMP_FLY_SPEED_Y 0.75f
 #define MARIO_FLY_ACTIVATION_TIME 1500
-
+#define MARIO_WHIP_TIME 300
 #define MARIO_GRAVITY			0.002f
 #define MARIO_GRAVITY_FLY		0.0008f
 
@@ -184,6 +184,7 @@ class CMario : public CGameObject
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 public:
+	int isWhip = 0;
 	BOOLEAN isOnPlatform;
 	bool isFlying;
 	float ax;				// acceleration on x 

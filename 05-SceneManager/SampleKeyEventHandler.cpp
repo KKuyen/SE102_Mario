@@ -16,6 +16,10 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT);
 		break;
+	case DIK_A:
+		mario->whip_start = 0;
+		mario->StartWhip();
+		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
@@ -53,6 +57,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_A: 
 		if(mario->isOnPlatform)
 		mario->StopRunning();
+		if (GetTickCount64() - mario->whip_start > MARIO_WHIP_TIME)
 		mario->StopWhip();
 		mario->SetState(MARIO_STATE_HOLD_RELEASE);
 		break;

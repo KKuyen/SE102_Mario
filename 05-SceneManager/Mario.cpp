@@ -725,8 +725,19 @@ int CMario::GetAniIdMax()
 			else
 				if (vx == 0)
 				{
-					if (nx > 0) aniId = ID_ANI_MARIO_MAX_IDLE_RIGHT;
-					else aniId = ID_ANI_MARIO_MAX_IDLE_LEFT;
+					if (nx > 0)
+					{
+						if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+							aniId = ID_ANI_MARIO_WHIP_LEFT;
+						else
+							aniId = ID_ANI_MARIO_MAX_IDLE_RIGHT;
+					}
+					else {
+						if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+							aniId = ID_ANI_MARIO_WHIP_RIGHT;
+						else
+							aniId = ID_ANI_MARIO_MAX_IDLE_LEFT;
+					}
 				}
 				else if (vx > 0)
 				{

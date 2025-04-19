@@ -192,6 +192,7 @@ class CMario : public CGameObject
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 public:
+	BOOLEAN isFallingFromHeight;
 	BOOLEAN isOnPlatform;
 	bool isFlying;
 	float ax;				// acceleration on x 
@@ -204,20 +205,22 @@ public:
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
-		isHolding = false; 
-		heldObject = NULL; 
+		isHolding = false;
+		heldObject = NULL;
 		hold_start = 0;
-		isFlying = false; 
+		isFlying = false;
 		run_start = 0;
 		whip_start = 0;
 		beforeLand = false;
+	
+
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

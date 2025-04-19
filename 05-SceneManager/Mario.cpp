@@ -22,6 +22,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vx += ax * dt;
 	
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
+	
 	if (!isOnPlatform)
 	{
 		beforeLand = true;
@@ -903,7 +904,7 @@ void CMario::SetState(int state)
 		}
 		else
 		{
-			if (isFlying)
+			if (isFlying && level ==MARIO_LEVEL_MAX)
 			{
 				vy = -MARIO_JUMP_FLY_SPEED_Y;
 
@@ -1027,6 +1028,9 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 void CMario::SetLevel(int l)
 {
 	// Adjust position to avoid falling off platform
+	
+	//xu ly truong hop dang bay thi mario bi tut lv
+
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;

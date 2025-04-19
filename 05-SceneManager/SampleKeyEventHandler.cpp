@@ -14,6 +14,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
+		if(!(mario->isFlying&&!mario->isOnPlatform))
 		mario->SetState(MARIO_STATE_SIT);
 		break;
 	case DIK_A:

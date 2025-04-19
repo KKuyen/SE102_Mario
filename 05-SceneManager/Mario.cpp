@@ -255,7 +255,7 @@ void CMario::OnCollisionWithGiftBox(LPCOLLISIONEVENT e)
 	CGiftBox* giftbox = dynamic_cast<CGiftBox*>(e->obj);
 
 	if (e->ny > 0) {
-		giftbox->Open();
+		giftbox->Open(this);
 	}
 	 
  

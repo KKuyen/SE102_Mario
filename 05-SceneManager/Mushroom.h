@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Mario.h"
 
 #define MUSHROOM_GRAVITY 0.0002f
 #define MUSHROOM_WALKING_SPEED 0.06f
@@ -19,6 +20,7 @@ class CMushroom : public CGameObject
 {
 protected:
 	float ax;
+	CMario* mario;
 	float ay;
 	int initY;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
@@ -27,10 +29,12 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 	virtual int IsCollidable() { return 1; };
  	virtual int IsBlocking() { return 0; }
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
 	virtual void SetState(int state);
-	CMushroom(float x, float y) :CGameObject(x, y){
+	CMushroom(float x, float y, CMario* mario) :CGameObject(x, y){
+		this->mario = mario;
  		this->ax = 0;
 		this->ay = 0;
 		this->initY = y;

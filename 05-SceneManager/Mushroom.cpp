@@ -1,5 +1,6 @@
 #include "Mushroom.h"
 #include "Mario.h"
+#include "Chimney.h"
  
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -50,8 +51,13 @@ void CMushroom::SetState(int state)
 		vy = -MUSHROOM_POP_UP_SPEED;
 		break;
 	case MUSHROOM_STATE_WALKING:
-		vx = -MUSHROOM_WALKING_SPEED;
-		ay = MUSHROOM_GRAVITY;
+		float marioX, marioY;
+		mario->GetPosition(marioX, marioY);
+		if (x < marioX)
+			vx =- MUSHROOM_WALKING_SPEED;
+		else
+			vx = MUSHROOM_WALKING_SPEED;
+ 		ay = MUSHROOM_GRAVITY;
 		break;
 	case MUSHROOM_STATE_EATEN:
 		break;
@@ -63,4 +69,12 @@ void CMushroom::Render()
 	s->Get(ID_MUSHROOM_SPRITE)->Draw(x, y);
 	//RenderBoundingBox();
 
+}
+void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (dynamic_cast<CChimney*>(e->obj))
+	{
+		vx = -vx;
+
+	}
 }

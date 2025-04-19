@@ -37,10 +37,11 @@ void CGiftBox::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (y > initY && state == GIFTBOX_STATE_BOUNCE) {
 		SetState(GIFTBOX_STATE_HIDDEN);
 		y = initY;
+		vy = 0;
 	}
 	if (type == 1 && state == GIFTBOX_STATE_HIDDEN && isBoxHidden == 1)
 	{
-		OpenMushroomBox();
+		OpenMushroomBox(mario);
 		isBoxHidden = 2;
 	}
 	 
@@ -50,6 +51,7 @@ void CGiftBox::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 void CGiftBox::Open(CMario* mario)
 {
+	this->mario = mario;
 	if (state == GIFTBOX_STATE_HIDDEN || state==GIFTBOX_STATE_BOUNCE)
 	{
 		return;
@@ -62,7 +64,7 @@ void CGiftBox::Open(CMario* mario)
 	{
 		if (mario->level == MARIO_LEVEL_SMALL)
 		{
-			OpenMushroomBox();
+			OpenMushroomBox(mario);
 		}
 		else
 		{
@@ -72,19 +74,19 @@ void CGiftBox::Open(CMario* mario)
  	SetState(GIFTBOX_STATE_BOUNCE);
 	vy = -GIFTBOX_BOUNCE_SPEED;
 }
-void CGiftBox::Open()
-{
-	if (state == GIFTBOX_STATE_HIDDEN || state==GIFTBOX_STATE_BOUNCE)
-	{
-		return;
-	}
-	if (type == 0)
-	{
-		OpenCoinBox();
-	}
-	SetState(GIFTBOX_STATE_BOUNCE);
-	vy = -GIFTBOX_BOUNCE_SPEED;
-}
+//void CGiftBox::Open()
+//{
+//	if (state == GIFTBOX_STATE_HIDDEN || state==GIFTBOX_STATE_BOUNCE)
+//	{
+//		return;
+//	}
+//	if (type == 0)
+//	{
+//		OpenCoinBox();
+//	}
+//	SetState(GIFTBOX_STATE_BOUNCE);
+//	vy = -GIFTBOX_BOUNCE_SPEED;
+//}
 void CGiftBox::OpenCoinBox()
 {
  		LPGAMEOBJECT effectCoinBox = new CEffectGiftBoxCoin(x, y -16 );
@@ -102,9 +104,9 @@ void CGiftBox::OpenLeafBox()
 	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 	p->PushBackGameObject(leaf);
 }
-void CGiftBox::OpenMushroomBox()
+void CGiftBox::OpenMushroomBox(CMario* mario)
 {
-	LPGAMEOBJECT mushroom = new CMushroom(x, y);
+	LPGAMEOBJECT mushroom = new CMushroom(x, y, mario);
 	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 	p->AddGameObject(mushroom);

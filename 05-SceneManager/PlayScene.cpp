@@ -147,7 +147,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int type = atoi(tokens[4].c_str());
 		obj = new CGiftBox(x, y, animationId, type); break;
 	}
-	case OBJECT_TYPE_MUSHROOM:obj = new CMushroom(x, y); break;
 	case OBJECT_TYPE_KOOPAS:
 		obj = new CKoopas(x, y);
 		break;
@@ -430,7 +429,7 @@ void CPlayScene::PurgeDeletedObjects()
 }
 void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 {
-	objects.insert(objects.begin() + 200, obj);
+	objects.insert(objects.begin() + 300, obj);
 }
 void CPlayScene::PushBackGameObject(LPGAMEOBJECT obj)
 {

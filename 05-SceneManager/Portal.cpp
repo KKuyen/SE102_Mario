@@ -2,14 +2,6 @@
 #include "Game.h"
 #include "Textures.h"
 
-CPortal::CPortal(float l, float t, float r, float b, int scene_id )
-{
-	this->scene_id = scene_id;
-	x = l; 
-	y = t;
-	width = r - l;
-	height = b - t;
-}
 
 void CPortal::RenderBoundingBox()
 {
@@ -34,13 +26,14 @@ void CPortal::RenderBoundingBox()
 
 void CPortal::Render()
 {
-	RenderBoundingBox();
+	CSprites* s = CSprites::GetInstance();
+	s->Get(PORTAL_SPRITE)->Draw(x, y);
 }
 
 void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
 {
-	l = x - width/2;
-	t = y - height/2;
-	r = x + width/2;
-	b = y + height/2;
+	l = x - PORTAL_BBOX_WIDTH /2;
+	t = y - PORTAL_BBOX_HEIGHT /2;
+	r = x + PORTAL_BBOX_WIDTH /2;
+	b = y + PORTAL_BBOX_HEIGHT /2;
 }

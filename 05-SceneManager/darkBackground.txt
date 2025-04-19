@@ -1,0 +1,9 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#edge
+190001	698	86	713	101	30
+#main
+190002	698	35	713	50	30
+
+#portal
+190003	650	106	675	131	30

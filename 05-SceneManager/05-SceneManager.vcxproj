@@ -155,6 +155,7 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorBox.cpp" />
+    <ClCompile Include="DarkBackground.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="EffectGiftBoxCoin.cpp" />
     <ClCompile Include="EffectPoint.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorBox.h" />
+    <ClInclude Include="DarkBackground.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectGiftBoxCoin.h" />
@@ -228,6 +230,7 @@
     <Text Include="cloud.txt" />
     <Text Include="coin.txt" />
     <Text Include="colorBox.txt" />
+    <Text Include="darkBackground.txt" />
     <Text Include="effect.txt" />
     <Text Include="flower.txt" />
     <Text Include="giftBox.txt" />

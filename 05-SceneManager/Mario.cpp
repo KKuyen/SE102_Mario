@@ -728,13 +728,13 @@ int CMario::GetAniIdMax()
 					if (nx > 0)
 					{
 						if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
-							aniId = ID_ANI_MARIO_WHIP_LEFT;
+							aniId = ID_ANI_MARIO_WHIP_RIGHT;
 						else
 							aniId = ID_ANI_MARIO_MAX_IDLE_RIGHT;
 					}
 					else {
 						if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
-							aniId = ID_ANI_MARIO_WHIP_RIGHT;
+							aniId = ID_ANI_MARIO_WHIP_LEFT;
 						else
 							aniId = ID_ANI_MARIO_MAX_IDLE_LEFT;
 					}

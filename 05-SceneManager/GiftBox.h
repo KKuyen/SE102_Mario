@@ -26,6 +26,7 @@ protected:
    int isBoxHidden;
    CMario* mario;
 public:
+
    CGiftBox(float x, float y, int animationId, int type);
    void Render();
    void Open(CMario* mario);
@@ -35,4 +36,5 @@ public:
    void OpenLeafBox();
    void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
    void GetBoundingBox(float& l, float& t, float& r, float& b);
+
 };

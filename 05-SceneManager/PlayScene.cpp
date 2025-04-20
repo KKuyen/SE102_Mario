@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include "AssetIDs.h"
 
@@ -357,16 +357,30 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return; 
 
 	// Update camera to follow mario
+
 	float cx, cy;
 	player->GetPosition(cx, cy);
-
-	CGame *game = CGame::GetInstance();
+	CGame* game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 
+	CMario* mario = dynamic_cast<CMario*>(player);
+	
+	if(cy<-100)
+	{ }
+	
+	else
+	{
+		// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+		cy = 0.0f;
+	}
+
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f/*cy*/);
+
+	// Đặt vị trí camera
+	CGame::GetInstance()->SetCamPos(cx, cy);
+
 
 	PurgeDeletedObjects();
 }

@@ -107,7 +107,7 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_FALL:
 			die_start = GetTickCount64();
-			vx = GOOMBA_FALL_SPEED_HORIZONTAL;
+			vx = nx*GOOMBA_FALL_SPEED_HORIZONTAL;
 			vy = GOOMBA_FALL_SPEED; // Nảy lên
 			ay = GOOMBA_GRAVITY; // Trọng lực sẽ kéo xuống
 			break;

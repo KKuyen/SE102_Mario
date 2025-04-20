@@ -18,6 +18,9 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 #define MARIO_JUMP_FLY_SPEED_Y 0.75f
 #define MARIO_FLY_ACTIVATION_TIME 1500
+#define MARIO_WHIP_TIME 250 
+
+
 
 #define MARIO_GRAVITY			0.002f
 #define MARIO_GRAVITY_FLY		0.0008f
@@ -115,14 +118,19 @@
 #define ID_ANI_MARIO_MAX_JUMP_RUN_LEFT 2201
 #define ID_ANI_MARIO_MAX_HOLD_RIGHT 2202
 #define ID_ANI_MARIO_MAX_HOLD_LEFT 2203
-#define ID_ANI_MARIO_MAX_SIT_RIGHT 2301
-#define ID_ANI_MARIO_MAX_SIT_LEFT 2302
+#define ID_ANI_MARIO_MAX_SIT_RIGHT 4008	
+	
+
+#define ID_ANI_MARIO_MAX_SIT_LEFT 4009
 #define ID_ANI_MARIO_MAX_HOLD_IDLE_RIGHT 2204
 #define ID_ANI_MARIO_MAX_HOLD_IDLE_LEFT 2205
 #define ID_ANI_MARIO_MAX_FLYING_RUNNING_RIGHT 3001 
 #define ID_ANI_MARIO_MAX_FLYING_RUNNING_LEFT 3002
 #define ID_ANI_MARIO_MAX_FLYING_RIGHT 3003 
 #define ID_ANI_MARIO_MAX_FLYING_LEFT 3004
+#define ID_ANI_MARIO_WHIP_RIGHT 4006// Animation đặc biệt khi chạy
+#define ID_ANI_MARIO_WHIP_LEFT 4007
+
 
 #pragma endregion
 
@@ -184,7 +192,11 @@ class CMario : public CGameObject
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 public:
+
 	int level;
+
+
+	BOOLEAN isFallingFromHeight;
 
 	BOOLEAN isOnPlatform;
 	bool isFlying;
@@ -192,29 +204,36 @@ public:
 	float ay;				// acceleration on y 
 	float maxVx;
 	ULONGLONG run_start;
+
 	bool isVisible;
 	bool isWaitingForLevelUp = false;
 	DWORD timeWaitingStart = 0;
 	float saved_x, saved_y;
+
+	ULONGLONG whip_start;
+
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isVisible = true;
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
-		isHolding = false; 
-		heldObject = NULL; 
+		isHolding = false;
+		heldObject = NULL;
 		hold_start = 0;
-		isFlying = false; 
+		isFlying = false;
 		run_start = 0;
+		whip_start = 0;
 		beforeLand = false;
+	
+
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -250,6 +269,11 @@ public:
 	void StartRunning() { 
 		if(run_start==0)
 		run_start = GetTickCount64(); }
+	void StartWhip() {
+		if (whip_start == 0)
+			whip_start = GetTickCount64();
+	}
+	void StopWhip() { whip_start = 0; }
 	void StopRunning() { run_start = 0; isFlying = false; }
 	bool IsFlying() { return isFlying; }
 	int getLevel() {

@@ -1,4 +1,4 @@
-# list of object assets to load in this scene
+git # list of object assets to load in this scene
 [ASSETS]
 mario.txt
 coin.txt

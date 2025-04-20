@@ -18,6 +18,7 @@ bullet.txt
 leaf.txt
 darkBackground.txt
 transcript.txt
+number.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

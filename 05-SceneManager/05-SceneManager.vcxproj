@@ -241,6 +241,7 @@
     <Text Include="mario-sample.txt" />
     <Text Include="mario.txt" />
     <Text Include="mushroom.txt" />
+    <Text Include="number.txt" />
     <Text Include="scene0005.txt" />
     <Text Include="scene01.txt" />
     <Text Include="scene02.txt" />

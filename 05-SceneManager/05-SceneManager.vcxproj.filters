@@ -254,6 +254,7 @@
     <Text Include="leaf.txt" />
     <Text Include="darkBackground.txt" />
     <Text Include="transcript.txt" />
+    <Text Include="number.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

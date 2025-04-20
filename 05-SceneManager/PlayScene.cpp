@@ -26,6 +26,7 @@
 #include "Flower.h"
 #include "Leaf.h"
 #include "DarkBackground.h"
+#include "Transcript.h"
 
 using namespace std;
 
@@ -141,7 +142,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrick(x, y, spriteId); break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-
+	case OBJECT_TYPE_TRANSCRIPT: obj = new CTranscript(x, y); break;
 	case OBJECT_TYPE_GIFTBOX: {
 		float animationId = (float)atof(tokens[3].c_str());
 		int type = atoi(tokens[4].c_str());
@@ -365,7 +366,7 @@ void CPlayScene::Update(DWORD dt)
 
 	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, cy);
+	CGame::GetInstance()->SetCamPos(cx, 0.0f/*cy*/);
 
 	PurgeDeletedObjects();
 }

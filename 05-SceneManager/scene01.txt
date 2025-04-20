@@ -17,6 +17,7 @@ flower.txt
 bullet.txt
 leaf.txt
 darkBackground.txt
+transcript.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -591,3 +592,4 @@ darkBackground.txt
 2	224	168
 2	560	168
 
+21	125	217

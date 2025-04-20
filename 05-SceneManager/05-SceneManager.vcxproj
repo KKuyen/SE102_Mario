@@ -179,6 +179,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Transcript.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WingedGoomba.cpp" />
   </ItemGroup>
@@ -219,6 +220,7 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Transcript.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WIngedGoomba.h" />
   </ItemGroup>
@@ -242,6 +244,7 @@
     <Text Include="scene0005.txt" />
     <Text Include="scene01.txt" />
     <Text Include="scene02.txt" />
+    <Text Include="transcript.txt" />
     <Text Include="wingedgoomba.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

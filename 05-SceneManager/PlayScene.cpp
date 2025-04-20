@@ -203,12 +203,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int sprite_middle = atoi(tokens[7].c_str());
 		int sprite_end = atoi(tokens[8].c_str());
 		int isVertical = atoi(tokens[9].c_str());
+		int type = (int)atoi(tokens[10].c_str());
 
 		obj = new CChimney(
 			x, y,
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end,
-			isVertical
+			isVertical, type
 		);
 
 		break;
@@ -366,8 +367,9 @@ void CPlayScene::Update(DWORD dt)
 
 	CMario* mario = dynamic_cast<CMario*>(player);
 	
-	if(cy<-100)
-	{ }
+	if(cy<-100||cy>50)
+	{
+	}
 	
 	else
 	{

@@ -39,7 +39,7 @@ void CChimney::Render()
 			s->Get(this->spriteIdEnd)->Draw(xx, y);
 	}
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CChimney::GetBoundingBox(float& l, float& t, float& r, float& b)

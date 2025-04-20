@@ -144,19 +144,19 @@
 #define MARIO_LEVEL_MAX     3
 
 #define MARIO_BIG_BBOX_WIDTH  13
-#define MARIO_BIG_BBOX_HEIGHT 24
+#define MARIO_BIG_BBOX_HEIGHT 26
 #define MARIO_BIG_SITTING_BBOX_WIDTH  13
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_MAX_BBOX_WIDTH  13
-#define MARIO_MAX_BBOX_HEIGHT 24
+#define MARIO_MAX_BBOX_HEIGHT 26
 #define MARIO_MAX_SITTING_BBOX_WIDTH  13
 #define MARIO_MAX_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
 #define MARIO_SMALL_BBOX_WIDTH  13
-#define MARIO_SMALL_BBOX_HEIGHT 12
+#define MARIO_SMALL_BBOX_HEIGHT 13
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
@@ -186,6 +186,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
+	void OnCollisionWithChimney(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -211,6 +212,7 @@ public:
 	float saved_x, saved_y;
 
 	ULONGLONG whip_start;
+	float teleport;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -232,6 +234,9 @@ public:
 		run_start = 0;
 		whip_start = 0;
 		beforeLand = false;
+
+		teleport = 0;
+
 	
 
 	}

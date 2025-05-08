@@ -213,8 +213,9 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_SHELL:
 		vx = 0;
 		vy = 0;
-		ay = KOOPAS_GRAVITY;
-		 y += (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_SHELL) / 2;
+		ax = 0;
+		
+		
 		 StartReviveTimer(); 
 		break;
 	case KOOPAS_STATE_HELD:

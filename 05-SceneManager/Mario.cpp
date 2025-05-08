@@ -24,6 +24,7 @@
  
 	void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
+
 		if (y >400)
 		{
 
@@ -314,6 +315,14 @@
 				koopas->SetState(KOOPAS_STATE_SHELL);
 			
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
+			}
+			else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
+			{
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				koopas->SetState(KOOPAS_STATE_FALL);
+				koopas->ax = 0;
+
+			
 			}
 			else if (koopas->GetState() == KOOPAS_STATE_SHELL)
 			{

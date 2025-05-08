@@ -22,7 +22,7 @@
 
 
 
-#define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY			0.0014f
 #define MARIO_GRAVITY_FLY		0.0008f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
@@ -213,6 +213,7 @@ public:
 
 	ULONGLONG whip_start;
 	float teleport;
+	float teleportState;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -236,7 +237,7 @@ public:
 		beforeLand = false;
 
 		teleport = 0;
-
+		teleportState = 0;
 	
 
 	}
@@ -284,5 +285,6 @@ public:
 	int getLevel() {
 		return level;
 	}
+	
 
 };

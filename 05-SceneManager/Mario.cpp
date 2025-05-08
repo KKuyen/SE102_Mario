@@ -24,12 +24,18 @@
  
 	void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
+		if (y >400)
+		{
+
+			SetState(MARIO_STATE_DIE);
+		}
 		if (teleport!=0)
 		{
 			if(teleport==1)
 			{
 				y =200;
 				teleport = 0;
+				teleportState = 1;
 			}
 		
 		}

@@ -361,13 +361,14 @@ void CPlayScene::Update(DWORD dt)
 
 	float cx, cy;
 	player->GetPosition(cx, cy);
+
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 
 	CMario* mario = dynamic_cast<CMario*>(player);
 	
-	if(cy<-100||cy>50)
+	 if(cy<-100)
 	{
 	}
 	
@@ -376,6 +377,8 @@ void CPlayScene::Update(DWORD dt)
 		// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
 		cy = 0.0f;
 	}
+	if(mario->teleportState==1)
+		 cy = 192.0f;
 
 	if (cx < 0) cx = 0;
 

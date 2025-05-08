@@ -28,8 +28,8 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float mario_x, mario_y;
 		mario->GetPosition(mario_x, mario_y);
 		bool isMarioRight = (mario_x > x);  
-		bool isUpFire = (mario_y < 117);
-		if(mario_x< 240 || mario_x> 470)
+		bool isUpFire = (mario_y < 110);
+		if(mario_x< 240 || mario_x> 500)
 		{
 			isMarioInRange = TOO_FAR;
 		}

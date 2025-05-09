@@ -457,7 +457,7 @@
 			SetHolding(false, nullptr);
 			koopas->nx = nx;
 			koopas->SetState(KOOPAS_STATE_FALL);
-			if (!areFacingEachOther)
+			/*if (!areFacingEachOther)
 			{
 				if (untouchable == 0)
 				{
@@ -478,7 +478,7 @@
 					}
 				}
 			}
-		
+		*/
 		
 		}
 		else if (level == MARIO_LEVEL_MAX && whip_start!=0 && GetTickCount64()- whip_start<= MARIO_WHIP_TIME)
@@ -539,7 +539,7 @@
 			CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
 			SetHolding(false, nullptr);
 			koopas->SetState(KOOPAS_STATE_FALL);
-			if (!areFacingEachOther)
+			/*if (!areFacingEachOther)
 			{
 				if (untouchable == 0)
 				{
@@ -559,7 +559,7 @@
 						}
 					}
 				}
-			}
+			}*/
 
 		}
 		else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)

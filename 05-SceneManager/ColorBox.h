@@ -15,9 +15,10 @@ protected:
 	int isVertical;	// 1: vertical, 0: horizontal
 
 public:
+	bool isPlatform;
 	CColorBox(float x, float y,
 		float cell_width, float cell_height, int length,
-		int sprite_id_begin, int sprite_id_middle, int sprite_id_end,int isVertical) :CGameObject(x, y)
+		int sprite_id_begin, int sprite_id_middle, int sprite_id_end, int isVertical, bool isPlatform = 0) :CGameObject(x, y)
 	{
 		this->length = length;
 		this->cellWidth = cell_width;
@@ -26,6 +27,7 @@ public:
 		this->spriteIdMiddle = sprite_id_middle;
 		this->spriteIdEnd = sprite_id_end;
 		this->isVertical = isVertical;
+		this->isPlatform = isPlatform;
 	}
 
 	void Render();

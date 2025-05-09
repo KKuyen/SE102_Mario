@@ -4,7 +4,7 @@
 #define WINGED_GOOMBA_GRAVITY 0.002f
 #define WINGED_GOOMBA_WALKING_SPEED 0.05f
 #define WINGED_GOOMBA_JUMP_SPEED_Y 0.35f 
-#define WINGED_GOOMBA_JUMP_INTERVAL 1500
+#define WINGED_GOOMBA_JUMP_INTERVAL 1600
 #define WINGED_GOOMBA_FALL_SPEED -0.28f
 #define WINGED_GOOMBA_FALL_SPEED_HORIZONTAL 0.20f
 #define WINGED_GOOMBA_BBOX_WIDTH 16
@@ -34,7 +34,7 @@ protected:
 	ULONGLONG die_start;
 	ULONGLONG jump_start;
 	bool isJumping;
-
+	
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -47,6 +47,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
+	bool prepareRotate;
 	CWingedGoomba(float x, float y);
 	virtual void SetState(int state);
 };

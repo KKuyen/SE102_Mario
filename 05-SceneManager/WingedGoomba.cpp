@@ -7,6 +7,7 @@ CWingedGoomba::CWingedGoomba(float x, float y) :CGameObject(x, y)
 	this->ay = WINGED_GOOMBA_GRAVITY;
 	die_start = -1;
 	jump_start = GetTickCount64();
+	prepareRotate = false;
 	SetState(WINGED_GOOMBA_STATE_FLYING);
 }
 
@@ -55,7 +56,7 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 			{
 				isJumping = false; 
 				jump_start = GetTickCount64(); 
-				vx = -WINGED_GOOMBA_WALKING_SPEED; // Tiếp tục đi bộ
+				
 			}
 		}
 		else if (e->nx != 0 && !isJumping)
@@ -69,17 +70,49 @@ void CWingedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
-
+	
+	
 	if ((state == WINGED_GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > WINGED_GOOMBA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
 		return;
 	}
+
 	// Kiểm tra thời gian để nhảy trong trạng thái fly
 	if (state == WINGED_GOOMBA_STATE_FLYING && !isJumping && GetTickCount64() - jump_start > WINGED_GOOMBA_JUMP_INTERVAL)
 	{
 		isJumping = true;
 		vy = -WINGED_GOOMBA_JUMP_SPEED_Y; // Nhảy lên
+		// Find Mario in the list of game objects
+		CMario* mario = nullptr;
+		for (LPGAMEOBJECT obj : *coObjects)
+		{
+			if (dynamic_cast<CMario*>(obj))
+			{
+				mario = dynamic_cast<CMario*>(obj);
+				break;
+			}
+		}
+
+		// If Mario is found, adjust the Winged Goomba's movement to follow him
+		if (mario)
+		{
+			float marioX, marioY;
+			mario->GetPosition(marioX, marioY);
+
+			// Adjust horizontal velocity to move towards Mario
+			if (x < marioX)
+				vx = WINGED_GOOMBA_WALKING_SPEED; // Move right
+			else if (x > marioX)
+				vx = -WINGED_GOOMBA_WALKING_SPEED; // Move left
+
+			// Adjust vertical velocity to simulate jumping towards Mario
+			if (state == WINGED_GOOMBA_STATE_FLYING && !isJumping && GetTickCount64() - jump_start > WINGED_GOOMBA_JUMP_INTERVAL)
+			{
+				isJumping = true;
+				vy = -WINGED_GOOMBA_JUMP_SPEED_Y; // Jump up
+			}
+		}
 		
 	}
 

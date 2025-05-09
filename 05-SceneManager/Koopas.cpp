@@ -105,8 +105,9 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CColorBox*>(obj) || dynamic_cast<CBrick*>(obj))
+			if (dynamic_cast<CPlatform*>(obj) || (dynamic_cast<CColorBox*>(obj)&& dynamic_cast<CColorBox*>(obj)->isPlatform==1) || dynamic_cast<CBrick*>(obj))
 			{
+
 				float l, t, r, b;
 				obj->GetBoundingBox(l, t, r, b);
 
@@ -117,9 +118,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
 					koopasLeft <= r && koopasRight >= l)
 				{
+
+
 					isOnPlatform = true;
 					platformLeft = l;
-					platformRight = r+16;
+					platformRight = r + 16;
 					break;
 				}
 			}
@@ -145,25 +148,26 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == KOOPAS_STATE_SHELL ||state == KOOPAS_STATE_HELD ) &&
+	if ((state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD) &&
 		revive_start != 0 && GetTickCount64() - revive_start >= KOOPAS_REVIVE_TIME)
 	{
 		vy = KOOPAS_JUMP_SPEED; // Nảy lên
 		ay = KOOPAS_GRAVITY;    // Áp dụng trọng lực
-		if(nx<0)
-		SetState(KOOPAS_STATE_WALKING);
+		if (nx < 0)
+			SetState(KOOPAS_STATE_WALKING);
 		else
 		{
 			SetState(KOOPAS_STATE_WALKING_RIGHT);
 		}
 	}
 
-	
+
 
 
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
+
 
 void CKoopas::Render()
 {
@@ -209,8 +213,9 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_SHELL:
 		vx = 0;
 		vy = 0;
-		ay = KOOPAS_GRAVITY;
-		 y += (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_SHELL) / 2;
+		ax = 0;
+		
+		
 		 StartReviveTimer(); 
 		break;
 	case KOOPAS_STATE_HELD:

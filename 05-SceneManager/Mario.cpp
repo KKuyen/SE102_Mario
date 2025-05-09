@@ -436,9 +436,10 @@
 		// jump on top >> kill Goomba and deflect a bit 
 		float goomba_vx, goomba_vy;
 		goomba->GetSpeed(goomba_vx, goomba_vy);
-		bool areFacingEachOther = (nx == 1 && goomba_vx < 0) || (nx == -1 && goomba_vx > 0);
+		float epsilon = 0.01f;
+		bool areFacingEachOther = 1;
+			
 
-	
 		if (e->ny < 0)
 		{
 	
@@ -482,7 +483,7 @@
 		}
 		else if (level == MARIO_LEVEL_MAX && whip_start!=0 && GetTickCount64()- whip_start<= MARIO_WHIP_TIME)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
+			goomba->SetState(GOOMBA_STATE_FALL);
 		}
 		else // hit by Goomba
 		{
@@ -511,7 +512,10 @@
 		CWingedGoomba* goomba = dynamic_cast<CWingedGoomba*>(e->obj);
 		float goomba_vx, goomba_vy;
 		goomba->GetSpeed(goomba_vx, goomba_vy);
-		bool areFacingEachOther = (nx == 1 && goomba_vx < 0) || (nx == -1 && goomba_vx > 0);
+		float epsilon = 0.01f;
+		bool areFacingEachOther =
+			1;
+
 		// jump on top >> kill Goomba and deflect a bit 
 		if (e->ny < 0)
 		{

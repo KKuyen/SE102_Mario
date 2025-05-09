@@ -88,7 +88,7 @@ void CGoomba::Render()
 	}
 	else if (state == GOOMBA_STATE_FALL)
 	{
-		aniId = ID_ANI_GOOMBA_FALL;
+		aniId = ID_ANI_GOOMBA_DIE;
 	}
 	
 

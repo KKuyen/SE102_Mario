@@ -34,9 +34,17 @@
 		{
 			if(teleport==1)
 			{
+				x = x - 155;
 				y =200;
 				teleport = 0;
 				teleportState = 1;
+			}
+			if (teleport == 2)
+			{
+				
+				y = 10;
+				teleport = 0;
+				teleportState = 0;
 			}
 		
 		}
@@ -215,6 +223,13 @@
             DebugOut(L"alo");
 			teleport = 1;
 		
+		}
+		if ( chimney->getType() == 3)
+		{
+
+			DebugOut(L"alo");
+			teleport = 2;
+
 		}
 		
 	}
@@ -483,10 +498,7 @@
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
 			}
 		}
-		else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
-		{
-			goomba->SetState(GOOMBA_STATE_DIE);
-		}
+		
 		else if (isHolding && heldObject != NULL)
 		{
 			goomba->SetState(WINGED_GOOMBA_STATE_FALL);
@@ -497,7 +509,7 @@
 			{
 				if (untouchable == 0)
 				{
-					if (goomba->GetState() != GOOMBA_STATE_DIE || GOOMBA_STATE_FALL)
+					if (goomba->GetState() != WINGED_GOOMBA_STATE_DIE || WINGED_GOOMBA_STATE_FALL)
 					{
 						if (level > MARIO_LEVEL_SMALL)
 						{
@@ -516,7 +528,7 @@
 			}
 
 		}
-		else if (level == MARIO_LEVEL_MAX)
+		else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
 		{
 			goomba->SetState(WINGED_GOOMBA_STATE_FALL);
 		}

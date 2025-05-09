@@ -5,7 +5,7 @@ void CEffectSmoke::Render()
    static DWORD startTime = GetTickCount();
    DWORD elapsedTime = GetTickCount() - startTime;
 
-   if (elapsedTime <= 400)  
+   if (elapsedTime <= ANI_TIME)
    {
        CAnimations* ani = CAnimations::GetInstance();
        ani->Get(SMOKE_ANI)->Render(x, y);

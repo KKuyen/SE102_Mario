@@ -28,8 +28,8 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float mario_x, mario_y;
 		mario->GetPosition(mario_x, mario_y);
 		bool isMarioRight = (mario_x > x);  
-		bool isUpFire = (mario_y < 110);
-		if(mario_x< 240 || mario_x> 500)
+		bool isUpFire = (mario_y < FIRE_DOWN_ZONE_Y);
+		if(mario_x< FIRE_LEFT_ZONE_X || mario_x> FIRE_RIGHT_ZONE_X)
 		{
 			isMarioInRange = TOO_FAR;
 		}
@@ -91,7 +91,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy = 0;
 			if (start == 0)
 				start = GetTickCount64();
-			if (GetTickCount64() - start > 1700 && isMarioInRange != TOO_CLOSE) {
+			if (GetTickCount64() - start > PAUSE_TIME && isMarioInRange != TOO_CLOSE) {
 				SetState(FLOWER_STATE_LEFT_POP_UP);
 				start = 0;
 			}
@@ -101,7 +101,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (start == 0)
 			start = GetTickCount64();
-		if (mario != nullptr && isFired==false && GetTickCount64() - start>1000 && isMarioInRange == IN_RANGE)
+		if (mario != nullptr && isFired==false && GetTickCount64() - start> FIRE_TIME && isMarioInRange == IN_RANGE)
 		{
 			DebugOut(L"[INFO] Fire bullet \n");
 			float mario_x, mario_y;
@@ -112,7 +112,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			p->PushBackGameObject(bullet);
 			isFired = true;
  		}
-		if (GetTickCount64() - start > 1700) {
+		if (GetTickCount64() - start > PAUSE_TIME) {
 			
 			SetState(FLOWER_STATE_LEFT_POP_DOWN);
 			isFired = false;
@@ -125,7 +125,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (start == 0)
 			start = GetTickCount64();
-		if (mario != nullptr && isFired == false && GetTickCount64() - start > 1000 && isMarioInRange == IN_RANGE)
+		if (mario != nullptr && isFired == false && GetTickCount64() - start > FIRE_TIME && isMarioInRange == IN_RANGE)
 		{
 			DebugOut(L"[INFO] Fire bullet \n");
 			float mario_x, mario_y;
@@ -136,7 +136,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			p->PushBackGameObject(bullet);
 			isFired = true;
 		}
-		if (GetTickCount64() - start > 1700) {
+		if (GetTickCount64() - start > PAUSE_TIME) {
 
 			SetState(FLOWER_STATE_LEFT_POP_DOWN);
 			isFired = false;
@@ -157,7 +157,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vy = 0;
 			if (start == 0)
 				start = GetTickCount64();
-			if (GetTickCount64() - start > 1700 && isMarioInRange !=TOO_CLOSE ) {
+			if (GetTickCount64() - start > PAUSE_TIME && isMarioInRange !=TOO_CLOSE ) {
 				SetState(FLOWER_STATE_RIGHT_POP_UP);
 				start = 0;
 			}
@@ -168,7 +168,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy = 0;
 		if (start == 0)
 			start = GetTickCount64();
-		if (mario != nullptr && isFired == false && GetTickCount64() - start > 1000 && isMarioInRange == IN_RANGE)
+		if (mario != nullptr && isFired == false && GetTickCount64() - start > FIRE_TIME && isMarioInRange == IN_RANGE)
 		{
 			DebugOut(L"[INFO] Fire bullet \n");
 			float mario_x, mario_y;
@@ -179,7 +179,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			p->PushBackGameObject(bullet);
 			isFired = true;
 		}
-		if (GetTickCount64() - start > 1700) {
+		if (GetTickCount64() - start > PAUSE_TIME) {
 
 			SetState(FLOWER_STATE_RIGHT_POP_DOWN);
 			isFired = false;
@@ -192,7 +192,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy = 0;
 		if (start == 0)
 			start = GetTickCount64();
-		if (mario != nullptr && isFired == false && GetTickCount64() - start > 1000 && isMarioInRange == IN_RANGE)
+		if (mario != nullptr && isFired == false && GetTickCount64() - start > FIRE_TIME && isMarioInRange == IN_RANGE)
 		{
 			DebugOut(L"[INFO] Fire bullet \n");
 			float mario_x, mario_y;
@@ -203,7 +203,7 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			p->PushBackGameObject(bullet);
 			isFired = true;
 		}
-		if (GetTickCount64() - start > 1700) {
+		if (GetTickCount64() - start > PAUSE_TIME) {
 
 			SetState(FLOWER_STATE_RIGHT_POP_DOWN);
 			isFired = false;

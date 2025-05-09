@@ -10,6 +10,7 @@
 #define EF_SMOKE_HEIGHT 11
 
 #define SMOKE_ANI	620000
+#define ANI_TIME	400
 
 
 class CEffectSmoke : public CEffect {

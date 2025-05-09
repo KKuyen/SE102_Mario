@@ -27,7 +27,7 @@ void CTranscript::Render()
         LPSPRITE digitSprite = s->Get(NUMBER_0 + scoreDigits[i]);
         if (digitSprite != nullptr)
         {
-            digitSprite->Draw(renderX -63 + i * 8, renderY -3);
+            digitSprite->Draw(renderX -63 + i * 8, renderY -4);
         }
         else
         {
@@ -41,7 +41,7 @@ void CTranscript::Render()
         LPSPRITE digitSprite = s->Get(NUMBER_0 + timeDigits[digitIndex]);
         if (digitSprite != nullptr)
         {
-            digitSprite->Draw(renderX +8 + i * 8, renderY -3); 
+            digitSprite->Draw(renderX +8 + i * 8, renderY -4); 
         }
         else
         {
@@ -52,7 +52,7 @@ void CTranscript::Render()
      LPSPRITE digitSprite = s->Get(NUMBER_0 + life);
      if (digitSprite != nullptr)
      {
-         digitSprite->Draw(renderX  -85, renderY - 3);
+         digitSprite->Draw(renderX  -85, renderY - 4);
      }
      else
      {
@@ -65,7 +65,7 @@ void CTranscript::Render()
 		 LPSPRITE digitSprite3 = s->Get(NUMBER_0 + dollarDigits[digitIndex]);
 		 if (digitSprite3 != nullptr)
 		 {
-             digitSprite3->Draw(renderX +18 + i * 8, renderY - 11);
+             digitSprite3->Draw(renderX +18 + i * 8, renderY - 12);
 		 }
 		 else
 		 {
@@ -78,7 +78,7 @@ void CTranscript::Render()
 		 LPSPRITE digitSprite = s->Get(NUMBER_0 + 10);
 		 if (digitSprite != nullptr)
 		 {
-			 digitSprite->Draw(renderX - 63 + i * 8, renderY - 11);
+			 digitSprite->Draw(renderX - 63 + i * 8, renderY - 12);
 		 }
 		 else
 		 {
@@ -88,7 +88,7 @@ void CTranscript::Render()
      LPSPRITE digitSprite4 = s->Get(NUMBER_0 + 11);
      if (digitSprite4 != nullptr)
      {
-         digitSprite4->Draw(renderX - 10, renderY - 11);
+         digitSprite4->Draw(renderX - 10, renderY - 12);
      }
      else
      {

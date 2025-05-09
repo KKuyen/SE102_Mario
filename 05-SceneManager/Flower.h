@@ -29,6 +29,14 @@
 #define IN_RANGE 2
 #define TOO_CLOSE 3
 
+#define FIRE_DOWN_ZONE_Y 110
+#define FIRE_LEFT_ZONE_X 240
+#define FIRE_RIGHT_ZONE_X 500
+
+#define PAUSE_TIME 1700
+#define FIRE_TIME 1000
+
+
 class CFlower : public CGameObject
 {
 protected:

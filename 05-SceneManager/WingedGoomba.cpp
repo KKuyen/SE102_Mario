@@ -1,5 +1,6 @@
 ﻿#include "WingedGoomba.h"
 #include "Koopas.h"
+#include "Goomba.h"
 
 CWingedGoomba::CWingedGoomba(float x, float y) :CGameObject(x, y)
 {
@@ -37,6 +38,12 @@ void CWingedGoomba::OnNoCollision(DWORD dt)
 
 void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (state == WINGED_GOOMBA_STATE_WALKING && dynamic_cast<CGoomba*>(e->obj))\
+	{
+		vx = -vx;
+			CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			goomba->SetVx(-goomba->GetVx());
+	}
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CWingedGoomba*>(e->obj)) return;
 	if (dynamic_cast<CKoopas*>(e->obj))

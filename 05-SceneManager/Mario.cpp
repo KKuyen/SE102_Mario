@@ -35,7 +35,7 @@
 			if(teleport==1)
 			{
 				x = x - 155;
-				y =200;
+				y =220;
 				teleport = 0;
 				teleportState = 1;
 			}

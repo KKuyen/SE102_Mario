@@ -30,6 +30,33 @@
 
 			SetState(MARIO_STATE_DIE);
 		}
+		if (x > 704 && renderedGoombaNum ==0)
+		{
+			LPGAMEOBJECT goomba = new CGoomba(855, 150);
+ 
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			p->AddGameObject(goomba);
+			renderedGoombaNum = 1;
+		}
+		if (x > 736 && renderedGoombaNum == 1)
+		{
+			LPGAMEOBJECT goomba = new CGoomba(925, 150);
+
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			p->AddGameObject(goomba);
+			renderedGoombaNum = 2;
+		}
+		if (x > 816 && renderedGoombaNum == 2)
+		{
+			LPGAMEOBJECT goomba = new CWingedGoomba(995, 150);
+
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			p->AddGameObject(goomba);
+			renderedGoombaNum = 3;
+		}
 		if (teleport!=0)
 		{
 			if(teleport==1)

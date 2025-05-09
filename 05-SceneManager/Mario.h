@@ -214,6 +214,7 @@ public:
 	ULONGLONG whip_start;
 	float teleport;
 	float teleportState;
+	int renderedGoombaNum;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -238,6 +239,7 @@ public:
 
 		teleport = 0;
 		teleportState = 0;
+		renderedGoombaNum = 0;
 	
 
 	}

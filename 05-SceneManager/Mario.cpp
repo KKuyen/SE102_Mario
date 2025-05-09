@@ -21,36 +21,39 @@
 	#include "Leaf.h"
 	#include "EffectSmoke.h"
 	#include "Chimney.h"
+#define RENDER_POINT_1	704
+#define RENDER_POINT_2	736
+#define RENDER_POINT_3	816
+#define RENDER_POSITION_Y 150
+#define RENDER_POSITION_X1 855
+#define RENDER_POSITION_X2 925
+#define RENDER_POSITION_X3 995
  
 	void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 
-		if (y >400)
+		
+		if (x > RENDER_POINT_1 && renderedGoombaNum ==0)
 		{
-
-			SetState(MARIO_STATE_DIE);
-		}
-		if (x > 704 && renderedGoombaNum ==0)
-		{
-			LPGAMEOBJECT goomba = new CGoomba(855, 150);
+			LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X1, RENDER_POSITION_Y);
  
 			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 			p->AddGameObject(goomba);
 			renderedGoombaNum = 1;
 		}
-		if (x > 736 && renderedGoombaNum == 1)
+		if (x > RENDER_POINT_2 && renderedGoombaNum == 1)
 		{
-			LPGAMEOBJECT goomba = new CGoomba(925, 150);
+			LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X2, RENDER_POSITION_Y);
 
 			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 			p->AddGameObject(goomba);
 			renderedGoombaNum = 2;
 		}
-		if (x > 816 && renderedGoombaNum == 2)
+		if (x > RENDER_POINT_3 && renderedGoombaNum == 2)
 		{
-			LPGAMEOBJECT goomba = new CWingedGoomba(995, 150);
+			LPGAMEOBJECT goomba = new CWingedGoomba(RENDER_POSITION_X3, RENDER_POSITION_Y);
 
 			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
@@ -59,18 +62,18 @@
 		}
 		if (teleport!=0)
 		{
-			if(teleport==1)
+			if(teleport== MARIO_TELEPORT_IN)
 			{
-				x = x - 155;
-				y =220;
-				teleport = 0;
+				x = x - MARIO_TELEPORT_IN_POSITION_X_MOVE;
+				y = MARIO_TELEPORT_IN_POSITION_Y;
+				teleport = MARIO_TELEPORT_NONE;
 				teleportState = 1;
 			}
-			if (teleport == 2)
+			if (teleport == MARIO_TELEPORT_OUT)
 			{
 				
-				y = 10;
-				teleport = 0;
+				y = MARIO_TELEPORT_OUT_POSITION_Y;
+				teleport = MARIO_TELEPORT_NONE;
 				teleportState = 0;
 			}
 		
@@ -248,14 +251,14 @@
 		{
 	
             DebugOut(L"alo");
-			teleport = 1;
+			teleport = MARIO_TELEPORT_IN;
 		
 		}
 		if ( chimney->getType() == 3)
 		{
 
 			DebugOut(L"alo");
-			teleport = 2;
+			teleport = MARIO_TELEPORT_OUT;
 
 		}
 		

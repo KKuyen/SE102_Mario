@@ -47,6 +47,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define ASSETS_SECTION_ANIMATIONS 2
 
 #define MAX_SCENE_LINE 1024
+#define CAMERA_POSITION_HIDDEN_MAP_Y 192
+#define RIGH_MAP_LIMIT 2647
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -378,11 +380,11 @@ void CPlayScene::Update(DWORD dt)
 		// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
 		cy = 0.0f;
 	}
-	if(mario->teleportState==1)
-		 cy = 192.0f;
+	if(mario->teleportState==MARIO_TELEPORT_IN)
+		 cy = CAMERA_POSITION_HIDDEN_MAP_Y;
 
 	if (cx < 0) cx = 0;
-	if (cx > 2547) cx = 2547;
+	if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
 
 
 	// Đặt vị trí camera

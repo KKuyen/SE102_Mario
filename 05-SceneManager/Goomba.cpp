@@ -35,8 +35,13 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CGoomba*>(e->obj)) {
+		vx = -vx;
+		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+		goomba->vx = -goomba->vx;
+	}
 	if (!e->obj->IsBlocking()) return; 
-	if (dynamic_cast<CGoomba*>(e->obj)) return; 
+
 	if (dynamic_cast<CKoopas*>(e->obj))
 	{
 		CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);

@@ -360,6 +360,10 @@
 				koopas->SetState(KOOPAS_STATE_SHELL);
 			
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(effectPoint);
 			}
 			else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
 			{
@@ -447,6 +451,10 @@
 			{
 				goomba->SetState(GOOMBA_STATE_DIE);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(effectPoint);
 			}
 		}
 		else if (isHolding && heldObject != NULL ) {
@@ -524,12 +532,20 @@
 			
 				goomba->SetState(WINGED_GOOMBA_STATE_DIE);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 200);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(effectPoint);
 			}
 			if (goomba->GetState() == WINGED_GOOMBA_STATE_FLYING)
 			{
 
 				goomba->SetState(WINGED_GOOMBA_STATE_WALKING);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(effectPoint);
 			}
 		}
 		

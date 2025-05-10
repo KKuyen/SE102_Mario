@@ -1060,12 +1060,14 @@
 					vy = -MARIO_JUMP_RUN_SPEED_Y;
 				else
 					vy = -MARIO_JUMP_SPEED_Y;
+				ay = MARIO_GRAVITY;
 			}
 			else
 			{
 				if (isFlying && level ==MARIO_LEVEL_MAX)
 				{
 					vy = -MARIO_JUMP_FLY_SPEED_Y;
+					ay = MARIO_GRAVITY_FLY;
 
 				}
 			}

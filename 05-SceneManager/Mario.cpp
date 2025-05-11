@@ -454,37 +454,45 @@
 		// jump on top >> kill Goomba and deflect a bit 
 		if (e->ny < 0)
 		{
-
-
-
-			if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+			if (koopas->canFly)
 			{
-				koopas->SetState(KOOPAS_STATE_SHELL);
-
+				koopas->canFly = false;
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
-				LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
-				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-				p->AddGameObject(effectPoint);
 			}
-			else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
+			else
 			{
-				vy = -MARIO_JUMP_DEFLECT_SPEED;
-				koopas->SetState(KOOPAS_STATE_FALL);
-				koopas->ax = 0;
+				if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+				{
+					koopas->SetState(KOOPAS_STATE_SHELL);
+
+					vy = -MARIO_JUMP_DEFLECT_SPEED;
+					LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+					LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+					LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+					p->AddGameObject(effectPoint);
+				}
+				else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
+				{
+					vy = -MARIO_JUMP_DEFLECT_SPEED;
+					koopas->SetState(KOOPAS_STATE_FALL);
+					koopas->ax = 0;
 
 
+				}
+				else if (koopas->GetState() == KOOPAS_STATE_SHELL)
+				{
+					koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+					koopas->SetVy(KOOPAS_JUMP_SPEED / 2);
+					if (vx > 0)
+						koopas->nx = 1;
+					else
+						koopas->nx = -1;
+				}
 			}
-			else if (koopas->GetState() == KOOPAS_STATE_SHELL)
-			{
-				koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
-				koopas->SetVy(KOOPAS_JUMP_SPEED / 2);
-				if (vx > 0)
-					koopas->nx = 1;
-				else
-					koopas->nx = -1;
-			}
 
+
+
+		
 
 		}
 		else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)

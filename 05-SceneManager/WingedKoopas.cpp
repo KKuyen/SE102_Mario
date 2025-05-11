@@ -8,17 +8,21 @@
 #include "ColorBox.h"
 #include "GiftBox.h"
 #include "WingedKoopas.h"
+#include "WIngedGoomba.h"
 CWingedKoopas::CWingedKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = WINGED_KOOPAS_GRAVITY;
 	this->nx = -1;
+	this->beforeLand = false;
+	this->canFly = true;
 	
 	SetState(WINGED_KOOPAS_STATE_WALKING);
 
 }
 void CWingedKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	
 	if (state == WINGED_KOOPAS_STATE_SHELL || state == WINGED_KOOPAS_STATE_SHELL_MOVING || state == WINGED_KOOPAS_STATE_HELD)
 	{
 		left = x - WINGED_KOOPAS_BBOX_WIDTH / 2;
@@ -88,6 +92,39 @@ void CWingedKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (canFly&&state!=WINGED_KOOPAS_STATE_SHELL && state != WINGED_KOOPAS_STATE_SHELL_MOVING)
+	{
+		// Check if the Winged Koopas is on the ground
+		bool isOnGround = false;
+
+		// Iterate through the list of objects to check if it's standing on a platform, brick, or color box
+		for (LPGAMEOBJECT obj : *coObjects)
+		{
+			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBrick*>(obj) ||
+				(dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1))
+			{
+				float l, t, r, b;
+				obj->GetBoundingBox(l, t, r, b);
+
+				float koopasLeft, koopasTop, koopasRight, koopasBottom;
+				GetBoundingBox(koopasLeft, koopasTop, koopasRight, koopasBottom);
+
+				// Check if the Winged Koopas is on top of the object
+				if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
+					koopasLeft <= r && koopasRight >= l)
+				{
+					isOnGround = true;
+					break;
+				}
+			}
+		}
+
+		// If on the ground, make it jump
+		if (isOnGround)
+		{
+			vy = WINGED_KOOPAS_JUMP_SPEED; // Set vertical velocity for jumping
+		}
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 	if (state == WINGED_KOOPAS_STATE_HELD)
@@ -97,57 +134,7 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		ay = 0;
 		return;
 	}
-	// Kiểm tra rìa mặt phẳng
-	if (state == WINGED_KOOPAS_STATE_WALKING || state == WINGED_KOOPAS_STATE_WALKING_RIGHT)
-	{
-		bool isOnPlatform = false;
-		float platformLeft, platformRight;
-
-		// Tìm đối tượng mà Koopas đang đứng
-		for (LPGAMEOBJECT obj : *coObjects)
-		{
-			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CPlatform*>(obj) || (dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1) || dynamic_cast<CBrick*>(obj))
-			{
-
-				float l, t, r, b;
-				obj->GetBoundingBox(l, t, r, b);
-
-
-				float koopasLeft, koopasTop, koopasRight, koopasBottom;
-				GetBoundingBox(koopasLeft, koopasTop, koopasRight, koopasBottom);
-				// Kiểm tra xem Koopas có đang đứng trên đối tượng này không
-				if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
-					koopasLeft <= r && koopasRight >= l)
-				{
-
-
-					isOnPlatform = true;
-					platformLeft = l;
-					platformRight = r + 16;
-					break;
-				}
-			}
-		}
-
-		// Nếu đang trên mặt phẳng, kiểm tra rìa
-		if (isOnPlatform)
-		{
-			float nextX = x + vx * dt; // Vị trí tiếp theo của Koopas
-
-			if (state == WINGED_KOOPAS_STATE_WALKING && nextX <= platformLeft + WINGED_KOOPAS_BBOX_WIDTH / 2)
-			{
-				// Gặp rìa trái, quay sang phải
-				SetState(WINGED_KOOPAS_STATE_WALKING_RIGHT);
-			}
-			else if (state == WINGED_KOOPAS_STATE_WALKING_RIGHT && nextX >= platformRight - WINGED_KOOPAS_BBOX_WIDTH / 2)
-			{
-				// Gặp rìa phải, quay sang trái
-				SetState(WINGED_KOOPAS_STATE_WALKING);
-			}
-		}
-	}
-
+	
 
 	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
 	if ((state == WINGED_KOOPAS_STATE_SHELL || state == WINGED_KOOPAS_STATE_HELD) &&
@@ -194,8 +181,24 @@ void CWingedKoopas::Render()
 	}
 
 	ani->Render(x, y);
+	if (canFly)
+	{
+		if(vx<0)
+		{
+			aniId = ID_ANI_WINGED_GOOMBA_FLYING;
+			CAnimations::GetInstance()->Get(aniId)->Render(x + WINGED_KOOPAS_BBOX_WIDTH / 2, y - WINGED_KOOPAS_BBOX_HEIGHT / 2.5);
+		}
+		if (vx > 0)
+		{
+			aniId = ID_ANI_WINGED_GOOMBA_FLYING_LEFT;
+		CAnimations::GetInstance()->Get(aniId)->Render(x - WINGED_KOOPAS_BBOX_WIDTH / 2, y - WINGED_KOOPAS_BBOX_HEIGHT / 2.5);
+		}
+	
+	}
+
 
 	//RenderBoundingBox();
+
 
 
 }

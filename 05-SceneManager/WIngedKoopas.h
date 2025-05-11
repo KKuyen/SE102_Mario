@@ -2,10 +2,10 @@
 #pragma once
 #include "GameObject.h"
 #include "Mario.h"
-#define WINGED_KOOPAS_GRAVITY 0.002f
-#define WINGED_KOOPAS_WALKING_SPEED 0.03f
+#define WINGED_KOOPAS_GRAVITY 0.00055f
+#define WINGED_KOOPAS_WALKING_SPEED 0.06f
 #define WINGED_KOOPAS_SHELL_MOVING_SPEED 0.2f
-#define WINGED_KOOPAS_JUMP_SPEED -0.2f 
+#define WINGED_KOOPAS_JUMP_SPEED -0.18
 #define WINGED_KOOPAS_FALL_SPEED -0.23f
 #define WINGED_KOOPAS_FALL_SPEED_HORIZONTAL 0.2f
 #define WINGED_KOOPAS_BBOX_WIDTH 16
@@ -18,6 +18,7 @@
 #define WINGED_KOOPAS_STATE_SHELL_MOVING 300
 #define WINGED_KOOPAS_STATE_HELD 202
 #define WINGED_KOOPAS_STATE_FALL 203
+
 
 
 
@@ -55,6 +56,8 @@ public:
 	float ax;
 	float ay;
 	int nx;
+	bool beforeLand;
+	bool canFly;
 
 	CMario* mario;
 	CWingedKoopas(float x, float y);

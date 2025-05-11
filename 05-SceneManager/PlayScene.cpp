@@ -48,7 +48,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 
 #define MAX_SCENE_LINE 1024
 #define CAMERA_POSITION_HIDDEN_MAP_Y 192
-#define RIGH_MAP_LIMIT 2647
+#define RIGH_MAP_LIMIT 2540
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {

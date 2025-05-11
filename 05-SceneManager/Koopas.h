@@ -8,7 +8,7 @@
 #define KOOPAS_FALL_SPEED -0.23f
 #define KOOPAS_FALL_SPEED_HORIZONTAL 0.2f
 #define KOOPAS_BBOX_WIDTH 16
-#define KOOPAS_BBOX_HEIGHT 26
+#define KOOPAS_BBOX_HEIGHT 25
 #define KOOPAS_BBOX_HEIGHT_SHELL 12
 
 #define KOOPAS_STATE_WALKING 100
@@ -25,6 +25,11 @@
 #define ID_ANI_KOOPAS_SHELL 6001
 #define ID_ANI_KOOPAS_SHELL_MOVING 6002
 #define ID_ANI_KOOPAS_FALL 6004
+#define ID_ANI_KOOPAS_GREEN_WALKING 7000
+#define ID_ANI_KOOPAS_GREEN_WALKING_RIGHT 7003
+#define ID_ANI_KOOPAS_GREEN_SHELL 7001
+#define ID_ANI_KOOPAS_GREEN_SHELL_MOVING 7002
+#define ID_ANI_KOOPAS_GREEN_FALL 7004
 #define KOOPAS_REVIVE_TIME 4000 
 class CKoopas : public CGameObject
 {
@@ -49,6 +54,7 @@ public:
 	float ax;
 	float ay;
 	int nx;
+	int color;
 	CMario* mario;
 	CKoopas(float x, float y);
 	virtual void SetState(int state);

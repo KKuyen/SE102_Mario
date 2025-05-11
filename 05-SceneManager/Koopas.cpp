@@ -12,6 +12,7 @@ CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	this->nx = -1;
+	this->color = 1;
 	SetState(KOOPAS_STATE_WALKING);
 
 }
@@ -171,18 +172,36 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopas::Render()
 {
-	int aniId = ID_ANI_KOOPAS_WALKING;
-	if (state == KOOPAS_STATE_WALKING_RIGHT)
-		aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
-	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
-		aniId = ID_ANI_KOOPAS_SHELL;
-	else if (state == KOOPAS_STATE_SHELL_MOVING)
-		aniId = ID_ANI_KOOPAS_SHELL_MOVING;
-	else if (state == KOOPAS_STATE_FALL)
-		aniId = ID_ANI_KOOPAS_FALL;
+	int aniId;
+	if(color==1)
+	{
+		 aniId= ID_ANI_KOOPAS_WALKING;
+		if (state == KOOPAS_STATE_WALKING_RIGHT)
+			aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
+		if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
+			aniId = ID_ANI_KOOPAS_SHELL;
+		else if (state == KOOPAS_STATE_SHELL_MOVING)
+			aniId = ID_ANI_KOOPAS_SHELL_MOVING;
+		else if (state == KOOPAS_STATE_FALL)
+			aniId = ID_ANI_KOOPAS_FALL;
 
 
 
+	
+	}
+	else
+	{
+		aniId = ID_ANI_KOOPAS_GREEN_WALKING;
+		if (state == KOOPAS_STATE_WALKING_RIGHT)
+			aniId = ID_ANI_KOOPAS_GREEN_WALKING_RIGHT;
+		if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
+			aniId = ID_ANI_KOOPAS_GREEN_SHELL;
+		else if (state == KOOPAS_STATE_SHELL_MOVING)
+			aniId = ID_ANI_KOOPAS_GREEN_SHELL_MOVING;
+		else if (state == KOOPAS_STATE_FALL)
+			aniId = ID_ANI_KOOPAS_GREEN_FALL;
+
+	}
 	LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
 	if (ani == nullptr)
 	{
@@ -191,6 +210,7 @@ void CKoopas::Render()
 	}
 
 	ani->Render(x, y);
+
 	//RenderBoundingBox();
 
 	

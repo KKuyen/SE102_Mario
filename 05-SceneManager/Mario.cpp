@@ -21,17 +21,28 @@
 	#include "Leaf.h"
 	#include "EffectSmoke.h"
 	#include "Chimney.h"
+#include "WingedKoopas.h"	
 #define RENDER_POINT_1	704
 #define RENDER_POINT_2	736
-#define RENDER_POINT_3	816
+#define RENDER_POINT_3	8163
 #define RENDER_POSITION_Y 150
+#define RENDER_POSITION_Y2 130
 #define RENDER_POSITION_X1 855
 #define RENDER_POSITION_X2 925
 #define RENDER_POSITION_X3 995
  
 	void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
+		if (x > RENDER_POINT_1 && renderedKoopas == 0)
+		{
+			CWingedKoopas* koopas = new CWingedKoopas(RENDER_POSITION_X1, RENDER_POSITION_Y2);
+		
 
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			p->AddGameObject(koopas);
+			renderedKoopas = 1;
+		}
 		
 		if (x > RENDER_POINT_1 && renderedGoombaNum ==0)
 		{
@@ -237,6 +248,10 @@
 			OnCollisionWithLeaf(e);
 		else if (dynamic_cast<CChimney*>(e->obj))
 			OnCollisionWithChimney(e);
+		else if (dynamic_cast<CWingedKoopas*>(e->obj))
+			OnCollisionWithWingedKoopas(e);
+
+
 
 	}
 	void CMario::OnCollisionWithChimney(LPCOLLISIONEVENT e)
@@ -427,6 +442,93 @@
 					}
 
 			
+				}
+			}
+		}
+	}
+	void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
+	{
+		CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(e->obj);
+		koopas->mario = this;
+
+		// jump on top >> kill Goomba and deflect a bit 
+		if (e->ny < 0)
+		{
+
+
+
+			if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+			{
+				koopas->SetState(KOOPAS_STATE_SHELL);
+
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(effectPoint);
+			}
+			else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
+			{
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				koopas->SetState(KOOPAS_STATE_FALL);
+				koopas->ax = 0;
+
+
+			}
+			else if (koopas->GetState() == KOOPAS_STATE_SHELL)
+			{
+				koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+				koopas->SetVy(KOOPAS_JUMP_SPEED / 2);
+				if (vx > 0)
+					koopas->nx = 1;
+				else
+					koopas->nx = -1;
+			}
+
+
+		}
+		else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+		{
+			koopas->SetState(KOOPAS_STATE_FALL);
+		}
+		else
+		{
+			if (untouchable == 0)
+			{
+				if (koopas->GetState() == KOOPAS_STATE_FALL)
+					return;
+				if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_HELD)
+				{
+					if (level > MARIO_LEVEL_SMALL)
+					{
+
+						level = level - 1;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+
+					}
+				}
+				else
+				{
+
+					CGame* game = CGame::GetInstance();
+					if (game->IsKeyDown(DIK_A)) // Run key
+					{
+						hold_start = GetTickCount64();
+						SetHolding(true, koopas);
+						koopas->SetState(KOOPAS_STATE_HELD);
+					}
+					else
+					{
+						koopas->nx = this->nx;
+						koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+					}
+
+
 				}
 			}
 		}

@@ -182,6 +182,7 @@
     <ClCompile Include="Transcript.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WingedGoomba.cpp" />
+    <ClCompile Include="WingedKoopas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -223,6 +224,7 @@
     <ClInclude Include="Transcript.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WIngedGoomba.h" />
+    <ClInclude Include="WIngedKoopas.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="background.txt" />

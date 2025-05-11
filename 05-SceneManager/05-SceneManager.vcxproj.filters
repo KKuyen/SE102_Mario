@@ -109,6 +109,9 @@
     <ClCompile Include="Transcript.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WingedKoopas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -226,6 +229,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transcript.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WIngedKoopas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

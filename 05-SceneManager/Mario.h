@@ -15,8 +15,8 @@
 #define MARIO_SLIP_DECEL 0.00015f     // Gia tốc giảm dần khi trượt
 
 #define MARIO_JUMP_SPEED_Y		0.40f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
-#define MARIO_JUMP_FLY_SPEED_Y 0.55f
+#define MARIO_JUMP_RUN_SPEED_Y	0.45f
+#define MARIO_JUMP_FLY_SPEED_Y 0.5f
 #define MARIO_FLY_ACTIVATION_TIME 1500
 #define MARIO_WHIP_TIME 250 
 
@@ -194,6 +194,7 @@ class CMario : public CGameObject
 	void OnCollisionWithFlower(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithChimney(LPCOLLISIONEVENT e);
+	void OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -222,6 +223,7 @@ public:
 	float teleport;
 	float teleportState;
 	int renderedGoombaNum;
+	int renderedKoopas;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -247,6 +249,7 @@ public:
 		teleport = 0;
 		teleportState = 0;
 		renderedGoombaNum = 0;
+		renderedKoopas = 0;
 	
 
 	}

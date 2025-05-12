@@ -20,10 +20,16 @@
 
 #define ID_FLOWER_TURN_LEFT_ANI 130001
 #define ID_FLOWER_TURN_RIGHT_ANI 130004
+#define ID_FLOWER_GREEN_TURN_LEFT_ANI 140001
+#define ID_FLOWER_GREEN_TURN_RIGHT_ANI 140004
 #define ID_FLOWER_LEFT_UP_FIRE_SPRITE 130002
 #define ID_FLOWER_LEFT_DOWN_FIRE_SPRITE 130003
 #define ID_FLOWER_RIGHT_UP_FIRE_SPRITE 130005
 #define ID_FLOWER_RIGHT_DOWN_FIRE_SPRITE 130006
+#define ID_FLOWER_GREEN_LEFT_UP_FIRE_SPRITE 140002
+#define ID_FLOWER_GREEN_LEFT_DOWN_FIRE_SPRITE 140003
+#define ID_FLOWER_GREEN_RIGHT_UP_FIRE_SPRITE 140005
+#define ID_FLOWER_GREEN_RIGHT_DOWN_FIRE_SPRITE 140006
 
 #define TOO_FAR 1
 #define IN_RANGE 2
@@ -53,12 +59,15 @@ protected:
 	virtual int IsBlocking() { return 0; }
 
 public:
-	CFlower(float x, float y) :CGameObject(x, y) {
+	int color;
+	CFlower(float x, float y, int color=1) :CGameObject(x, y) {
 		initY = y;
 		start = 0;
 		mario = nullptr;
 		isFired = false;
 		isMarioInRange = TOO_FAR;
+		color = color;
+	
 	}
 	void SetMario(CMario* m) { mario = m; } 
 };

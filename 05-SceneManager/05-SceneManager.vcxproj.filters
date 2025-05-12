@@ -112,6 +112,12 @@
     <ClCompile Include="WingedKoopas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PiranhaPlant.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PiranhaPlant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -261,6 +267,7 @@
     <Text Include="darkBackground.txt" />
     <Text Include="transcript.txt" />
     <Text Include="number.txt" />
+    <Text Include="piranha_plant.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

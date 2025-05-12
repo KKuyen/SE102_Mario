@@ -1,0 +1,7 @@
+﻿# id left top right bottom texture_id
+[SPRITES]
+120000	0	144	15	175	90
+120001	17	144	31	175	90
+# ani_id sprite1_id time1 sprite2_id time2 ...
+[ANIMATIONS]
+12000	120000	200	120001	200  # Animation đơn giản cho Piranha Plant

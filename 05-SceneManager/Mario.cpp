@@ -22,6 +22,7 @@
 	#include "EffectSmoke.h"
 	#include "Chimney.h"
 #include "WingedKoopas.h"	
+#include "PiranhaPlant.h"
 #define RENDER_POINT_1	704
 #define RENDER_POINT_2	736
 #define RENDER_POINT_3	8163
@@ -250,8 +251,28 @@
 			OnCollisionWithChimney(e);
 		else if (dynamic_cast<CWingedKoopas*>(e->obj))
 			OnCollisionWithWingedKoopas(e);
+		else if (dynamic_cast<CPiranhaPlant*>(e->obj))
+			OnCollisionWithCPiranhaPlant(e);
 
 
+
+	}
+	void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
+	{
+		CPiranhaPlant* piranhaplant = dynamic_cast<CPiranhaPlant*>(e->obj);\
+			if (untouchable == 0)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					StartUntouchable();
+					level = level - 1;
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
 
 	}
 	void CMario::OnCollisionWithChimney(LPCOLLISIONEVENT e)
@@ -391,7 +412,7 @@
 			else if (koopas->GetState() == KOOPAS_STATE_SHELL)
 			{
 				koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
-				koopas->SetVy(KOOPAS_JUMP_SPEED/2);
+			
 				if(vx>0)
 					koopas->nx = 1;
 				else
@@ -482,7 +503,7 @@
 				else if (koopas->GetState() == KOOPAS_STATE_SHELL)
 				{
 					koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
-					koopas->SetVy(KOOPAS_JUMP_SPEED / 2);
+					
 					if (vx > 0)
 						koopas->nx = 1;
 					else

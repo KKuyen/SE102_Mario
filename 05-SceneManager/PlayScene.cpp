@@ -11,7 +11,7 @@
 #include "Platform.h"
 #include "Brick.h"
 #include "Background.h"
-
+#include "PiranhaPlant.h"
 #include "Koopas.h" 
 #include "WingedGoomba.h"
 
@@ -226,6 +226,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		else if (flowerType == 2) {
 			obj->SetState(FLOWER_STATE_LEFT_POP_UP);
 		}
+		else if (flowerType == 3) {
+			obj->SetState(FLOWER_STATE_LEFT_POP_UP);
+			((CFlower*)obj)->color = 2;
+			
+		}
 		if (player != nullptr && dynamic_cast<CMario*>(player)) {
  			((CFlower*)obj)->SetMario((CMario*)player);
 		}
@@ -255,8 +260,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int scene_id = atoi(tokens[3].c_str());
 		obj = new CPortal(x, y, scene_id);
+		break;
 	}
-	break;
+	case OBJECT_TYPE_PIRANHA_PLANT:
+
+	{
+		float max_y = (float)atof(tokens[3].c_str());
+		obj = new CPiranhaPlant(x, y, max_y);
+		break;
+	}
+	
 
 
 	default:

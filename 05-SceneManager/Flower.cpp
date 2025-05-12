@@ -221,33 +221,39 @@ void CFlower::Render()
 {
 	CSprites* s = CSprites::GetInstance();
 	CAnimations* animations = CAnimations::GetInstance();
+	int color = 0;
+	if (this->color == 2)
+	{
+		color = 10000;
+	}
 	switch (state) {
 	case FLOWER_STATE_LEFT_POP_UP:
-		animations->Get(ID_FLOWER_TURN_LEFT_ANI)->Render(x, y);
+		
+		animations->Get(ID_FLOWER_TURN_LEFT_ANI+color)->Render(x, y);
 		break;
 	case FLOWER_STATE_LEFT_POP_DOWN:
-		animations->Get(ID_FLOWER_TURN_LEFT_ANI)->Render(x, y);
+		animations->Get(ID_FLOWER_TURN_LEFT_ANI + color)->Render(x, y);
 		break;
 	case FLOWER_STATE_LEFT_UP_FIRE:
-		s->Get(ID_FLOWER_LEFT_UP_FIRE_SPRITE)->Draw(x, y);
+		s->Get(ID_FLOWER_LEFT_UP_FIRE_SPRITE + color)->Draw(x, y);
 		break;
 	case FLOWER_STATE_LEFT_DOWN_FIRE:
-		s->Get(ID_FLOWER_LEFT_DOWN_FIRE_SPRITE)->Draw(x, y);
+		s->Get(ID_FLOWER_LEFT_DOWN_FIRE_SPRITE + color)->Draw(x, y);
 		break;
 	case FLOWER_STATE_RIGHT_POP_UP:
-		animations->Get(ID_FLOWER_TURN_RIGHT_ANI)->Render(x, y);
+		animations->Get(ID_FLOWER_TURN_RIGHT_ANI + color)->Render(x, y);
 		break;
 	case FLOWER_STATE_RIGHT_POP_DOWN:
-		animations->Get(ID_FLOWER_TURN_RIGHT_ANI)->Render(x, y);
+		animations->Get(ID_FLOWER_TURN_RIGHT_ANI + color)->Render(x, y);
 		break;
 	case FLOWER_STATE_RIGHT_UP_FIRE:
-		s->Get(ID_FLOWER_RIGHT_UP_FIRE_SPRITE)->Draw(x, y);
+		s->Get(ID_FLOWER_RIGHT_UP_FIRE_SPRITE + color)->Draw(x, y);
 		break;
 	case FLOWER_STATE_RIGHT_DOWN_FIRE:
-		s->Get(ID_FLOWER_RIGHT_DOWN_FIRE_SPRITE)->Draw(x, y);
+		s->Get(ID_FLOWER_RIGHT_DOWN_FIRE_SPRITE + color)->Draw(x, y);
 		break;
 	default:
-		animations->Get(ID_FLOWER_TURN_LEFT_ANI)->Render(x, y);
+		animations->Get(ID_FLOWER_TURN_LEFT_ANI + color)->Render(x, y);
 		break;
 			
 	}

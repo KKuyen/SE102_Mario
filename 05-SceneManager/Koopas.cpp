@@ -248,6 +248,7 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_SHELL_MOVING:
 		vx = nx * KOOPAS_SHELL_MOVING_SPEED;
+		vy = 0;
 		ay = KOOPAS_GRAVITY;
 		StartReviveTimer(); 
 		break;

@@ -174,7 +174,7 @@ class CMario : public CGameObject
 	
 
 
-	int untouchable; 
+
 	ULONGLONG untouchable_start;
 
 	int coin; 
@@ -195,13 +195,14 @@ class CMario : public CGameObject
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithChimney(LPCOLLISIONEVENT e);
 	void OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 public:
-
+	int untouchable;
 	int level;
 
 

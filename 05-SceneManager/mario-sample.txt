@@ -7,8 +7,8 @@ height	240
 # type: 0: intro, 1: play scene 
 [SCENES]
 0	intro.txt
-1	scene01.txt
-2	scene02.txt
+1	scene1_1.txt
+2	scene1_4.txt
 5	scene0005.txt
 
 # id	file 

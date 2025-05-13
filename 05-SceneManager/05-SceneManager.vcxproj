@@ -248,8 +248,8 @@
     <Text Include="number.txt" />
     <Text Include="piranha_plant.txt" />
     <Text Include="scene0005.txt" />
-    <Text Include="scene01.txt" />
-    <Text Include="scene02.txt" />
+    <Text Include="scene1_1.txt" />
+    <Text Include="scene1_4.txt" />
     <Text Include="transcript.txt" />
     <Text Include="wingedgoomba.txt" />
   </ItemGroup>

@@ -162,23 +162,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBackground(x, y,width, height, spriteId); break;
 	}
 	case OBJECT_TYPE_COLORBOX: {
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-		int isVertical = atoi(tokens[9].c_str());
-		int isPlatform = atoi(tokens[10].c_str());
+		int widthCells = atoi(tokens[3].c_str());
+		int heightCells = atoi(tokens[4].c_str());
+		float cellWidth = (float)atof(tokens[5].c_str());
+		float cellHeight = (float)atof(tokens[6].c_str());
+		int color = atoi(tokens[7].c_str());
+		int isPlatform = atoi(tokens[8].c_str());
 
 		obj = new CColorBox(
 			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end,
-			isVertical,isPlatform
+			widthCells, heightCells,
+			cellWidth, cellHeight,
+			color, isPlatform
 		);
 
-		break; 
+		break;
 	}
 	case OBJECT_TYPE_DARK_BACKGROUND: {
 		float cell_width = (float)atof(tokens[3].c_str());

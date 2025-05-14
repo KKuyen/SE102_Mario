@@ -164,16 +164,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COLORBOX: {
 		int widthCells = atoi(tokens[3].c_str());
 		int heightCells = atoi(tokens[4].c_str());
-		float cellWidth = (float)atof(tokens[5].c_str());
-		float cellHeight = (float)atof(tokens[6].c_str());
-		int color = atoi(tokens[7].c_str());
-		int isPlatform = atoi(tokens[8].c_str());
+		int color = atoi(tokens[5].c_str());
+		int isPlatform = atoi(tokens[6].c_str());
 
 		obj = new CColorBox(
 			x, y,
 			widthCells, heightCells,
-			cellWidth, cellHeight,
-			color, isPlatform
+ 			color, isPlatform
 		);
 
 		break;

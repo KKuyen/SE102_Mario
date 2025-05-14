@@ -399,7 +399,7 @@ breakable_brick.txt
 6	2785	168	16	16	63004
 
 #Portal 
-50	100	50	115	65	2
+50	100	100	115	115	2
 
 
 #Colorbox
@@ -407,6 +407,16 @@ breakable_brick.txt
 #float x, float y, int widthCells, int heightCells,   int color, bool isPlatform
 7	272	105	3	5	1	1
 7	240	137	3	3	0	1
+7	512	73	4	7	3	1
+7	464	105	4	5	0	1
+7	400	137	5	3	2	1
+7	512	153	6	2	2	1
+7	1328	89	7	6	1	1
+7	1296	121	7	4	0	1
+7	1264	153	7	2	2	1
+7	2176	41	3	9	2	1
+7	2144	137	3	3	0	1
+
 
   
 
@@ -560,6 +570,6 @@ breakable_brick.txt
 
 # PIRANHA PLANT
 # Format: type x y max_y
-12	300	150	115
+#12	300	150	115
 # BREAKABLE BRICK
 14	64	168

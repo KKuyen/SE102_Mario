@@ -16,37 +16,37 @@ void CColorBox::Render()
         for (int col = 0; col < widthCells; col++)
         {
             int spriteIndex;
-
-            if (widthCells <= 3 && heightCells <= 3)
+            if (row == 0)
             {
-                spriteIndex = row * 3 + col + 1;
-            }
-            else
-            {
-                if (widthCells > 3)
-                {
-                    if (col == 0)
-                        spriteIndex = row * 3 + 1;
-                    else if (col == widthCells - 1)
-                        spriteIndex = row * 3 + 3;
-                    else
-                        spriteIndex = row * 3 + 2;
-                }
+                if (col == 0)
+                    spriteIndex = 1;
+                else if (col == widthCells - 1)
+                    spriteIndex = 3;
                 else
-                {
-                    spriteIndex = row * 3 + col + 1;
-                }
+					spriteIndex = 2;
+			}
+			else if (row == heightCells - 1)
+			{
+                if (col == 0)
+                    spriteIndex = 7;
+                else if (col == widthCells - 1)
+                    spriteIndex = 9;
+                else
+                    spriteIndex = 8;
+				
+			}
+			else
+			{
+                if (col == 0)
+                    spriteIndex = 4;
+                else if (col == widthCells - 1)
+                    spriteIndex = 6;
+                else
+                    spriteIndex = 5;
+			}
 
-                if (heightCells > 3)
-                {
-                    if (row == 0)
-                        spriteIndex = col + 1;
-                    else if (row == heightCells - 1)
-                        spriteIndex = 7 + col;
-                    else if (widthCells <= 3 || (col != 0 && col != widthCells - 1))
-                        spriteIndex = 4 + col;
-                }
-            }
+
+            
 
             int spriteId = baseSpriteId + spriteIndex;
             LPSPRITE sprite = s->Get(spriteId);
@@ -91,7 +91,7 @@ void CColorBox::GetBoundingBox(float& l, float& t, float& r, float& b)
     float CELL_WIDTH_div_2 = CELL_WIDTH / 2;
     l = x - CELL_WIDTH_div_2;
     t = y - CELL_HEIGHT / 2;
-    r = l + CELL_WIDTH * this->widthCells + 8.0f;
+    r = l + CELL_WIDTH * this->widthCells - 6.0f;
     b = t + CELL_HEIGHT * this->heightCells;
 }
 

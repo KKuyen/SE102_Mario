@@ -29,6 +29,8 @@
 #define OBJECT_TYPE_TRANSCRIPT	21
 #define OBJECT_TYPE_NUMBER	23
 #define OBJECT_TYPE_PIRANHA_PLANT 12
+#define OBJECT_TYPE_BREAKABLE_BRICK 14 
+
 
  
 
@@ -161,3 +163,4 @@
 
 #define ID_SPRITE_PIRANHA_PLANT 120000 // ID sprite cho Piranha Plant
 #define ID_ANI_PIRANHA_PLANT_UP_DOWN 12000 // ID animation cho trạng thái lên/xuống
+#define ID_SPRITE_BREAKABLE_BRICK 14001 

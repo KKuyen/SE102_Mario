@@ -27,7 +27,7 @@
 #include "Leaf.h"
 #include "DarkBackground.h"
 #include "Transcript.h"
-
+#include "BreakableBrick.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -266,6 +266,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPiranhaPlant(x, y, max_y);
 		break;
 	}
+	case OBJECT_TYPE_BREAKABLE_BRICK: obj = new CBreakableBrick(x, y); break;
 	
 
 

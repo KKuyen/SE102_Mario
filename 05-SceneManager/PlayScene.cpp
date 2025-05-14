@@ -28,6 +28,7 @@
 #include "DarkBackground.h"
 #include "Transcript.h"
 #include "BreakableBrick.h"
+#include "GrassPlatform.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -171,6 +172,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			x, y,
 			widthCells, heightCells,
  			color, isPlatform
+		);
+
+		break;
+	}
+	case OBJECT_TYPE_GRASSPLATFORM: {
+		int widthCells = atoi(tokens[3].c_str());
+		int heightCells = atoi(tokens[4].c_str());
+		int isPlatform = atoi(tokens[5].c_str());
+
+		obj = new CGrassPlatform(
+			x, y,
+			widthCells, heightCells,
+			 isPlatform
 		);
 
 		break;

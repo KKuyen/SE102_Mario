@@ -841,7 +841,7 @@
 	void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	{
 		CPortal* p = (CPortal*)e->obj;
-		CGame::GetInstance()->InitiateSwitchScene(5);
+		CGame::GetInstance()->InitiateSwitchScene(2);
 	}
 
 	//

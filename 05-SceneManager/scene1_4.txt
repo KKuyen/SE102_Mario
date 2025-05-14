@@ -4,6 +4,9 @@ mario.txt
 coin.txt
 cloud.txt
 brick.txt
+grass.txt
+transcript.txt
+number.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -33,3 +36,9 @@ brick.txt
 #Portal 
 50	200	160	216	180	1
 
+#Grass_platform
+#float x, float y, int widthCells, int heightCells,  bool isPlatform
+25	8	122	10	5	1
+
+#Transcript
+21	125	217

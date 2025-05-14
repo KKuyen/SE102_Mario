@@ -2,63 +2,63 @@
 
 #include "Sprite.h"
 #include "Sprites.h"
-
 #include "Textures.h"
 #include "Game.h"
 
-void CGrassPlatform::RenderBoundingBox()
-{
-	D3DXVECTOR3 p(x, y, 0);
-	RECT rect;
-
-	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
-
-	float l, t, r, b;
-
-	GetBoundingBox(l, t, r, b);
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = (int)r - (int)l;
-	rect.bottom = (int)b - (int)t;
-
-	float cx, cy;
-	CGame::GetInstance()->GetCamPos(cx, cy);
-
-	float xx = x - this->cellWidth / 2 + rect.right / 2;
-
-	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
-}
-
 void CGrassPlatform::Render()
 {
-	if (this->length <= 0) return;
-	float xx = x;
-	CSprites* s = CSprites::GetInstance();
+    if (widthCells <= 0 || heightCells <= 0) return;
 
-	s->Get(this->spriteIdBegin)->Draw(xx, y);
-	xx += this->cellWidth;
-	for (int i = 1; i < this->length - 1; i++)
-	{
-		s->Get(this->spriteIdMiddle)->Draw(xx, y);
-		xx += this->cellWidth;
-	}
-	if (length > 1)
-		s->Get(this->spriteIdEnd)->Draw(xx, y);
+    CSprites* s = CSprites::GetInstance();
 
-	//RenderBoundingBox();
+    for (int row = 0; row < heightCells; row++)
+    {
+        for (int col = 0; col < widthCells; col++)
+        {
+            int spriteIndex;
+            if (row == 0)
+            {
+                if (col == 0)
+                    spriteIndex = 1;
+                else if (col == widthCells - 1)
+                    spriteIndex = 3;
+                else
+                    spriteIndex = 2;
+            }
+            else
+            {
+                if (col == 0)
+                    spriteIndex = 4;
+                else if (col == widthCells - 1)
+                    spriteIndex = 6;
+                else
+                    spriteIndex = 5;
+            }
+
+            int spriteId = baseSpriteId + spriteIndex;
+            LPSPRITE sprite = s->Get(spriteId);
+            if (sprite == nullptr)
+            {
+                return;
+            }
+            float renderX = x + col * CELL_WIDTH;
+            float renderY = y + row * CELL_HEIGHT;
+            sprite->Draw(renderX, renderY);
+        }
+    }
 }
 
 void CGrassPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	float cellWidth_div_2 = this->cellWidth / 2;
-	l = x - cellWidth_div_2;
-	t = y - this->cellHeight / 2;
-	r = l + this->cellWidth * this->length;
-	b = t + this->cellHeight;
+    float CELL_WIDTH_div_2 = CELL_WIDTH / 2;
+    l = x - CELL_WIDTH_div_2;
+    t = y - CELL_HEIGHT / 2;
+    r = l + CELL_WIDTH * this->widthCells ;
+    b = t + CELL_HEIGHT * this->heightCells;
 }
 
 int CGrassPlatform::IsDirectionColliable(float nx, float ny)
 {
-	if (nx == 0 && ny == -1) return 1;
-	else return 0;
+    if (nx == 0 && ny == -1) return 1;
+    else return 0;
 }

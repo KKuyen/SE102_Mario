@@ -243,7 +243,7 @@ void CWingedKoopas::SetState(int state)
 		vx = nx * WINGED_KOOPAS_FALL_SPEED_HORIZONTAL;
 
 		vy = WINGED_KOOPAS_FALL_SPEED; // Nảy lên
-		ay = WINGED_KOOPAS_GRAVITY; // Trọng lực sẽ kéo xuống
+		ay = WINGED_KOOPAS_GRAVITY_FALL; // Trọng lực sẽ kéo xuống
 		revive_start = 0;
 
 

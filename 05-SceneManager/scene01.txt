@@ -20,6 +20,7 @@ darkBackground.txt
 transcript.txt
 number.txt
 piranha_plant.txt
+breakable_brick.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -617,7 +618,7 @@ piranha_plant.txt
 3	590	130
 
 # WINGEDGOOMBA
-#10	1100	10
+	10	1100	10
 #GOOMBA
 2	224	168
 2	560	168
@@ -629,3 +630,5 @@ piranha_plant.txt
 # PIRANHA PLANT
 # Format: type x y max_y
 12	300	150	115
+# BREAKABLE BRICK
+14	64	168

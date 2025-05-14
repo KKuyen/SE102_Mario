@@ -118,6 +118,15 @@
     <ClCompile Include="PiranhaPlant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BreakableBrick.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakableBrick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakableBrickPart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -240,6 +249,9 @@
     <ClInclude Include="WIngedKoopas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BreakableBrickPart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -268,6 +280,7 @@
     <Text Include="transcript.txt" />
     <Text Include="number.txt" />
     <Text Include="piranha_plant.txt" />
+    <Text Include="breakable_brick.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

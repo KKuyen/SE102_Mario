@@ -149,6 +149,9 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Background.cpp" />
+    <ClCompile Include="BreakableBrick.cpp" />
+    <ClCompile Include="BreakableBrick.h" />
+    <ClCompile Include="BreakableBrickPart.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Chimney.cpp" />
@@ -192,6 +195,7 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="AssetIDs.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="BreakableBrickPart.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Chimney.h" />
@@ -230,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="background.txt" />
+    <Text Include="breakable_brick.txt" />
     <Text Include="brick.txt" />
     <Text Include="bullet.txt" />
     <Text Include="chimney.txt" />

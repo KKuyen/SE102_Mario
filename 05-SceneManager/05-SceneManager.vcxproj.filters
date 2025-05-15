@@ -127,6 +127,9 @@
     <ClCompile Include="BreakableBrickPart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GrassPlatform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -252,6 +255,9 @@
     <ClInclude Include="BreakableBrickPart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GrassPlatform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -271,8 +277,6 @@
     <Text Include="mario.txt" />
     <Text Include="mushroom.txt" />
     <Text Include="scene0005.txt" />
-    <Text Include="scene01.txt" />
-    <Text Include="scene02.txt" />
     <Text Include="wingedgoomba.txt" />
     <Text Include="coin.txt" />
     <Text Include="leaf.txt" />
@@ -281,6 +285,9 @@
     <Text Include="number.txt" />
     <Text Include="piranha_plant.txt" />
     <Text Include="breakable_brick.txt" />
+    <Text Include="grass.txt" />
+    <Text Include="scene1_1.txt" />
+    <Text Include="scene1_4.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

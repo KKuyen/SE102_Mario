@@ -255,11 +255,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int sprite_begin = atoi(tokens[6].c_str());
 		int sprite_middle = atoi(tokens[7].c_str());
 		int sprite_end = atoi(tokens[8].c_str());
+		int isVertical = atoi(tokens[9].c_str());
+		int animationId = atoi(tokens[10].c_str());
 
 		obj = new CPlatform(
 			x, y,
 			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
+			sprite_begin, sprite_middle, sprite_end, isVertical, animationId
 		);
 
 		break;
@@ -478,7 +480,12 @@ void CPlayScene::PurgeDeletedObjects()
 }
 void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 {
-	objects.insert(objects.begin() + 400, obj);
+	if (400 <= objects.size()) {
+		objects.insert(objects.begin() + 400, obj);
+	}
+	else {
+		objects.push_back(obj); // Or handle the case appropriately
+	}
 }
 void CPlayScene::PushBackGameObject(LPGAMEOBJECT obj)
 {

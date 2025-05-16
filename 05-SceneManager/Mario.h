@@ -196,6 +196,7 @@ class CMario : public CGameObject
 	void OnCollisionWithChimney(LPCOLLISIONEVENT e);
 	void OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e);
+	void OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -225,6 +226,7 @@ public:
 	float teleportState;
 	int renderedGoombaNum;
 	int renderedKoopas;
+	int renderedMovablePlatform;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -251,6 +253,7 @@ public:
 		teleportState = 0;
 		renderedGoombaNum = 0;
 		renderedKoopas = 0;
+		renderedMovablePlatform = 0;
 	
 
 	}

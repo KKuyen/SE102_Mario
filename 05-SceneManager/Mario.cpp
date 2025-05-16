@@ -77,14 +77,15 @@
 			}
 		}
 		else {
-			if (x > 238 )
+			if (x > 238 && renderedMovablePlatform == 0)
 			{
-				CMovablePlatform* movablePlatform = new CMovablePlatform(335, 30);
+				CMovablePlatform* movablePlatform = new CMovablePlatform(305, 80);
 
 
 				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 				p->AddGameObject(movablePlatform);
+				renderedMovablePlatform = 1;
  			}
 
 
@@ -271,13 +272,15 @@
 			OnCollisionWithWingedKoopas(e);
 		else if (dynamic_cast<CPiranhaPlant*>(e->obj))
 			OnCollisionWithCPiranhaPlant(e);
-
+		else if (dynamic_cast<CMovablePlatform*>(e->obj))
+			OnCollisionWithCMovablePlatform(e);
 
 
 	}
+
 	void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
 	{
-		CPiranhaPlant* piranhaplant = dynamic_cast<CPiranhaPlant*>(e->obj);\
+		CPiranhaPlant* piranhaplant = dynamic_cast<CPiranhaPlant*>(e->obj); \
 			if (untouchable == 0)
 			{
 				if (level > MARIO_LEVEL_SMALL)
@@ -291,6 +294,15 @@
 					SetState(MARIO_STATE_DIE);
 				}
 			}
+
+	}
+	void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
+	{
+		CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj); 
+		if (e->ny < 0) {
+			movablePlatform->Falling();
+		}
+
 
 	}
 	void CMario::OnCollisionWithChimney(LPCOLLISIONEVENT e)

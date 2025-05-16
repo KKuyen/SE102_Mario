@@ -1,4 +1,5 @@
 #include "MovablePlatform.h"
+#include "Mario.h"
 
 void CMovablePlatform::Render()
 {
@@ -12,8 +13,20 @@ void CMovablePlatform::Render()
 
 void CMovablePlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - PLATFORM_WIDTH / 2;
+	l = x - PLATFORM_WIDTH / 2 + 8;
 	t = y - PLATFORM_HEIGHT / 2;
 	r = l + PLATFORM_WIDTH;
 	b = t + PLATFORM_HEIGHT;
+}
+
+void CMovablePlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+ 	x += vx * dt;
+	y += vy * dt;
+}
+ 
+
+void CMovablePlatform::Falling() {
+	vx = 0;
+	vy = PLATFORM_GRAVITY;
 }

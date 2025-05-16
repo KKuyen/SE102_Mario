@@ -477,7 +477,7 @@ void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 		objects.insert(objects.begin() + 400, obj);
 	}
 	else {
-		objects.push_back(obj); // Or handle the case appropriately
+		objects.insert(objects.begin() + 20, obj);
 	}
 }
 void CPlayScene::PushBackGameObject(LPGAMEOBJECT obj)

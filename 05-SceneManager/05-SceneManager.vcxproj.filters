@@ -127,6 +127,12 @@
     <ClCompile Include="BreakableBrickPart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HiddenButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -252,6 +258,12 @@
     <ClInclude Include="BreakableBrickPart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HiddenButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -281,6 +293,7 @@
     <Text Include="number.txt" />
     <Text Include="piranha_plant.txt" />
     <Text Include="breakable_brick.txt" />
+    <Text Include="button.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

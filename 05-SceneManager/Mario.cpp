@@ -23,9 +23,11 @@
 	#include "Chimney.h"
 #include "WingedKoopas.h"	
 #include "PiranhaPlant.h"
+#include "HiddenButton.h"
+#include "Button.h"
 #define RENDER_POINT_1	704
 #define RENDER_POINT_2	736
-#define RENDER_POINT_3	8163
+#define RENDER_POINT_3	816
 #define RENDER_POSITION_Y 150
 #define RENDER_POSITION_Y2 130
 #define RENDER_POSITION_X1 855
@@ -253,13 +255,52 @@
 			OnCollisionWithWingedKoopas(e);
 		else if (dynamic_cast<CPiranhaPlant*>(e->obj))
 			OnCollisionWithCPiranhaPlant(e);
+		else if (dynamic_cast<CHiddenButton*>(e->obj))
+			OnCollisionWithCHiddenButton(e);
+		else if (dynamic_cast<CButton*>(e->obj))
+			OnCollisionWithButton(e);
 
 
+	}
+	void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
+	{
+		CButton* button = dynamic_cast<CButton*>(e->obj);
+		if (!button->isPressed && e->ny < 0) // Mario jumps on top of the button
+		{
+			button->isPressed = true;
+			// Optionally: Play hit animation or trigger other game logic (e.g., spawn platforms)
+			// Example: vy = -MARIO_JUMP_DEFLECT_SPEED; // Deflect Mario upward
+		}
+	}
+	void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
+	{
+		CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
+		if (e->ny > 0 && hiddenbutton->isActivated == false)
+		{
+
+			hiddenbutton->isActivated = true;
+			float bx, by;
+			hiddenbutton->GetPosition(bx, by);
+
+			// Calculate the position for the new button (adjust offset as needed)
+			float buttonX = bx;
+			float buttonY = by - 16.0f; // 16.0f is an example offset, use your button's height
+
+			// Create the button object
+			CButton* button = new CButton(buttonX, buttonY);
+
+			// Add the button to the current scene
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			if (p) p->AddGameObject(button);
+
+		
+		}
 
 	}
 	void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
 	{
-		CPiranhaPlant* piranhaplant = dynamic_cast<CPiranhaPlant*>(e->obj);\
+		CPiranhaPlant* piranhaplant = dynamic_cast<CPiranhaPlant*>(e->obj);
 			if (untouchable == 0)
 			{
 				if (level > MARIO_LEVEL_SMALL)
@@ -1225,22 +1266,46 @@
 			hold_start = 0;
 			if (isHolding && heldObject != NULL)
 			{
-				CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
-				if (koopas)
+				if (dynamic_cast<CKoopas*>(heldObject))
 				{
-					koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
-					// Throw shell in facing direction
-					koopas->SetSpeed(nx > 0 ? KOOPAS_SHELL_MOVING_SPEED : -KOOPAS_SHELL_MOVING_SPEED, 0);
-					float kx, ky;
-			
-				
-					koopas->GetPosition(kx, ky);
-					if (level == MARIO_LEVEL_SMALL)
-						ky -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT)/2;
-					koopas->SetPosition(kx, ky);
-			
+					CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+					if (koopas)
+					{
+						koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+						// Throw shell in facing direction
+						koopas->SetSpeed(nx > 0 ? KOOPAS_SHELL_MOVING_SPEED : -KOOPAS_SHELL_MOVING_SPEED, 0);
+						float kx, ky;
+
+
+						koopas->GetPosition(kx, ky);
+						if (level == MARIO_LEVEL_SMALL)
+							ky -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+						koopas->SetPosition(kx, ky);
+
+					}
+					SetHolding(false, NULL);
 				}
-				SetHolding(false, NULL);
+				if (dynamic_cast<CWingedKoopas*>(heldObject))
+				{
+					CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+					if (koopas)
+					{
+						koopas->SetState(WINGED_KOOPAS_STATE_SHELL_MOVING);
+						// Throw shell in facing direction
+						koopas->SetSpeed(nx > 0 ? WINGED_KOOPAS_SHELL_MOVING_SPEED : -WINGED_KOOPAS_SHELL_MOVING_SPEED, 0);
+						float kx, ky;
+
+
+						koopas->GetPosition(kx, ky);
+						if (level == MARIO_LEVEL_SMALL)
+							ky -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+						koopas->SetPosition(kx, ky);
+
+					}
+					SetHolding(false, NULL);
+
+				}
+
 			}
 			break;
 		case MARIO_STATE_RUNNING_RIGHT:

@@ -21,6 +21,7 @@ transcript.txt
 number.txt
 piranha_plant.txt
 breakable_brick.txt
+button.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -618,7 +619,7 @@ breakable_brick.txt
 3	590	130
 
 # WINGEDGOOMBA
-	10	1100	10
+10	100	10
 #GOOMBA
 2	224	168
 2	560	168
@@ -632,3 +633,6 @@ breakable_brick.txt
 12	300	150	115
 # BREAKABLE BRICK
 14	64	168
+# HIDDEN BUTTON
+16	80	140
+

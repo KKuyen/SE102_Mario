@@ -14,6 +14,7 @@
 #include "PiranhaPlant.h"
 #include "Koopas.h" 
 #include "WingedGoomba.h"
+#include "HiddenButton.h"
 
 #include "SampleKeyEventHandler.h"
 #include "ColorBox.h"
@@ -270,6 +271,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_BREAKABLE_BRICK: obj = new CBreakableBrick(x, y); break;
+	case OBJECT_TYPE_HIDDEN_BUTTON: obj = new CHiddenButton(x, y); break;
 	
 
 

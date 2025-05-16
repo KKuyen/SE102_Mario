@@ -1,6 +1,7 @@
 ﻿#include "WingedGoomba.h"
 #include "Koopas.h"
 #include "Goomba.h"
+#include "WIngedKoopas.h"
 
 CWingedGoomba::CWingedGoomba(float x, float y) :CGameObject(x, y)
 {
@@ -50,6 +51,13 @@ void CWingedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 		if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING || koopas->GetState() == KOOPAS_STATE_HELD)
+			SetState(WINGED_GOOMBA_STATE_FALL);
+
+	}
+	else if (dynamic_cast<CWingedKoopas*>(e->obj))
+	{
+		CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(e->obj);
+		if (koopas->GetState() == WINGED_KOOPAS_STATE_SHELL_MOVING || koopas->GetState() == WINGED_KOOPAS_STATE_HELD)
 			SetState(WINGED_GOOMBA_STATE_FALL);
 
 	}
@@ -156,7 +164,7 @@ void CWingedGoomba::Render()
 		aniId = ID_ANI_WINGED_GOOMBA_FLYING_LEFT;
 		CAnimations::GetInstance()->Get(aniId)->Render(x -WINGED_GOOMBA_BBOX_WIDTH / 2, y - WINGED_GOOMBA_BBOX_HEIGHT / 2);
 	}
-
+	RenderBoundingBox();
 
 }
 

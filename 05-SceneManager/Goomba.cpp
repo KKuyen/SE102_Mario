@@ -1,5 +1,6 @@
 ﻿#include "Goomba.h"
 #include "Koopas.h"
+#include "WIngedKoopas.h"
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
@@ -48,6 +49,13 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 		if(koopas->GetState()==KOOPAS_STATE_SHELL_MOVING|| koopas->GetState() == KOOPAS_STATE_HELD)
 		SetState(GOOMBA_STATE_FALL);
 	
+	}
+	else if(dynamic_cast<CWingedKoopas*>(e->obj))
+	{
+		CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(e->obj);
+		if (koopas->GetState() == WINGED_KOOPAS_STATE_SHELL_MOVING || koopas->GetState() == WINGED_KOOPAS_STATE_HELD)
+			SetState(GOOMBA_STATE_FALL);
+
 	}
 	else
 	{

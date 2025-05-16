@@ -29,6 +29,7 @@
 #include "Transcript.h"
 #include "BreakableBrick.h"
 #include "GrassPlatform.h"
+#include "MovablePlatform.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -36,6 +37,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 {
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
+	curentCX = 10;
 }
 
 
@@ -239,6 +241,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
+	case OBJECT_TYPE_MOVABLEPLATFORM: obj = new CMovablePlatform(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -382,30 +385,40 @@ void CPlayScene::Update(DWORD dt)
 
 	// Update camera to follow mario
 
-	float cx, cy;
-	player->GetPosition(cx, cy);
+	float cx =0 , cy;
+	CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
+	if (currentScene->GetId() == 1) {
+		player->GetPosition(cx, cy);
 
-	CGame* game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetBackBufferWidth() / 2;
+		cy -= game->GetBackBufferHeight() / 2;
 
-	CMario* mario = dynamic_cast<CMario*>(player);
-	
-	 if(cy<-160)
-	{
+		CMario* mario = dynamic_cast<CMario*>(player);
+
+		if (cy < -160)
+		{
+		}
+
+		else
+		{
+			// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+			cy = 0.0f;
+		}
+		if (mario->teleportState == MARIO_TELEPORT_IN)
+			cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+
+		if (cx < 0) cx = 0;
+		if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
 	}
-	
-	else
-	{
-		// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
-		cy = 0.0f;
+	else{
+		cy = 0;
+		//Mai mot nho doi ve 0.7
+		cx = curentCX + 2;
+		curentCX += 2;
+
+
 	}
-	if(mario->teleportState==MARIO_TELEPORT_IN)
-		 cy = CAMERA_POSITION_HIDDEN_MAP_Y;
-
-	if (cx < 0) cx = 0;
-	if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
-
 
 	// Đặt vị trí camera
 	CGame::GetInstance()->SetCamPos(cx, cy);

@@ -27,6 +27,7 @@ protected:
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
+	float curentCX;
 
 	virtual void Load();
 	virtual void Update(DWORD dt);

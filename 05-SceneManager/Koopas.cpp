@@ -7,6 +7,7 @@
 #include "Brick.h"
 #include "ColorBox.h"
 #include "GiftBox.h"
+#include "GrassPlatform.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -46,7 +47,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		mario = dynamic_cast<CMario*>(e->obj);
 	}
 	if (state == KOOPAS_STATE_FALL &&
-		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+		(dynamic_cast<CGrassPlatform*>(e->obj) || dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
 	{
 		return;
 	}
@@ -106,7 +107,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CPlatform*>(obj) || (dynamic_cast<CColorBox*>(obj)&& dynamic_cast<CColorBox*>(obj)->isPlatform==1) || dynamic_cast<CBrick*>(obj))
+			if (dynamic_cast<CGrassPlatform*>(obj) || dynamic_cast<CPlatform*>(obj) || (dynamic_cast<CColorBox*>(obj)&& dynamic_cast<CColorBox*>(obj)->isPlatform==1) || dynamic_cast<CBrick*>(obj))
 			{
 
 				float l, t, r, b;

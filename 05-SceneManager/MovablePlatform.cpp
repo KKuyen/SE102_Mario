@@ -1,5 +1,6 @@
 #include "MovablePlatform.h"
 #include "Mario.h"
+#include "Game.h"
 
 void CMovablePlatform::Render()
 {
@@ -13,7 +14,7 @@ void CMovablePlatform::Render()
 
 void CMovablePlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - PLATFORM_WIDTH / 2 + 8;
+	l = x - PLATFORM_WIDTH / 2 + 16;
 	t = y - PLATFORM_HEIGHT / 2;
 	r = l + PLATFORM_WIDTH;
 	b = t + PLATFORM_HEIGHT;
@@ -21,8 +22,17 @@ void CMovablePlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CMovablePlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
- 	x += vx * dt;
-	y += vy * dt;
+	if (isActive == 1) {
+		x += vx * dt;
+		y += vy * dt;
+	}
+	else {
+		float cx, cy;
+		CGame::GetInstance()->GetCamPos(cx, cy);
+		if (x <= cx + SCREEN_WIDTH) {
+			isActive = 1;
+		}
+	}
 }
  
 

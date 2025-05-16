@@ -167,6 +167,8 @@
 #define MARIO_TELEPORT_OUT 2
 #define MARIO_TELEPORT_OUT_POSITION_Y 100
 #define MARIO_TELEPORT_NONE 0
+#define MOVABLEPLATFORM_NUM 13
+
 
 class CMario : public CGameObject
 {
@@ -226,7 +228,7 @@ public:
 	float teleportState;
 	int renderedGoombaNum;
 	int renderedKoopas;
-	int renderedMovablePlatform;
+ 	int renderedMovablePlatforms [MOVABLEPLATFORM_NUM];
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -253,7 +255,10 @@ public:
 		teleportState = 0;
 		renderedGoombaNum = 0;
 		renderedKoopas = 0;
-		renderedMovablePlatform = 0;
+		for (int i = 0; i < MOVABLEPLATFORM_NUM; i++)
+		{
+			renderedMovablePlatforms[i] = 0;
+		}
 	
 
 	}

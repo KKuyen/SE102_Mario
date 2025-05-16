@@ -40,8 +40,6 @@
 			if (x > RENDER_POINT_1 && renderedKoopas == 0)
 			{
 				CWingedKoopas* koopas = new CWingedKoopas(RENDER_POSITION_X1, RENDER_POSITION_Y2);
-
-
 				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 				p->AddGameObject(koopas);
@@ -77,16 +75,7 @@
 			}
 		}
 		else {
-			if (x > 238 && renderedMovablePlatform == 0)
-			{
-				CMovablePlatform* movablePlatform = new CMovablePlatform(305, 80);
-
-
-				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-				p->AddGameObject(movablePlatform);
-				renderedMovablePlatform = 1;
- 			}
+			
 
 
 		}

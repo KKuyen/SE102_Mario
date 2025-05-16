@@ -12,6 +12,7 @@ breakable_brick.txt
 chimney.txt
 darkBackground.txt
 movable_platform.txt
+koopas.txt
 
 #
 [OBJECTS]
@@ -146,6 +147,24 @@ movable_platform.txt
 6	2485	152	16	16	63004
 6	2485	168	16	16	63004
 
+#Movable platform
+27	377	89
+27	600	74
+27	568	122
+27	632	170
+27	760	102
+27	1096	154
+27	1208	90
+27	1416	106
+27	1384	122
+27	1560	74
+27	1784	106
+27	1752	122
+27	1800	185
+
+#Koopas
+3	1048	100
+3	1988	100
 
 #Transcript
 21	125	217

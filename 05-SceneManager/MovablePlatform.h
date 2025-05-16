@@ -11,13 +11,19 @@
 #define PLATFORM_WIDTH 48
 #define PLATFORM_HEIGHT 16
 #define PLATFORM_SPEED 0.03f
-#define PLATFORM_GRAVITY 0.02f
+#define PLATFORM_GRAVITY 0.04f
+#define SCREEN_WIDTH 270
 
 class CMovablePlatform : public CGameObject {
 public:
+	int ay;
+	int isActive;
 	CMovablePlatform(float x, float y) : CGameObject(x, y) {
 		vx =- PLATFORM_SPEED;
 		vy = 0;
+		ay = 0;
+		isActive = 0;
+
 	}
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

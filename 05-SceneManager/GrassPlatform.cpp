@@ -51,7 +51,7 @@ void CGrassPlatform::Render()
 void CGrassPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
     float CELL_WIDTH_div_2 = CELL_WIDTH / 2;
-    l = x - CELL_WIDTH_div_2;
+    l = x - CELL_WIDTH_div_2- CELL_WIDTH;
     t = y - CELL_HEIGHT / 2;
     r = l + CELL_WIDTH * this->widthCells ;
     b = t + CELL_HEIGHT * this->heightCells;

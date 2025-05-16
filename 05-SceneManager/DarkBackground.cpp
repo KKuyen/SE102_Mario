@@ -2,54 +2,52 @@
 
 #include "Sprite.h"
 #include "Sprites.h"
-
 #include "Textures.h"
 #include "Game.h"
 
-
 void CDarkBackground::Render()
 {
-	if (this->length <= 0) return;
-	if (isVertical == 1) {
-		float yy = y;
-		CSprites* s = CSprites::GetInstance();
-		s->Get(this->spriteIdBegin)->Draw(x, yy);
-		yy += this->cellHeight;
-		for (int i = 1; i < this->length - 1; i++)
-		{
-			s->Get(this->spriteIdMiddle)->Draw(x, yy);
-			yy += this->cellHeight;
-		}
-		if (length > 1)
-			s->Get(this->spriteIdEnd)->Draw(x, yy);
+    if (widthCells <= 0 || heightCells <= 0) return;
 
-	}
-	else {
-		float xx = x;
-		CSprites* s = CSprites::GetInstance();
+    CSprites* s = CSprites::GetInstance();
 
-		s->Get(this->spriteIdBegin)->Draw(xx, y);
-		xx += this->cellWidth;
-		for (int i = 1; i < this->length - 1; i++)
-		{
-			s->Get(this->spriteIdMiddle)->Draw(xx, y);
-			xx += this->cellWidth;
-		}
-		if (length > 1)
-			s->Get(this->spriteIdEnd)->Draw(xx, y);
-	}
+    for (int row = 0; row < heightCells; row++)
+    {
+        for (int col = 0; col < widthCells; col++)
+        {
+            int spriteId;
+            if (col == 0)
+            {
+				spriteId = EDGE_SPRITE_ID;
+            }
+            else
+            {
+				spriteId = MAIN_SPRITE_ID;
+            }
 
-	//RenderBoundingBox();
+            LPSPRITE sprite = s->Get(spriteId);
+            if (sprite == nullptr)
+            {
+                return;
+            }
+            float renderX = x + col * CELL_WIDTH;
+            float renderY = y + row * CELL_HEIGHT;
+            sprite->Draw(renderX, renderY);
+        }
+    }
 }
 
 void CDarkBackground::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	float cellWidth_div_2 = this->cellWidth / 2;
-	l = x - cellWidth_div_2;
-	t = y - this->cellHeight / 2;
-	r = l + this->cellWidth * this->length;
-	b = t + this->cellHeight;
+    float CELL_WIDTH_div_2 = CELL_WIDTH / 2;
+    l = x - CELL_WIDTH_div_2;
+    t = y - CELL_HEIGHT / 2;
+    r = l + CELL_WIDTH * this->widthCells;
+    b = t + CELL_HEIGHT * this->heightCells;
 }
- 
 
-
+int CDarkBackground::IsDirectionColliable(float nx, float ny)
+{
+    if (nx == 0 && ny == -1) return 1;
+    else return 0;
+}

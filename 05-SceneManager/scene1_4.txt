@@ -10,6 +10,7 @@ number.txt
 background.txt
 breakable_brick.txt
 chimney.txt
+darkBackground.txt
 
 #
 [OBJECTS]

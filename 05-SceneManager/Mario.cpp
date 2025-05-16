@@ -34,44 +34,48 @@
  
 	void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
-		if (x > RENDER_POINT_1 && renderedKoopas == 0)
-		{
-			CWingedKoopas* koopas = new CWingedKoopas(RENDER_POSITION_X1, RENDER_POSITION_Y2);
+		CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
+		if(currentScene->GetId()==1){
+			if (x > RENDER_POINT_1 && renderedKoopas == 0)
+			{
+				CWingedKoopas* koopas = new CWingedKoopas(RENDER_POSITION_X1, RENDER_POSITION_Y2);
+
+
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(koopas);
+				renderedKoopas = 1;
+			}
+
+			if (x > RENDER_POINT_1 && renderedGoombaNum == 0)
+			{
+				LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X1, RENDER_POSITION_Y);
+
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(goomba);
+				renderedGoombaNum = 1;
+			}
+			if (x > RENDER_POINT_2 && renderedGoombaNum == 1)
+			{
+				LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X2, RENDER_POSITION_Y);
+
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(goomba);
+				renderedGoombaNum = 2;
+			}
+			if (x > RENDER_POINT_3 && renderedGoombaNum == 2)
+			{
+				LPGAMEOBJECT goomba = new CWingedGoomba(RENDER_POSITION_X3, RENDER_POSITION_Y);
+
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(goomba);
+				renderedGoombaNum = 3;
+			}
+		}
 		
-
-			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-			p->AddGameObject(koopas);
-			renderedKoopas = 1;
-		}
-		
-		if (x > RENDER_POINT_1 && renderedGoombaNum ==0)
-		{
-			LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X1, RENDER_POSITION_Y);
- 
-			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-			p->AddGameObject(goomba);
-			renderedGoombaNum = 1;
-		}
-		if (x > RENDER_POINT_2 && renderedGoombaNum == 1)
-		{
-			LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X2, RENDER_POSITION_Y);
-
-			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-			p->AddGameObject(goomba);
-			renderedGoombaNum = 2;
-		}
-		if (x > RENDER_POINT_3 && renderedGoombaNum == 2)
-		{
-			LPGAMEOBJECT goomba = new CWingedGoomba(RENDER_POSITION_X3, RENDER_POSITION_Y);
-
-			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-			p->AddGameObject(goomba);
-			renderedGoombaNum = 3;
-		}
 		if (teleport!=0)
 		{
 			if(teleport== MARIO_TELEPORT_IN)

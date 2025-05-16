@@ -166,5 +166,6 @@
 #define ID_SPRITE_PIRANHA_PLANT 120000 // ID sprite cho Piranha Plant
 #define ID_ANI_PIRANHA_PLANT_UP_DOWN 12000 // ID animation cho trạng thái lên/xuống
 #define ID_SPRITE_BREAKABLE_BRICK 14001 
-#define ID_ANI_BUTTON_CLOSE 16000    // Animation ID for appearing
-#define ID_ANI_BUTTON_IDLE 16001      // Animation ID for standing still
+#define ID_ANI_BUTTON_IDLE 14300
+#define ID_ANI_BUTTON_CLOSE 14300
+#define ID_ANI_EXPLODE 80000 

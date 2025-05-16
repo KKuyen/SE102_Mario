@@ -38,6 +38,7 @@ public:
 	LPGAMEOBJECT GetPlayer() { return player; }
 
 	void Clear();
+	vector<LPGAMEOBJECT>& GetObjects() { return objects; }
 	void PurgeDeletedObjects();
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);

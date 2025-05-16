@@ -12,6 +12,7 @@
 
 #define BREAKABLE_BRICK_STATE_NORMAL 100
 #define BREAKABLE_BRICK_STATE_BREAK 200
+#define BREAKABLE_BRICK_STATE_INVISIBLE 300
 
 class CBreakableBrick : public CGameObject {
 protected:

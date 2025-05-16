@@ -37,13 +37,23 @@ void CBreakableBrick::SetState(int state)
 	switch (state)
 	{
 	case BREAKABLE_BRICK_STATE_BREAK:
+	{
 		CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 		scene->PushBackGameObject(new CBreakableBrickPart(x, y, -BRICK_PART_SPEED_X, -BRICK_PART_SPEED_Y));
 		scene->PushBackGameObject(new CBreakableBrickPart(x, y, BRICK_PART_SPEED_X, -BRICK_PART_SPEED_Y));
 		scene->PushBackGameObject(new CBreakableBrickPart(x, y, -BRICK_PART_SPEED_X * 0.5f, -BRICK_PART_SPEED_Y * 1.2f));
 		scene->PushBackGameObject(new CBreakableBrickPart(x, y, BRICK_PART_SPEED_X * 0.5f, -BRICK_PART_SPEED_Y * 1.2f));
-		isDeleted = true; 
+		isDeleted = true;
 		break;
+	}
+	case BREAKABLE_BRICK_STATE_INVISIBLE:
+	{
+		isDeleted = true;
+		break;
+
+
+	}
+
 	}
 }
 

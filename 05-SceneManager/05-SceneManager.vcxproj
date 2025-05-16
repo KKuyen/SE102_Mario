@@ -165,6 +165,7 @@
     <ClCompile Include="EffectPoint.cpp" />
     <ClCompile Include="EffectPoint.h" />
     <ClCompile Include="EffectSmoke.cpp" />
+    <ClCompile Include="ExplodeAni.cpp" />
     <ClCompile Include="Flower.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectGiftBoxCoin.h" />
     <ClInclude Include="EffectSmoke.h" />
+    <ClInclude Include="ExplodeAni.h" />
     <ClInclude Include="Flower.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
@@ -248,6 +250,7 @@
     <Text Include="colorBox.txt" />
     <Text Include="darkBackground.txt" />
     <Text Include="effect.txt" />
+    <Text Include="explodeAni.txt" />
     <Text Include="flower.txt" />
     <Text Include="giftBox.txt" />
     <Text Include="goomba.txt" />

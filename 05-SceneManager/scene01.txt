@@ -21,7 +21,7 @@ transcript.txt
 number.txt
 piranha_plant.txt
 breakable_brick.txt
-button.txt
+explodeAni.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

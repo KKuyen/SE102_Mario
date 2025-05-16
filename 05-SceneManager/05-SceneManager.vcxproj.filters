@@ -133,6 +133,9 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExplodeAni.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -264,6 +267,9 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ExplodeAni.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -294,6 +300,7 @@
     <Text Include="piranha_plant.txt" />
     <Text Include="breakable_brick.txt" />
     <Text Include="button.txt" />
+    <Text Include="explodeAni.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

@@ -25,6 +25,8 @@
 #include "PiranhaPlant.h"
 #include "HiddenButton.h"
 #include "Button.h"
+#include "BreakableBrick.h"
+#include "ExplodeAni.h"
 #define RENDER_POINT_1	704
 #define RENDER_POINT_2	736
 #define RENDER_POINT_3	816
@@ -237,14 +239,14 @@
 			OnCollisionWithPortal(e);
 		else if (dynamic_cast<CKoopas*>(e->obj))
 			OnCollisionWithKooPas(e);
- 		else if (dynamic_cast<CWingedGoomba*>(e->obj))
+		else if (dynamic_cast<CWingedGoomba*>(e->obj))
 			OnCollisionWithWingedGoomba(e);
 		else if (dynamic_cast<CGiftBox*>(e->obj))
 			OnCollisionWithGiftBox(e);
 		else if (dynamic_cast<CMushroom*>(e->obj))
 			OnCollisionWithMushroom(e);
 		else if (dynamic_cast<CBullet*>(e->obj))
-			OnCollisionWithBullet(e);	
+			OnCollisionWithBullet(e);
 		else if (dynamic_cast<CFlower*>(e->obj))
 			OnCollisionWithFlower(e);
 		else if (dynamic_cast<CLeaf*>(e->obj))
@@ -259,17 +261,69 @@
 			OnCollisionWithCHiddenButton(e);
 		else if (dynamic_cast<CButton*>(e->obj))
 			OnCollisionWithButton(e);
+		else if (dynamic_cast<CBreakableBrick*>(e->obj))
+			OnCollisionWithBreakableBrick(e);
 
 
+	}
+	void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
+	{
+		CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
+		 if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+		{
+			 brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+		}
 	}
 	void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 	{
 		CButton* button = dynamic_cast<CButton*>(e->obj);
-		if (!button->isPressed && e->ny < 0) // Mario jumps on top of the button
+		if (!button->isPressed) // Mario jumps on top of the button
 		{
 			button->isPressed = true;
 			// Optionally: Play hit animation or trigger other game logic (e.g., spawn platforms)
-			// Example: vy = -MARIO_JUMP_DEFLECT_SPEED; // Deflect Mario upward
+			 vy = -MARIO_JUMP_DEFLECT_SPEED; // Deflect Mario upward
+			 button->y = button->y + 5;
+			 CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			 if (currentScene)
+			 {
+
+				 vector<LPGAMEOBJECT>& objects = currentScene->GetObjects(); // Access the objects list
+
+				 // Iterate through objects and replace CBreakBrick with CCoin
+				 for (size_t i = 0; i < objects.size(); i++)
+				 {
+					 if (dynamic_cast<CBreakableBrick*>(objects[i]))
+					 {
+						 CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(objects[i]);	
+						 if (brick->GetState() != BREAKABLE_BRICK_STATE_INVISIBLE)
+						 {float brickX, brickY;
+							 objects[i]->GetPosition(brickX, brickY);
+
+							 // Delete the brick
+							 brick->SetState(BREAKABLE_BRICK_STATE_INVISIBLE);
+						
+
+							 // Create a new coin at the same position
+							 CCoin* coin = new CCoin(brickX, brickY);
+
+							 LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+							 LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+							 p->AddGameObject(coin);
+
+						 }
+						
+							 
+							
+						
+							 
+						
+							 // Get position of the brick
+						 
+						
+					 }
+				 }
+			 }
+
 		}
 	}
 	void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
@@ -288,11 +342,14 @@
 
 			// Create the button object
 			CButton* button = new CButton(buttonX, buttonY);
+			CExplodeAni* expolde =new CExplodeAni(buttonX, buttonY);
 
 			// Add the button to the current scene
 			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			if (p) p->AddGameObject(expolde);
 			if (p) p->AddGameObject(button);
+			
 
 		
 		}

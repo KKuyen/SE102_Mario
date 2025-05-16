@@ -130,6 +130,9 @@
     <ClCompile Include="GrassPlatform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MovablePlatform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -258,6 +261,9 @@
     <ClInclude Include="GrassPlatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MovablePlatform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -288,6 +294,7 @@
     <Text Include="grass.txt" />
     <Text Include="scene1_1.txt" />
     <Text Include="scene1_4.txt" />
+    <Text Include="movable_platform.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

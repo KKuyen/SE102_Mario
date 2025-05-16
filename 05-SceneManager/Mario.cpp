@@ -23,6 +23,7 @@
 	#include "Chimney.h"
 #include "WingedKoopas.h"	
 #include "PiranhaPlant.h"
+#include "MovablePlatform.h"
 #define RENDER_POINT_1	704
 #define RENDER_POINT_2	736
 #define RENDER_POINT_3	8163
@@ -74,6 +75,19 @@
 				p->AddGameObject(goomba);
 				renderedGoombaNum = 3;
 			}
+		}
+		else {
+			if (x > 238 )
+			{
+				CMovablePlatform* movablePlatform = new CMovablePlatform(335, 30);
+
+
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(movablePlatform);
+ 			}
+
+
 		}
 		
 		if (teleport!=0)

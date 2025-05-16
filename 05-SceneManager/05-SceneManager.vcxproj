@@ -175,6 +175,7 @@
     <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="MovablePlatform.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="PiranhaPlant.cpp" />
     <ClCompile Include="PiranhaPlant.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Leaf.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="MovablePlatform.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
@@ -252,6 +254,7 @@
     <Text Include="leaf.txt" />
     <Text Include="mario-sample.txt" />
     <Text Include="mario.txt" />
+    <Text Include="movable_platform.txt" />
     <Text Include="mushroom.txt" />
     <Text Include="number.txt" />
     <Text Include="piranha_plant.txt" />

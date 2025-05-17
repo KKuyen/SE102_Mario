@@ -30,6 +30,8 @@
 #include "BreakableBrick.h"
 #include "GrassPlatform.h"
 #include "MovablePlatform.h"
+#include "BomerangBro.h"
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -137,6 +139,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_BOMERANGBRO: obj = new CBomerangBro(x,y); break;
 	case OBJECT_TYPE_WINGED_GOOMBA: {
 		obj = new CWingedGoomba(x, y);
 		break;

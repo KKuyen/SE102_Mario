@@ -32,4 +32,5 @@ height	240
 140	textures\sprite11.png
 150	textures\sprite12.png
 160	textures\sprite14.png
+170	textures\sprite15.png
 

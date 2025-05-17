@@ -21,6 +21,7 @@ transcript.txt
 number.txt
 piranha_plant.txt
 breakable_brick.txt
+bomerang_bro.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -529,6 +530,7 @@ breakable_brick.txt
 10	1100	10
 #GOOMBA
 2	224	168
+29	224	150
 2	560	168
 #2	800	10
 #2	900	10

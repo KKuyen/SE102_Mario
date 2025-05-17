@@ -1,0 +1,46 @@
+#pragma once
+#include "GameObject.h"
+
+#define BOMERANG_BRO_GRAVITY 0.002f
+#define BOMERANG_BRO_WALKING_SPEED 0.02f
+#define BOMERANG_BRO_JUMP_SPEED -0.2f
+#define BOMERANG_BRO_FALL_SPEED -0.28f
+#define BOMERANG_BRO_FALL_SPEED_HORIZONTAL 0.15f
+
+
+#define BOMERANG_BRO_BBOX_WIDTH 16
+#define BOMERANG_BRO_BBOX_HEIGHT 20
+
+#define BOMERANG_BRO_DIE_TIMEOUT 500
+
+#define BOMERANG_BRO_STATE_WALKING 100
+#define BOMERANG_BRO_STATE_DIE 200
+#define BOMERANG_BRO_STATE_FALL 300
+
+#define ID_ANI_BOMERANG_BRO_WALKING 290005
+#define ID_ANI_BOMERANG_BRO_DIE 290006
+
+class CBomerangBro : public CGameObject
+{
+protected:
+	float ax;
+	float ay;
+
+	ULONGLONG die_start;
+
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Render();
+
+	virtual int IsCollidable() {
+		return state != BOMERANG_BRO_STATE_FALL;
+	};
+	virtual int IsBlocking() { return 0; }
+	virtual void OnNoCollision(DWORD dt);
+
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+
+public:
+	CBomerangBro(float x, float y);
+	virtual void SetState(int state);
+};

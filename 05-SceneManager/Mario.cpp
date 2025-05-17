@@ -24,6 +24,8 @@
 #include "WingedKoopas.h"	
 #include "PiranhaPlant.h"
 #include "MovablePlatform.h"
+#include "BomerangBro.h"
+
 #define RENDER_POINT_1	704
 #define RENDER_POINT_2	736
 #define RENDER_POINT_3	8163
@@ -263,7 +265,8 @@
 			OnCollisionWithCPiranhaPlant(e);
 		else if (dynamic_cast<CMovablePlatform*>(e->obj))
 			OnCollisionWithCMovablePlatform(e);
-
+		else if (dynamic_cast<CBomerangBro*>(e->obj))
+			OnCollisionWithBomerangBro(e);
 
 	}
 
@@ -647,6 +650,23 @@
 	}
 
 
+	void CMario::OnCollisionWithBomerangBro(LPCOLLISIONEVENT e)
+	{
+		CBomerangBro* bomerangBro = dynamic_cast<CBomerangBro*>(e->obj);
+		if (e->ny < 0)
+		{
+			if (bomerangBro->GetState() != BOMERANG_BRO_STATE_FALL)
+			{
+				bomerangBro->SetState(BOMERANG_BRO_STATE_FALL);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(effectPoint);
+			}
+		}
+		
+	}
 	void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);

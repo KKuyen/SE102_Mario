@@ -133,6 +133,9 @@
     <ClCompile Include="MovablePlatform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BomerangBro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -264,6 +267,9 @@
     <ClInclude Include="MovablePlatform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BomerangBro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -296,6 +302,7 @@
     <Text Include="scene1_4.txt" />
     <Text Include="movable_platform.txt" />
     <Text Include="koopas.txt" />
+    <Text Include="bomerang_bro.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

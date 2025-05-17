@@ -295,6 +295,7 @@
     <Text Include="scene1_1.txt" />
     <Text Include="scene1_4.txt" />
     <Text Include="movable_platform.txt" />
+    <Text Include="koopas.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

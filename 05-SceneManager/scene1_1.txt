@@ -523,10 +523,10 @@ breakable_brick.txt
 
 # KOOPAS 
 
-3	590	130
+3	590	130	0
 
 # WINGEDGOOMBA
-	10	1100	10
+10	1100	10
 #GOOMBA
 2	224	168
 2	560	168
@@ -540,3 +540,4 @@ breakable_brick.txt
 #12	300	150	115
 # BREAKABLE BRICK
 14	64	168
+

@@ -163,8 +163,11 @@ koopas.txt
 27	1800	185
 
 #Koopas
-3	1048	100
-3	1988	100
+3	1048	100	0
+3	1988	100	0
+
+#Winged red koopas
+3	1881	70	1
 
 #Transcript
 21	125	217

@@ -32,6 +32,12 @@
 # SHELL FALL GREEn
 43000	64	64	79	79	70   # Koopas shell idle
 
+#Winged Red Koopa
+50000	265	358	280	385	160
+50001	286	358	301	385	160
+50002	307	358	322	385	160
+50003	329	358	344	385	160
+
 # ani_id sprite1_id time1 sprite2_id time2 ...
 [ANIMATIONS]
 6000	31000	200	31001	200   # Walking animation
@@ -44,3 +50,4 @@
 7002	42001	200	42002	200	42003	200	42004	200  # Shell moving animation
 7003 	41002 	200 	41003 	200  #animation walking right
 7004	43000	100             # Shell fall animation
+7005	50000	150	50001	150	50002	150	50003	150

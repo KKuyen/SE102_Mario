@@ -8,12 +8,13 @@
 #include "ColorBox.h"
 #include "GiftBox.h"
 #include "GrassPlatform.h"
-CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
+CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = KOOPAS_GRAVITY;
 	this->nx = -1;
 	this->color = 1;
+	this->type = type;
 	SetState(KOOPAS_STATE_WALKING);
 
 }
@@ -36,9 +37,22 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 }
 void CKoopas::OnNoCollision(DWORD dt)
 {
-	x += vx * dt;
-	y += vy * dt;
+	if (type == 1) {
+		if (state == KOOPAS_STATE_UP)
+		{
+			y -= KOOPAS_VERTICAL_MOVE_SPEED * dt;
+		}
+		else if (state == KOOPAS_STATE_DOWN)
+		{
+			y += KOOPAS_VERTICAL_MOVE_SPEED * dt;
+		}
+	}
+	else {
+		x += vx * dt;
+		y += vy * dt;
+	}
 }
+
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
@@ -88,81 +102,100 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
-	vx += ax * dt;
-	if (state == KOOPAS_STATE_HELD)
+	if (type == 1)
 	{
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		return;
-	}
-	// Kiểm tra rìa mặt phẳng
-	if (state == KOOPAS_STATE_WALKING || state == KOOPAS_STATE_WALKING_RIGHT)
-	{
-		bool isOnPlatform = false;
-		float platformLeft, platformRight;
-
-		// Tìm đối tượng mà Koopas đang đứng
-		for (LPGAMEOBJECT obj : *coObjects)
+		if (state != KOOPAS_STATE_UP && state != KOOPAS_STATE_DOWN)
 		{
-			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CGrassPlatform*>(obj) || dynamic_cast<CPlatform*>(obj) || (dynamic_cast<CColorBox*>(obj)&& dynamic_cast<CColorBox*>(obj)->isPlatform==1) || dynamic_cast<CBrick*>(obj))
+			SetState(KOOPAS_STATE_DOWN);
+		}
+
+		if (state == KOOPAS_STATE_UP && y <= MIN_VERTICAL_MOVE)
+		{
+			SetState(KOOPAS_STATE_DOWN);
+		}
+		else if (state == KOOPAS_STATE_DOWN && y >= MAX_VERTICAL_MOVE)
+		{
+			SetState(KOOPAS_STATE_UP);
+		}
+	}
+	else {
+		vy += ay * dt;
+		vx += ax * dt;
+		if (state == KOOPAS_STATE_HELD)
+		{
+			vx = 0;
+			vy = 0;
+			ay = 0;
+			return;
+		}
+		// Kiểm tra rìa mặt phẳng
+		if (state == KOOPAS_STATE_WALKING || state == KOOPAS_STATE_WALKING_RIGHT)
+		{
+			bool isOnPlatform = false;
+			float platformLeft, platformRight;
+
+			// Tìm đối tượng mà Koopas đang đứng
+			for (LPGAMEOBJECT obj : *coObjects)
 			{
-
-				float l, t, r, b;
-				obj->GetBoundingBox(l, t, r, b);
-
-
-				float koopasLeft, koopasTop, koopasRight, koopasBottom;
-				GetBoundingBox(koopasLeft, koopasTop, koopasRight, koopasBottom);
-				// Kiểm tra xem Koopas có đang đứng trên đối tượng này không
-				if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
-					koopasLeft <= r && koopasRight >= l)
+				// Truyền vào các loại đối tượng
+				if (dynamic_cast<CGrassPlatform*>(obj) || dynamic_cast<CPlatform*>(obj) || (dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1) || dynamic_cast<CBrick*>(obj))
 				{
 
+					float l, t, r, b;
+					obj->GetBoundingBox(l, t, r, b);
 
-					isOnPlatform = true;
-					platformLeft = l;
-					platformRight = r + 16;
-					break;
+
+					float koopasLeft, koopasTop, koopasRight, koopasBottom;
+					GetBoundingBox(koopasLeft, koopasTop, koopasRight, koopasBottom);
+					// Kiểm tra xem Koopas có đang đứng trên đối tượng này không
+					if (koopasBottom <= t + 1.0f && koopasBottom >= t - 1.0f &&
+						koopasLeft <= r && koopasRight >= l)
+					{
+
+
+						isOnPlatform = true;
+						platformLeft = l;
+						platformRight = r + 16;
+						break;
+					}
+				}
+			}
+
+			// Nếu đang trên mặt phẳng, kiểm tra rìa
+			if (isOnPlatform)
+			{
+				float nextX = x + vx * dt; // Vị trí tiếp theo của Koopas
+
+				if (state == KOOPAS_STATE_WALKING && nextX <= platformLeft + KOOPAS_BBOX_WIDTH / 2)
+				{
+					// Gặp rìa trái, quay sang phải
+					SetState(KOOPAS_STATE_WALKING_RIGHT);
+				}
+				else if (state == KOOPAS_STATE_WALKING_RIGHT && nextX >= platformRight - KOOPAS_BBOX_WIDTH / 2)
+				{
+					// Gặp rìa phải, quay sang trái
+					SetState(KOOPAS_STATE_WALKING);
 				}
 			}
 		}
 
-		// Nếu đang trên mặt phẳng, kiểm tra rìa
-		if (isOnPlatform)
-		{
-			float nextX = x + vx * dt; // Vị trí tiếp theo của Koopas
 
-			if (state == KOOPAS_STATE_WALKING && nextX <= platformLeft + KOOPAS_BBOX_WIDTH / 2)
+		// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
+		if ((state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD) &&
+			revive_start != 0 && GetTickCount64() - revive_start >= KOOPAS_REVIVE_TIME)
+		{
+			vy = KOOPAS_JUMP_SPEED; // Nảy lên
+			ay = KOOPAS_GRAVITY;    // Áp dụng trọng lực
+			if (nx < 0)
+				SetState(KOOPAS_STATE_WALKING);
+			else
 			{
-				// Gặp rìa trái, quay sang phải
 				SetState(KOOPAS_STATE_WALKING_RIGHT);
 			}
-			else if (state == KOOPAS_STATE_WALKING_RIGHT && nextX >= platformRight - KOOPAS_BBOX_WIDTH / 2)
-			{
-				// Gặp rìa phải, quay sang trái
-				SetState(KOOPAS_STATE_WALKING);
-			}
 		}
+
 	}
-
-
-	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD) &&
-		revive_start != 0 && GetTickCount64() - revive_start >= KOOPAS_REVIVE_TIME)
-	{
-		vy = KOOPAS_JUMP_SPEED; // Nảy lên
-		ay = KOOPAS_GRAVITY;    // Áp dụng trọng lực
-		if (nx < 0)
-			SetState(KOOPAS_STATE_WALKING);
-		else
-		{
-			SetState(KOOPAS_STATE_WALKING_RIGHT);
-		}
-	}
-
+	
 
 
 
@@ -173,45 +206,57 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopas::Render()
 {
-	int aniId;
-	if(color==1)
-	{
-		 aniId= ID_ANI_KOOPAS_WALKING;
-		if (state == KOOPAS_STATE_WALKING_RIGHT)
-			aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
-		if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
-			aniId = ID_ANI_KOOPAS_SHELL;
-		else if (state == KOOPAS_STATE_SHELL_MOVING)
-			aniId = ID_ANI_KOOPAS_SHELL_MOVING;
-		else if (state == KOOPAS_STATE_FALL)
-			aniId = ID_ANI_KOOPAS_FALL;
+	if (type == 1) {
+		LPANIMATION ani = CAnimations::GetInstance()->Get(ID_ANI_WINGED_RED_KOOPA);
+		if (ani == nullptr)
+		{
+			DebugOut(L"[ERROR] Animation ID %d not found!\n", ID_ANI_WINGED_RED_KOOPA);
+			return; // Thoát nếu animation không tồn tại
+		}
+		ani->Render(x, y);
+	}
+	else {
+		int aniId;
+		if (color == 1)
+		{
+			aniId = ID_ANI_KOOPAS_WALKING;
+			if (state == KOOPAS_STATE_WALKING_RIGHT)
+				aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
+			if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
+				aniId = ID_ANI_KOOPAS_SHELL;
+			else if (state == KOOPAS_STATE_SHELL_MOVING)
+				aniId = ID_ANI_KOOPAS_SHELL_MOVING;
+			else if (state == KOOPAS_STATE_FALL)
+				aniId = ID_ANI_KOOPAS_FALL;
 
 
 
+
+		}
+		else
+		{
+			aniId = ID_ANI_KOOPAS_GREEN_WALKING;
+			if (state == KOOPAS_STATE_WALKING_RIGHT)
+				aniId = ID_ANI_KOOPAS_GREEN_WALKING_RIGHT;
+			if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
+				aniId = ID_ANI_KOOPAS_GREEN_SHELL;
+			else if (state == KOOPAS_STATE_SHELL_MOVING)
+				aniId = ID_ANI_KOOPAS_GREEN_SHELL_MOVING;
+			else if (state == KOOPAS_STATE_FALL)
+				aniId = ID_ANI_KOOPAS_GREEN_FALL;
+
+		}
+		LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
+		if (ani == nullptr)
+		{
+			DebugOut(L"[ERROR] Animation ID %d not found!\n", aniId);
+			return; // Thoát nếu animation không tồn tại
+		}
+
+		ani->Render(x, y);
+
+	}
 	
-	}
-	else
-	{
-		aniId = ID_ANI_KOOPAS_GREEN_WALKING;
-		if (state == KOOPAS_STATE_WALKING_RIGHT)
-			aniId = ID_ANI_KOOPAS_GREEN_WALKING_RIGHT;
-		if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
-			aniId = ID_ANI_KOOPAS_GREEN_SHELL;
-		else if (state == KOOPAS_STATE_SHELL_MOVING)
-			aniId = ID_ANI_KOOPAS_GREEN_SHELL_MOVING;
-		else if (state == KOOPAS_STATE_FALL)
-			aniId = ID_ANI_KOOPAS_GREEN_FALL;
-
-	}
-	LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
-	if (ani == nullptr)
-	{
-		DebugOut(L"[ERROR] Animation ID %d not found!\n", aniId);
-		return; // Thoát nếu animation không tồn tại
-	}
-
-	ani->Render(x, y);
-
 	//RenderBoundingBox();
 
 	
@@ -261,12 +306,10 @@ void CKoopas::SetState(int state)
 		vy = KOOPAS_FALL_SPEED; // Nảy lên
 		ay = KOOPAS_GRAVITY_FALL; // Trọng lực sẽ kéo xuống
 		revive_start = 0; 
-		
-	
-		
-
-		
-		
 		break;
 	}
+    
+
+
 }
+

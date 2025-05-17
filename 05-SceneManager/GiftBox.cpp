@@ -3,6 +3,7 @@
 #include "EffectGiftBoxCoin.h"
 #include "Mushroom.h"
 #include "Leaf.h"
+#include "GreenMushroom.h"
 
 CGiftBox::CGiftBox(float x, float y, int animationId, int type) :CGameObject(x, y)
 {
@@ -71,6 +72,10 @@ void CGiftBox::Open(CMario* mario)
 			OpenLeafBox();
 		}
  	}
+	else if (type == 3)
+	{
+		OpenGreenMushroomBox(mario);
+	}
  	SetState(GIFTBOX_STATE_BOUNCE);
 	vy = -GIFTBOX_BOUNCE_SPEED;
 }
@@ -111,6 +116,14 @@ void CGiftBox::OpenMushroomBox(CMario* mario)
 	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 	p->AddGameObject(mushroom);
 }
+void CGiftBox::OpenGreenMushroomBox(CMario* mario)
+{
+	LPGAMEOBJECT mushroom = new CGreenMushroom(x, y, mario);
+	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+	p->AddGameObject(mushroom);
+}
+
 void CGiftBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BOX_BBOX_WIDTH / 2 + 2;

@@ -20,8 +20,6 @@ protected:
 
 	
 
-	float vx;
-	float vy;
 
 
 
@@ -29,7 +27,10 @@ protected:
 
 	bool isDeleted; 
 
-public: 
+public:
+
+	float vx;
+	float vy;
 	float x;
 	float y;
 	int nx;

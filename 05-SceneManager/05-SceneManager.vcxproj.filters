@@ -136,6 +136,9 @@
     <ClCompile Include="ExplodeAni.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GreenMushroom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -268,6 +271,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ExplodeAni.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenMushroom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

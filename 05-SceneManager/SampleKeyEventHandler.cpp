@@ -51,6 +51,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	{
 	case DIK_S:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
+		holdingS = false;
 		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
@@ -79,6 +80,19 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 {
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	// Kiểm tra trạng thái kìm tốc độ rơi
+	if (game->IsKeyDown(DIK_S) && mario->level == MARIO_LEVEL_MAX && mario->vy > 0 && mario->isOnPlatform==false)
+	{
+		if (!mario->IsSlowFalling()&&holdingS==false)
+		{
+			holdingS = true;
+			mario->StartSlowFalling();
+		}
+	}
+	else
+	{
+		mario->StopSlowFalling();
+	}
 	if (mario->IsHolding())
 	{
 		mario->SetState(MARIO_STATE_HOLD);

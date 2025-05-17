@@ -272,7 +272,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_BREAKABLE_BRICK: obj = new CBreakableBrick(x, y); break;
-	case OBJECT_TYPE_HIDDEN_BUTTON: obj = new CHiddenButton(x, y); break;
+	case OBJECT_TYPE_HIDDEN_BUTTON:
+	{
+		int type = atoi(tokens[3].c_str());
+		
+			obj = new CHiddenButton(x, y, type); 
+		
+		
+
+		break;
+	}
 	case OBJECT_TYPE_WINGED_KOOPAS: obj= new CWingedKoopas(x, y); break;
 	
 

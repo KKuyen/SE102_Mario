@@ -12,17 +12,33 @@ void CHiddenButton::Render() {
     }
     else
     {
-        CSprites* s = CSprites::GetInstance();
-        s->Get(SPRITE_ID_HIDDEN)->Draw(x, y);
-        RenderBoundingBox(); // Có thể bật để debug
+        if (type == HIDDEN_BUTTON_TYPE_BUTTON)
+        {
+            CSprites* s = CSprites::GetInstance();
+            s->Get(SPRITE_ID_HIDDEN)->Draw(x, y);
+            RenderBoundingBox(); // Có thể bật để debug
+        }
+        else
+        {
+
+        }
+        
 
     }
 }
 
-void CHiddenButton::GetBoundingBox(float& l, float& t, float& r, float& b) {
+void CHiddenButton::GetBoundingBox(float& l, float& t, float& r, float& b) {  
+   if (type != HIDDEN_BUTTON_TYPE_BUTTON && isActivated == true) // Fixed assignment operator '=' to comparison operator '=='  
+   {  
+      
+   }
+   else
+   {
+       l = x - HIDDEN_BUTTON_BBOX_WIDTH / 2;
+       t = y - HIDDEN_BUTTON_BBOX_HEIGHT / 2;
+       r = l + HIDDEN_BUTTON_BBOX_WIDTH;
+       b = t + HIDDEN_BUTTON_BBOX_HEIGHT;
+   }
  
-    l = x - HIDDEN_BUTTON_BBOX_WIDTH / 2;
-    t = y - HIDDEN_BUTTON_BBOX_HEIGHT / 2;
-    r = l + HIDDEN_BUTTON_BBOX_WIDTH;
-    b = t + HIDDEN_BUTTON_BBOX_HEIGHT;
+  
 }

@@ -94,6 +94,34 @@
 			}
 		
 		}
+		if (isOnPlatform)
+		{
+			isSlowFalling = false;
+			slow_fall_start = 0;
+		}
+		if (level == MARIO_LEVEL_MAX && vy > 0 && isSlowFalling)
+		{
+			// Kiểm tra thời gian kìm tối đa
+			if (GetTickCount64() - slow_fall_start > MARIO_SLOW_FALL_MAX_TIME)
+			{
+				DebugOut(L"[SLOW FALL] Time: %llu ms\n", GetTickCount64() - slow_fall_start);
+				isSlowFalling = false;
+				ay = MARIO_GRAVITY; // Trở lại trọng lực bình thường
+			}
+			else
+			{
+				DebugOut(L"[SLOW FALL] Time: %llu ms\n", GetTickCount64() - slow_fall_start);
+				// Áp dụng tốc độ rơi chậm và trọng lực nhỏ
+				if (vy > MARIO_SLOW_FALL_SPEED_Y)
+					vy = MARIO_SLOW_FALL_SPEED_Y;
+				ay = MARIO_SLOW_FALL_GRAVITY;
+			}
+		}
+		else if (!isSlowFalling && vy > 0)
+		{
+			// Nếu không kìm, sử dụng trọng lực bình thường
+			ay = MARIO_GRAVITY;
+		}
 		vy += ay * dt;
 		vx += ax * dt;
 	
@@ -341,14 +369,36 @@
 			float buttonY = by - 16.0f; // 16.0f is an example offset, use your button's height
 
 			// Create the button object
-			CButton* button = new CButton(buttonX, buttonY);
-			CExplodeAni* expolde =new CExplodeAni(buttonX, buttonY);
+			if (hiddenbutton->type == HIDDEN_BUTTON_TYPE_BUTTON)
+			{
+				CButton* button = new CButton(buttonX, buttonY);
+				CExplodeAni* expolde = new CExplodeAni(buttonX, buttonY);
+				// Add the button to the current scene
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				if (p) p->AddGameObject(expolde);
+				if (p) p->AddGameObject(button);
+			}
+			if (hiddenbutton->type == HIDDEN_BUTTON_TYPE_GIFT_BOX_LEAF)
+			{
+				CGiftBox* giftbox = new CGiftBox(bx, by, 91000, 2);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				if (p) p->AddGameObject(giftbox);
+				giftbox->Open(this);
+			}
+			if (hiddenbutton->type == HIDDEN_BUTTON_TYPE_GIFT_BOX_GREEN_MUSHROOM)
+			{
+				CGiftBox* giftbox = new CGiftBox(bx, by, 91000, 3);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				if (p) p->AddGameObject(giftbox);
+				giftbox->Open(this);
+			}
 
-			// Add the button to the current scene
-			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-			if (p) p->AddGameObject(expolde);
-			if (p) p->AddGameObject(button);
+		
+
+			
 			
 
 		
@@ -1166,7 +1216,18 @@
 	int CMario::GetAniIdMax()
 	{
 		int aniId = -1;
-		if (isHolding)
+		if (isSlowFalling)
+		{
+			if (nx > 0)
+			{
+				aniId = ID_ANI_MARIO_DEF_GRAVITY_RIGHT;
+			}
+			else
+			{
+				aniId = ID_ANI_MARIO_DEF_GRAVITY_LEFT;
+			}
+		}
+		else if (isHolding)
 		{
 			if (vx != 0)
 			{

@@ -130,6 +130,9 @@
 #define ID_ANI_MARIO_MAX_FLYING_LEFT 3004
 #define ID_ANI_MARIO_WHIP_RIGHT 4006// Animation đặc biệt khi chạy
 #define ID_ANI_MARIO_WHIP_LEFT 4007
+#define ID_ANI_MARIO_DEF_GRAVITY_RIGHT 4010
+#define ID_ANI_MARIO_DEF_GRAVITY_LEFT 4011
+
 
 
 #pragma endregion
@@ -168,6 +171,9 @@
 #define MARIO_TELEPORT_OUT_POSITION_Y 100
 #define MARIO_TELEPORT_NONE 0
 
+#define MARIO_SLOW_FALL_SPEED_Y 0.05f  // Tốc độ rơi chậm khi kìm
+#define MARIO_SLOW_FALL_GRAVITY 0.0005f // Trọng lực giảm khi kìm
+#define MARIO_SLOW_FALL_MAX_TIME 700  // Thời gian tối đa có thể kìm (ms)
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -205,6 +211,8 @@ class CMario : public CGameObject
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 public:
+	BOOLEAN isSlowFalling;      // Trạng thái đang kìm tốc độ rơi
+	ULONGLONG slow_fall_start;  // Thời gian bắt đầu kìm tốc độ
 	int untouchable;
 	int level;
 
@@ -254,6 +262,8 @@ public:
 		teleportState = 0;
 		renderedGoombaNum = 0;
 		renderedKoopas = 0;
+		isSlowFalling = false;      // Khởi tạo trạng thái kìm tốc độ
+		slow_fall_start = 0;
 	
 
 	}
@@ -301,6 +311,9 @@ public:
 	int getLevel() {
 		return level;
 	}
+	void StartSlowFalling() { isSlowFalling = true; slow_fall_start = GetTickCount64(); }
+	void StopSlowFalling() { isSlowFalling = false; slow_fall_start = 0; ay = MARIO_GRAVITY; }
+	BOOLEAN IsSlowFalling() { return isSlowFalling; }
 	
 
 };

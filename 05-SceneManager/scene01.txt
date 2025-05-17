@@ -641,5 +641,5 @@ explodeAni.txt
 
 
 # HIDDEN BUTTON
-16	80	140
 
+16	120	140	3

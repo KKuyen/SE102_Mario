@@ -68,4 +68,5 @@ public:
 	CMario* mario;
 	CKoopas(float x, float y, int type);
 	virtual void SetState(int state);
+	int getType() { return type; }
 };

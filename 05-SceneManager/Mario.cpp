@@ -407,13 +407,13 @@
 		// jump on top >> kill Goomba and deflect a bit 
 		if (e->ny < 0)
 		{
-		
-
 
 			if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
 			{
 				koopas->SetState(KOOPAS_STATE_SHELL);
-			
+				if(koopas->getType()==1)
+					koopas->SetState(KOOPAS_STATE_WALKING);
+
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
 				LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
 				LPSCENE s = CGame::GetInstance()->GetCurrentScene();

@@ -15,7 +15,12 @@ CKoopas::CKoopas(float x, float y, int type) :CGameObject(x, y)
 	this->nx = -1;
 	this->color = 1;
 	this->type = type;
-	SetState(KOOPAS_STATE_WALKING);
+	if (type == 1)
+	{
+		SetState(KOOPAS_STATE_DOWN);
+	}else{
+		SetState(KOOPAS_STATE_WALKING);
+	}
 
 }
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -45,6 +50,10 @@ void CKoopas::OnNoCollision(DWORD dt)
 		else if (state == KOOPAS_STATE_DOWN)
 		{
 			y += KOOPAS_VERTICAL_MOVE_SPEED * dt;
+		}
+		else if (state == KOOPAS_STATE_WALKING)
+		{
+			y -= KOOPAS_FALL_SPEED * dt;
 		}
 	}
 	else {
@@ -104,11 +113,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (type == 1)
 	{
-		if (state != KOOPAS_STATE_UP && state != KOOPAS_STATE_DOWN)
-		{
-			SetState(KOOPAS_STATE_DOWN);
-		}
-
+		 
 		if (state == KOOPAS_STATE_UP && y <= MIN_VERTICAL_MOVE)
 		{
 			SetState(KOOPAS_STATE_DOWN);
@@ -117,6 +122,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			SetState(KOOPAS_STATE_UP);
 		}
+		
 	}
 	else {
 		vy += ay * dt;
@@ -207,10 +213,16 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CKoopas::Render()
 {
 	if (type == 1) {
-		LPANIMATION ani = CAnimations::GetInstance()->Get(ID_ANI_WINGED_RED_KOOPA);
+		int aniId= ID_ANI_WINGED_RED_KOOPA;
+		if (state == KOOPAS_STATE_WALKING)
+		{
+			aniId = ID_ANI_KOOPAS_WALKING;
+			
+		}
+		LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
 		if (ani == nullptr)
 		{
-			DebugOut(L"[ERROR] Animation ID %d not found!\n", ID_ANI_WINGED_RED_KOOPA);
+			DebugOut(L"[ERROR] Animation ID %d not found!\n", aniId);
 			return; // Thoát nếu animation không tồn tại
 		}
 		ani->Render(x, y);

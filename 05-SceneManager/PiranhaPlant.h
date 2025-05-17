@@ -24,7 +24,7 @@ protected:
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     virtual void Render();
 
-    virtual int IsCollidable() { return 1; }
+    virtual int IsCollidable() { return 0; }
     virtual int IsBlocking() { return 0; } // Không chặn Mario
     virtual void OnNoCollision(DWORD dt);
     virtual void OnCollisionWith(LPCOLLISIONEVENT e);

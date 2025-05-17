@@ -7,17 +7,15 @@
 #define HIDDEN_BUTTON_WIDTH 16
 #define HIDDEN_BUTTON_BBOX_WIDTH 16
 #define HIDDEN_BUTTON_BBOX_HEIGHT 16
-#define HIDDEN_BUTTON_TYPE_BUTTON 1
+
 class CHiddenButton : public CGameObject {
 protected:
    // Trạng thái nút đã được kích hoạt hay chưa
 
 public:
-    float type;
     bool isActivated;
-    CHiddenButton(float x, float y,int type = HIDDEN_BUTTON_TYPE_BUTTON) : CGameObject(x, y) {
+    CHiddenButton(float x, float y) : CGameObject(x, y) {
         isActivated = false; // Mặc định chưa kích hoạt
-        this->type = type;
     }
 
     void Render();

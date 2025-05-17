@@ -27,7 +27,7 @@ public:
     void Render();
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     void GetBoundingBox(float& l, float& t, float& r, float& b);
-    int IsBlocking() { return 0; } // Không chặn va chạm
+    int IsBlocking() { return 1; } // Không chặn va chạm
     int IsCollidable() { return isActivated ? 1 : 0; } // Chỉ va chạm khi đã kích hoạt
     void Activate() { isActivated = true; 
   

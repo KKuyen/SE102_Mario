@@ -28,6 +28,7 @@
 #include "Leaf.h"
 #include "DarkBackground.h"
 #include "Transcript.h"
+#include "WIngedKoopas.h"
 #include "BreakableBrick.h"
 using namespace std;
 
@@ -272,6 +273,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_BREAKABLE_BRICK: obj = new CBreakableBrick(x, y); break;
 	case OBJECT_TYPE_HIDDEN_BUTTON: obj = new CHiddenButton(x, y); break;
+	case OBJECT_TYPE_WINGED_KOOPAS: obj= new CWingedKoopas(x, y); break;
 	
 
 

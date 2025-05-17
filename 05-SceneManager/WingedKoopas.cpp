@@ -17,7 +17,7 @@ CWingedKoopas::CWingedKoopas(float x, float y) :CGameObject(x, y)
 	this->beforeLand = false;
 	this->canFly = true;
 	
-	SetState(WINGED_KOOPAS_STATE_WALKING);
+	SetState(WINGED_KOOPAS_STATE_INACTIVE);
 
 }
 void CWingedKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -91,7 +91,15 @@ void CWingedKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 }
 void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+
 {
+	if (state == WINGED_KOOPAS_STATE_INACTIVE) {
+		float cx, cy;
+		CGame::GetInstance()->GetCamPos(cx, cy);
+		if (x < cx + 250) {
+			SetState(WINGED_KOOPAS_STATE_WALKING);
+		}
+	}
 	if (canFly&&state!=WINGED_KOOPAS_STATE_SHELL && state != WINGED_KOOPAS_STATE_SHELL_MOVING)
 	{
 		// Check if the Winged Koopas is on the ground
@@ -101,7 +109,7 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBrick*>(obj) ||
-				(dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1))
+				dynamic_cast<CColorBox*>(obj))
 			{
 				float l, t, r, b;
 				obj->GetBoundingBox(l, t, r, b);
@@ -181,7 +189,7 @@ void CWingedKoopas::Render()
 	}
 
 	ani->Render(x, y);
-	if (canFly)
+	if (canFly&&(state== WINGED_KOOPAS_STATE_WALKING|| state == WINGED_KOOPAS_STATE_WALKING_RIGHT))
 	{
 		if(vx<0)
 		{
@@ -207,6 +215,11 @@ void CWingedKoopas::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
+	case WINGED_KOOPAS_STATE_INACTIVE:
+		vx = 0;
+		
+		ax = 0;
+		break;
 	case WINGED_KOOPAS_STATE_WALKING:
 		vx = -WINGED_KOOPAS_WALKING_SPEED;
 		nx = -nx;

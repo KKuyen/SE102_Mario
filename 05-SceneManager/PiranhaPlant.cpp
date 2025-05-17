@@ -3,6 +3,7 @@
 #include "Mario.h"
 #include "Platform.h"
 #include "Brick.h"
+#include "Chimney.h"
 
 CPiranhaPlant::CPiranhaPlant(float x, float y, float max_y) : CGameObject(x, y)
 {
@@ -29,8 +30,13 @@ void CPiranhaPlant::OnNoCollision(DWORD dt)
 void CPiranhaPlant::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     // Bỏ qua va chạm với Platform, Brick, và các đối tượng không phải Mario
-    if (!dynamic_cast<CMario*>(e->obj))
+    if (!dynamic_cast<CMario*>(e->obj) &&
+        !dynamic_cast<CChimney*>(e->obj))
         return;
+
+    if (dynamic_cast<CChimney*>(e->obj))
+        return;
+
 
    
    

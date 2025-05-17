@@ -269,7 +269,7 @@
 	void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 	{
 		CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
-		 if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+		 if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME&&e->nx!=0)||e->ny>0)
 		{
 			 brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
 		}
@@ -277,7 +277,7 @@
 	void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 	{
 		CButton* button = dynamic_cast<CButton*>(e->obj);
-		if (!button->isPressed) // Mario jumps on top of the button
+		if (!button->isPressed&&e->ny<0) // Mario jumps on top of the button
 		{
 			button->isPressed = true;
 			// Optionally: Play hit animation or trigger other game logic (e.g., spawn platforms)
@@ -329,7 +329,7 @@
 	void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
 	{
 		CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
-		if (e->ny > 0 && hiddenbutton->isActivated == false)
+		if ((e->ny > 0||(level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)) && hiddenbutton->isActivated == false)
 		{
 
 			hiddenbutton->isActivated = true;
@@ -353,6 +353,7 @@
 
 		
 		}
+		
 
 	}
 	void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
@@ -360,7 +361,18 @@
 		CPiranhaPlant* piranhaplant = dynamic_cast<CPiranhaPlant*>(e->obj);
 			if (untouchable == 0)
 			{
-				if (level > MARIO_LEVEL_SMALL)
+				if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0)
+				{
+					float x, y;
+					piranhaplant->GetPosition(x, y);
+					CExplodeAni* exp = new CExplodeAni(x, y);
+					LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+					LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+					p->AddGameObject(exp);
+					piranhaplant->Delete();
+				}
+				
+				else if (level > MARIO_LEVEL_SMALL)
 				{
 					StartUntouchable();
 					level = level - 1;
@@ -453,8 +465,21 @@
 	void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
 	{
 		CBullet* bullet = dynamic_cast<CBullet*>(e->obj);
+		CFlower* flower = dynamic_cast<CFlower*>(e->obj);
 		if (untouchable == 0)
 		{
+			if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0)
+			{
+				float x, y;
+				flower->GetPosition(x, y);
+				CExplodeAni* exp = new CExplodeAni(x,y);
+				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+				p->AddGameObject(exp);
+				flower->Delete();
+				
+			}
+
 			if (level > MARIO_LEVEL_SMALL)
 			{
 				StartUntouchable();

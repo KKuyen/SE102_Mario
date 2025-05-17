@@ -7,6 +7,7 @@
 #include "Brick.h"
 #include "ColorBox.h"
 #include "GiftBox.h"
+#include "BreakableBrick.h"
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -20,9 +21,9 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 {
 	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_SHELL_MOVING || state == KOOPAS_STATE_HELD)
 	{
-		left = x - KOOPAS_BBOX_WIDTH / 2;
+		left = x - KOOPAS_BBOX_WIDTH / 2+5;
 		top = y - KOOPAS_BBOX_HEIGHT_SHELL / 2;
-		right = left + KOOPAS_BBOX_WIDTH;
+		right = left + KOOPAS_BBOX_WIDTH-5;
 		bottom = top + KOOPAS_BBOX_HEIGHT_SHELL;
 	}
 	else
@@ -106,7 +107,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CPlatform*>(obj) || (dynamic_cast<CColorBox*>(obj)&& dynamic_cast<CColorBox*>(obj)->isPlatform==1) || dynamic_cast<CBrick*>(obj))
+			if (dynamic_cast<CPlatform*>(obj) ||dynamic_cast<CBreakableBrick*>(obj) || (dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1) || dynamic_cast<CBrick*>(obj))
 			{
 
 				float l, t, r, b;

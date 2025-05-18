@@ -250,7 +250,7 @@ void CKoopas::Render()
                 if (!isReverse)
                     aniId = ID_ANI_KOOPAS_SHELL_MOVING;
                 else
-                    aniId = ID_ANI_KOOPAS_SHELL_MOVING_REVERSE;
+                    aniId = ID_ANI_KOOPAS_FALL;
             }
             else if (state == KOOPAS_STATE_FALL || state == KOOPAS_STATE_REVERSE)
                 aniId = ID_ANI_KOOPAS_FALL;
@@ -269,10 +269,17 @@ void CKoopas::Render()
             }
             else if (state == KOOPAS_STATE_SHELL_MOVING)
             {
+                
                 if (!isReverse)
+                {
+                   
                     aniId = ID_ANI_KOOPAS_GREEN_SHELL_MOVING;
+                }
                 else
-                    aniId = ID_ANI_KOOPAS_GREEN_SHELL_MOVING_REVERSE;
+                {
+                    aniId = ID_ANI_KOOPAS_GREEN_FALL;
+                  
+                }
             }
             else if (state == KOOPAS_STATE_FALL || state == KOOPAS_STATE_REVERSE)
                 aniId = ID_ANI_KOOPAS_GREEN_FALL;

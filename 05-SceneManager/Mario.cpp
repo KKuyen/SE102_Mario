@@ -172,36 +172,73 @@
 		{
 			float mx, my;
 			GetPosition(mx, my);
-			CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
-			if ( GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
+			if (dynamic_cast<CKoopas*>(heldObject))
 			{
-
-				koopas->SetVy(KOOPAS_JUMP_SPEED);
-				koopas->ay = KOOPAS_GRAVITY;
-				koopas->nx = nx;
-				koopas->SetState(KOOPAS_STATE_WALKING);
-				SetHolding(false, nullptr);
-				hold_start = 0;
-				if (level > MARIO_LEVEL_SMALL)
+				CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+				if (GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
 				{
 
-					level = level - 1;
-					StartUntouchable();
+					koopas->SetVy(KOOPAS_JUMP_SPEED);
+					koopas->ay = KOOPAS_GRAVITY;
+					koopas->nx = nx;
+					koopas->SetState(KOOPAS_STATE_WALKING);
+					SetHolding(false, nullptr);
+					hold_start = 0;
+					if (level > MARIO_LEVEL_SMALL)
+					{
+
+						level = level - 1;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+
+					}
+
 				}
 				else
 				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
-
+					heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
+					// Kiểm tra thời gian cầm Koopas
 				}
 
 			}
-			else
+			else if (dynamic_cast<CWingedKoopas*>(heldObject))
 			{
-				heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
-				// Kiểm tra thời gian cầm Koopas
+				CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+				if (GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
+				{
+
+					koopas->SetVy(KOOPAS_JUMP_SPEED);
+					koopas->ay = KOOPAS_GRAVITY;
+					koopas->nx = nx;
+					koopas->SetState(KOOPAS_STATE_WALKING);
+					SetHolding(false, nullptr);
+					hold_start = 0;
+					if (level > MARIO_LEVEL_SMALL)
+					{
+
+						level = level - 1;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+
+					}
+
+				}
+				else
+				{
+					heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
+					// Kiểm tra thời gian cầm Koopas
+				}
+
 			}
-	
+		
 	
 		
 		}
@@ -564,7 +601,7 @@
 		
 
 
-			if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+			if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING && koopas->GetState() != KOOPAS_STATE_REVERSE)
 			{
 				koopas->SetState(KOOPAS_STATE_SHELL);
 			
@@ -573,6 +610,15 @@
 				LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 				LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 				p->AddGameObject(effectPoint);
+			}
+			else if (koopas->GetState() == KOOPAS_STATE_REVERSE)
+			{
+				koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+
+				if (vx > 0)
+					koopas->nx = 1;
+				else
+					koopas->nx = -1;
 			}
 			else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
 			{
@@ -596,7 +642,9 @@
 		}
 		else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
 		{
-			koopas->SetState(KOOPAS_STATE_FALL);
+	
+			koopas->nx = nx;
+			koopas->SetState(KOOPAS_STATE_REVERSE);
 		}
 		else if (isHolding && heldObject != NULL && !dynamic_cast<CKoopas*>(heldObject)) {
 
@@ -636,7 +684,7 @@
 			{
 				if (koopas->GetState() == KOOPAS_STATE_FALL)
 					return;
-				if (koopas->GetState() != KOOPAS_STATE_SHELL&& koopas->GetState() != KOOPAS_STATE_HELD)
+				if (koopas->GetState() != KOOPAS_STATE_SHELL&& koopas->GetState() != KOOPAS_STATE_HELD && koopas->GetState() != WINGED_KOOPAS_STATE_REVERSE)
 				{
 					if (level > MARIO_LEVEL_SMALL)
 					{
@@ -687,7 +735,7 @@
 			}
 			else
 			{
-				if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+				if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING&&koopas->GetState() != KOOPAS_STATE_REVERSE)
 				{
 					koopas->SetState(KOOPAS_STATE_SHELL);
 
@@ -705,14 +753,31 @@
 
 
 				}
-				else if (koopas->GetState() == KOOPAS_STATE_SHELL)
+				else if (koopas->GetState() == WINGED_KOOPAS_STATE_SHELL)
 				{
-					koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
-					
+					koopas->SetState(WINGED_KOOPAS_STATE_SHELL_MOVING);
+
 					if (vx > 0)
 						koopas->nx = 1;
 					else
 						koopas->nx = -1;
+				}
+				else if (koopas->GetState() == WINGED_KOOPAS_STATE_REVERSE)
+				{
+					koopas->SetState(WINGED_KOOPAS_STATE_SHELL_MOVING);
+
+					if (vx > 0)
+						koopas->nx = 1;
+					else
+						koopas->nx = -1;
+				}
+				else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
+				{
+					vy = -MARIO_JUMP_DEFLECT_SPEED;
+					koopas->SetState(KOOPAS_STATE_FALL);
+					koopas->ax = 0;
+
+
 				}
 			}
 
@@ -755,15 +820,16 @@
 		}
 		else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
 		{
-			koopas->SetState(KOOPAS_STATE_FALL);
+			koopas->nx = nx;
+			koopas->SetState(WINGED_KOOPAS_STATE_REVERSE);
 		}
 		else
 		{
 			if (untouchable == 0)
 			{
-				if (koopas->GetState() == KOOPAS_STATE_FALL)
+				if (koopas->GetState() == WINGED_KOOPAS_STATE_FALL)
 					return;
-				if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_HELD)
+				if (koopas->GetState() != WINGED_KOOPAS_STATE_SHELL && koopas->GetState() != WINGED_KOOPAS_STATE_HELD&&koopas->GetState() != WINGED_KOOPAS_STATE_REVERSE)
 				{
 					if (level > MARIO_LEVEL_SMALL)
 					{
@@ -786,12 +852,12 @@
 					{
 						hold_start = GetTickCount64();
 						SetHolding(true, koopas);
-						koopas->SetState(KOOPAS_STATE_HELD);
+						koopas->SetState(WINGED_KOOPAS_STATE_HELD);
 					}
 					else
 					{
 						koopas->nx = this->nx;
-						koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+						koopas->SetState(WINGED_KOOPAS_STATE_SHELL_MOVING);
 					}
 
 
@@ -836,12 +902,12 @@
 				koopas->nx = nx;
 				koopas->SetState(KOOPAS_STATE_FALL);
 			}
-			else if (dynamic_cast<CWingedGoomba*>(heldObject))
+			else if (dynamic_cast<CWingedKoopas*>(heldObject))
 			{
-				CWingedGoomba* koopas = dynamic_cast<CWingedGoomba*>(heldObject);
+				CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
 				SetHolding(false, nullptr);
 				koopas->nx = nx;
-				koopas->SetState(WINGED_GOOMBA_STATE_FALL);
+				koopas->SetState(WINGED_KOOPAS_STATE_FALL);
 			}
 			else
 			{
@@ -935,7 +1001,7 @@
 		else if (isHolding && heldObject != NULL)
 		{
 
-			goomba->SetState(GOOMBA_STATE_FALL);
+			goomba->SetState(WINGED_GOOMBA_STATE_FALL);
 
 			if (dynamic_cast<CKoopas*>(heldObject))
 			{
@@ -943,13 +1009,13 @@
 				SetHolding(false, nullptr);
 				koopas->nx = nx;
 				koopas->SetState(KOOPAS_STATE_FALL);
-			}
-			else if (dynamic_cast<CWingedGoomba*>(heldObject))
+			}	
+			else if (dynamic_cast<CWingedKoopas*>(heldObject))
 			{
-				CWingedGoomba* koopas = dynamic_cast<CWingedGoomba*>(heldObject);
+				CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
 				SetHolding(false, nullptr);
 				koopas->nx = nx;
-				koopas->SetState(WINGED_GOOMBA_STATE_FALL);
+				koopas->SetState(WINGED_KOOPAS_STATE_FALL);
 			}
 			else
 			{

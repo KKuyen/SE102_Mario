@@ -15,15 +15,16 @@ CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 	this->nx = -1;
 	this->color = 1;
 	SetState(KOOPAS_STATE_WALKING);
+	this->isReverse = false;
 
 }
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_SHELL_MOVING || state == KOOPAS_STATE_HELD)
+	if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_SHELL_MOVING || state == KOOPAS_STATE_HELD||state== KOOPAS_STATE_REVERSE)
 	{
-		left = x - KOOPAS_BBOX_WIDTH / 2+5;
+		left = x - KOOPAS_BBOX_WIDTH / 2+2;
 		top = y - KOOPAS_BBOX_HEIGHT_SHELL / 2;
-		right = left + KOOPAS_BBOX_WIDTH-5;
+		right = left + KOOPAS_BBOX_WIDTH-2;
 		bottom = top + KOOPAS_BBOX_HEIGHT_SHELL;
 	}
 	else
@@ -45,6 +46,16 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) {
 		mario = dynamic_cast<CMario*>(e->obj);
+	}
+	if (state == KOOPAS_STATE_REVERSE &&
+		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+	{
+			
+		ax = 0;
+		vx = 0;
+		vy = 0;
+		ay = 0;
+		state = KOOPAS_STATE_SHELL;
 	}
 	if (state == KOOPAS_STATE_FALL &&
 		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
@@ -90,6 +101,9 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+
+	DebugOut(L"[Koopas] revive condition: %d\n", (GetTickCount64() - revive_start) >= KOOPAS_REVIVE_TIME);
+
 	if (state == KOOPAS_STATE_HELD)
 	{
 		vx = 0;
@@ -150,9 +164,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD) &&
+	if ((state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD|| state == KOOPAS_STATE_REVERSE) &&
 		revive_start != 0 && GetTickCount64() - revive_start >= KOOPAS_REVIVE_TIME)
 	{
+		
+		y -= 3;
 		vy = KOOPAS_JUMP_SPEED; // Nảy lên
 		ay = KOOPAS_GRAVITY;    // Áp dụng trọng lực
 		if (nx < 0)
@@ -180,10 +196,24 @@ void CKoopas::Render()
 		if (state == KOOPAS_STATE_WALKING_RIGHT)
 			aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 		if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
-			aniId = ID_ANI_KOOPAS_SHELL;
+		{
+			if(!isReverse)
+				aniId = ID_ANI_KOOPAS_SHELL;
+			else
+				aniId = ID_ANI_KOOPAS_FALL;
+		}
+			
 		else if (state == KOOPAS_STATE_SHELL_MOVING)
-			aniId = ID_ANI_KOOPAS_SHELL_MOVING;
-		else if (state == KOOPAS_STATE_FALL)
+			{
+			if (!isReverse)
+
+				aniId = ID_ANI_KOOPAS_SHELL_MOVING;
+			else
+				aniId = ID_ANI_KOOPAS_SHELL_MOVING_REVERSE;
+		}
+		
+		
+		else if (state == KOOPAS_STATE_FALL ||state == KOOPAS_STATE_REVERSE)
 			aniId = ID_ANI_KOOPAS_FALL;
 
 
@@ -196,10 +226,22 @@ void CKoopas::Render()
 		if (state == KOOPAS_STATE_WALKING_RIGHT)
 			aniId = ID_ANI_KOOPAS_GREEN_WALKING_RIGHT;
 		if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
-			aniId = ID_ANI_KOOPAS_GREEN_SHELL;
+		{
+			if (!isReverse)
+				aniId = ID_ANI_KOOPAS_GREEN_SHELL;
+			else
+				aniId = ID_ANI_KOOPAS_GREEN_FALL;
+		}
+			
 		else if (state == KOOPAS_STATE_SHELL_MOVING)
-			aniId = ID_ANI_KOOPAS_GREEN_SHELL_MOVING;
-		else if (state == KOOPAS_STATE_FALL)
+		{
+			if (!isReverse)
+
+				aniId = ID_ANI_KOOPAS_GREEN_SHELL_MOVING;
+			else
+				aniId = ID_ANI_KOOPAS_GREEN_SHELL_MOVING_REVERSE;
+	}
+		else if (state == KOOPAS_STATE_FALL|| state == KOOPAS_STATE_REVERSE)
 			aniId = ID_ANI_KOOPAS_GREEN_FALL;
 
 	}
@@ -232,8 +274,9 @@ void CKoopas::SetState(int state)
 		revive_start = 0;
 		break;
 	case KOOPAS_STATE_SHELL:
+		y -= 5;
 		vx = 0;
-		vy = KOOPAS_JUMP_SPEED/3;
+		vy = KOOPAS_JUMP_SPEED/4;
 		ax = 0;
 		ay = KOOPAS_GRAVITY;
 		
@@ -261,6 +304,16 @@ void CKoopas::SetState(int state)
 		vy = KOOPAS_FALL_SPEED; // Nảy lên
 		ay = KOOPAS_GRAVITY_FALL; // Trọng lực sẽ kéo xuống
 		revive_start = 0; 
+		break;
+	case KOOPAS_STATE_REVERSE:
+		this->isReverse = true;
+		vx = nx * KOOPAS_FALL_SPEED_HORIZONTAL;
+
+		vy = KOOPAS_FALL_SPEED*2; // Nảy lên
+		vy = KOOPAS_FALL_SPEED*2; // Nảy lên
+		ay = KOOPAS_GRAVITY_FALL; // Trọng lực sẽ kéo xuống
+		StartReviveTimer();
+
 		
 	
 		

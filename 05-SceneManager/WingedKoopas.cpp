@@ -16,18 +16,18 @@ CWingedKoopas::CWingedKoopas(float x, float y) :CGameObject(x, y)
 	this->nx = -1;
 	this->beforeLand = false;
 	this->canFly = true;
-	
+	this->isReverse = false;
 	SetState(WINGED_KOOPAS_STATE_INACTIVE);
 
 }
 void CWingedKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	
-	if (state == WINGED_KOOPAS_STATE_SHELL || state == WINGED_KOOPAS_STATE_SHELL_MOVING || state == WINGED_KOOPAS_STATE_HELD)
+	if (state == WINGED_KOOPAS_STATE_SHELL || state == WINGED_KOOPAS_STATE_SHELL_MOVING || state == WINGED_KOOPAS_STATE_HELD|| state == WINGED_KOOPAS_STATE_REVERSE)
 	{
-		left = x - WINGED_KOOPAS_BBOX_WIDTH / 2;
+		left = x - WINGED_KOOPAS_BBOX_WIDTH / 2+2;
 		top = y - WINGED_KOOPAS_BBOX_HEIGHT_SHELL / 2;
-		right = left + WINGED_KOOPAS_BBOX_WIDTH;
+		right = left + WINGED_KOOPAS_BBOX_WIDTH-2;
 		bottom = top + WINGED_KOOPAS_BBOX_HEIGHT_SHELL;
 	}
 	else
@@ -49,6 +49,15 @@ void CWingedKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CWingedKoopas*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) {
 		mario = dynamic_cast<CMario*>(e->obj);
+	}
+	if (state == WINGED_KOOPAS_STATE_REVERSE &&
+		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+	{
+		ax = 0;
+		vx = 0;
+		vy = 0;
+		ay = 0;
+		state = WINGED_KOOPAS_STATE_SHELL;
 	}
 	if (state == WINGED_KOOPAS_STATE_FALL &&
 		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
@@ -100,6 +109,21 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(WINGED_KOOPAS_STATE_WALKING);
 		}
 	}
+
+	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
+	if ((state == WINGED_KOOPAS_STATE_SHELL || state == WINGED_KOOPAS_STATE_HELD || state == WINGED_KOOPAS_STATE_REVERSE) &&
+		revive_start != 0 && GetTickCount64() - revive_start >= WINGED_KOOPAS_REVIVE_TIME)
+	{
+		y -= 3;
+		vy = WINGED_KOOPAS_JUMP_SPEED; // Nảy lên
+		ay = WINGED_KOOPAS_GRAVITY;    // Áp dụng trọng lực
+		if (nx < 0)
+			SetState(WINGED_KOOPAS_STATE_WALKING);
+		else
+		{
+			SetState(WINGED_KOOPAS_STATE_WALKING_RIGHT);
+		}
+	}
 	if (canFly&&state!=WINGED_KOOPAS_STATE_SHELL && state != WINGED_KOOPAS_STATE_SHELL_MOVING)
 	{
 		// Check if the Winged Koopas is on the ground
@@ -128,7 +152,7 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 		// If on the ground, make it jump
-		if (isOnGround)
+		if (isOnGround&&state!=WINGED_KOOPAS_STATE_FALL&& state != WINGED_KOOPAS_STATE_REVERSE)
 		{
 			vy = WINGED_KOOPAS_JUMP_SPEED; // Set vertical velocity for jumping
 		}
@@ -144,19 +168,6 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	
 
-	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == WINGED_KOOPAS_STATE_SHELL || state == WINGED_KOOPAS_STATE_HELD) &&
-		revive_start != 0 && GetTickCount64() - revive_start >= WINGED_KOOPAS_REVIVE_TIME)
-	{
-		vy = WINGED_KOOPAS_JUMP_SPEED; // Nảy lên
-		ay = WINGED_KOOPAS_GRAVITY;    // Áp dụng trọng lực
-		if (nx < 0)
-			SetState(WINGED_KOOPAS_STATE_WALKING);
-		else
-		{
-			SetState(WINGED_KOOPAS_STATE_WALKING_RIGHT);
-		}
-	}
 
 
 
@@ -174,10 +185,20 @@ void CWingedKoopas::Render()
 		if (state == WINGED_KOOPAS_STATE_WALKING_RIGHT)
 			aniId = ID_ANI_WINGED_KOOPAS_GREEN_WALKING_RIGHT;
 		if (state == WINGED_KOOPAS_STATE_SHELL || state == WINGED_KOOPAS_STATE_HELD)
-			aniId = ID_ANI_WINGED_KOOPAS_GREEN_SHELL;
+		{
+			if (!isReverse)
+				aniId = ID_ANI_WINGED_KOOPAS_GREEN_SHELL;
+			else
+				aniId = ID_ANI_WINGED_KOOPAS_GREEN_FALL;
+		}
+			
 		else if (state == WINGED_KOOPAS_STATE_SHELL_MOVING)
-			aniId = ID_ANI_WINGED_KOOPAS_GREEN_SHELL_MOVING;
-		else if (state == WINGED_KOOPAS_STATE_FALL)
+			if (!isReverse)
+
+				aniId = ID_ANI_WINGED_KOOPAS_GREEN_SHELL_MOVING;
+			else
+				aniId = ID_ANI_WINGED_KOOPAS_GREEN_SHELL_MOVING_REVERSE;
+		else if (state == WINGED_KOOPAS_STATE_FALL|| state == KOOPAS_STATE_REVERSE)
 			aniId = ID_ANI_WINGED_KOOPAS_GREEN_FALL;
 
 	
@@ -231,10 +252,11 @@ void CWingedKoopas::SetState(int state)
 		revive_start = 0;
 		break;
 	case WINGED_KOOPAS_STATE_SHELL:
+		y -= 5;
 		vx = 0;
-		vy = 0;
+		vy = WINGED_KOOPAS_JUMP_SPEED / 4;
 		ax = 0;
-
+		ay = WINGED_KOOPAS_GRAVITY;
 
 		StartReviveTimer();
 		break;
@@ -260,9 +282,17 @@ void CWingedKoopas::SetState(int state)
 		revive_start = 0;
 
 
+		break;
+	case WINGED_KOOPAS_STATE_REVERSE:
+		this->isReverse = true;
+		canFly = false;
+		vx = nx * WINGED_KOOPAS_FALL_SPEED_HORIZONTAL;
 
-
-
+		vy = WINGED_KOOPAS_FALL_SPEED/1.5 ; // Nảy lên
+		
+		ay = WINGED_KOOPAS_GRAVITY_FALL; // Trọng lực sẽ kéo xuống
+	
+		StartReviveTimer();
 
 		break;
 	}

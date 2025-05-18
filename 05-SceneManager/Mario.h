@@ -44,6 +44,8 @@
 #define MARIO_STATE_SLIP_LEFT       701
 #define MARIO_STATE_HOLD 800
 #define MARIO_STATE_HOLD_RELEASE 801
+#define MARIO_STATE_GROWING 900
+#define MARIO_STATE_SHRINKING 901
 
 
 #pragma region ANIMATION_ID
@@ -174,6 +176,9 @@
 #define MARIO_SLOW_FALL_SPEED_Y 0.05f  // Tốc độ rơi chậm khi kìm
 #define MARIO_SLOW_FALL_GRAVITY 0.0005f // Trọng lực giảm khi kìm
 #define MARIO_SLOW_FALL_MAX_TIME 700  // Thời gian tối đa có thể kìm (ms)
+
+
+#define MARIO_TRANSITION_TIME 500
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -211,6 +216,8 @@ class CMario : public CGameObject
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 public:
+	ULONGLONG transition_start; // Thời điểm bắt đầu hiệu ứng
+	int target_level; // Cấp độ mục tiêu (để biết phóng to hay thu nhỏ)
 	BOOLEAN isSlowFalling;      // Trạng thái đang kìm tốc độ rơi
 	ULONGLONG slow_fall_start;  // Thời gian bắt đầu kìm tốc độ
 	int untouchable;
@@ -265,6 +272,8 @@ public:
 		isSlowFalling = false;      // Khởi tạo trạng thái kìm tốc độ
 		slow_fall_start = 0;
 	
+		transition_start = -1;
+		target_level = MARIO_LEVEL_BIG;
 
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

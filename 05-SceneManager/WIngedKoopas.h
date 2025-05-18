@@ -23,6 +23,7 @@
 #define WINGED_KOOPAS_STATE_FALL 203
 
 
+#define WINGED_KOOPAS_STATE_REVERSE 204
 
 
 #define ID_ANI_WINGED_KOOPAS_WALKING 6000
@@ -34,6 +35,7 @@
 #define ID_ANI_WINGED_KOOPAS_GREEN_WALKING_RIGHT 7003
 #define ID_ANI_WINGED_KOOPAS_GREEN_SHELL 7001
 #define ID_ANI_WINGED_KOOPAS_GREEN_SHELL_MOVING 7002
+#define ID_ANI_WINGED_KOOPAS_GREEN_SHELL_MOVING_REVERSE 7012
 #define ID_ANI_WINGED_KOOPAS_GREEN_FALL 7004
 #define WINGED_KOOPAS_REVIVE_TIME 4000 
 class CWingedKoopas : public CGameObject
@@ -56,6 +58,7 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void StartReviveTimer() { revive_start = GetTickCount64(); }
 public:
+	bool isReverse;
 	float ax;
 	float ay;
 	int nx;

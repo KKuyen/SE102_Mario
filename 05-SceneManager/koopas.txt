@@ -13,8 +13,12 @@
 32002	144	48	159	61	70   # Koopas shell moving frame 1
 32003	160	48	175	61	70   # Koopas shell moving frame 2
 32004	176	48	191	61	70   # Koopas shell idle
+32011	144	64	159	79	70   # Koopas shell idle
+32012	288	48	303	61	70   # Koopas shell moving frame 1
+32013	304	48	319	61	70   # Koopas shell moving frame 2
+32014	320	48	335	61	70   # Koopas shell idle
 # SHELL FALL
-33000	143	64	159	79	70   # Koopas shell idle
+33000	144	64	159	79	70   # Koopas shell idle
 
 # WALKING GREEn
 41000	0	51	15	77	70     # Koopas walking frame 1
@@ -29,6 +33,11 @@
 42002	48	48	63	61	70   # Koopas shell moving frame 1
 42003	64	48	78	61	70   # Koopas shell moving frame 2
 42004	79	48	96	61	70   # Koopas shell idle
+42011	64	64	79	79	70   # Koopas shell idle
+42012	288	64	303	79	70   # Koopas shell moving frame 1
+42013	304	64	319	79	70   # Koopas shell moving frame 2
+42014	320	64	335	79	70   # Koopas shell idle
+
 # SHELL FALL GREEn
 43000	64	64	79	79	70   # Koopas shell idle
 
@@ -37,10 +46,13 @@
 6000	31000	200	31001	200   # Walking animation
 6001	32000	100             # Shell idle animation
 6002	32001	200	32002	200	32003	200	32004	200  # Shell moving animation
+6012	32011	200	32012	200	32013	200	32014	200  # Shell moving animation reverse
 6003 	31002 	200 	31003 	200  #animation walking right
 6004	33000	100             # Shell fall animation
 7000	41000	200	41001	200   # Walking animation
 7001	42000	100             # Shell idle animation
 7002	42001	200	42002	200	42003	200	42004	200  # Shell moving animation
+7012	42011	200	42012	200	42013	200	42014	200  # Shell moving animation reverse
+
 7003 	41002 	200 	41003 	200  #animation walking right
 7004	43000	100             # Shell fall animation

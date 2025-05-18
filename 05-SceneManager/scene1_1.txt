@@ -22,6 +22,7 @@ number.txt
 piranha_plant.txt
 breakable_brick.txt
 bomerang_bro.txt
+bomerang.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -530,7 +531,7 @@ bomerang_bro.txt
 10	1100	10
 #GOOMBA
 2	224	168
-29	224	150
+29	124	150
 2	560	168
 #2	800	10
 #2	900	10

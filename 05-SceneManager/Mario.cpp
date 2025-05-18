@@ -25,6 +25,7 @@
 #include "PiranhaPlant.h"
 #include "MovablePlatform.h"
 #include "BomerangBro.h"
+#include "Bomerang.h"
 
 #define RENDER_POINT_1	704
 #define RENDER_POINT_2	736
@@ -267,6 +268,8 @@
 			OnCollisionWithCMovablePlatform(e);
 		else if (dynamic_cast<CBomerangBro*>(e->obj))
 			OnCollisionWithBomerangBro(e);
+		else if (dynamic_cast<CBoomerang*>(e->obj))
+			OnCollisionWithBomerang(e);
 
 	}
 
@@ -650,6 +653,25 @@
 	}
 
 
+	void CMario::OnCollisionWithBomerang(LPCOLLISIONEVENT e)
+	{
+		if (untouchable == 0)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+
+				level = level - 1;
+				StartUntouchable();
+			}
+			else
+			{
+ 				SetState(MARIO_STATE_DIE);
+
+			}
+		}
+		
+	}
+
 	void CMario::OnCollisionWithBomerangBro(LPCOLLISIONEVENT e)
 	{
 		CBomerangBro* bomerangBro = dynamic_cast<CBomerangBro*>(e->obj);
@@ -665,7 +687,25 @@
 				p->AddGameObject(effectPoint);
 			}
 		}
-		
+		if (untouchable == 0)
+		{
+			if (bomerangBro->GetState() != BOMERANG_BRO_STATE_FALL  )
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+
+					level = level - 1;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+
+				}
+			}
+		}
+
 	}
 	void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{

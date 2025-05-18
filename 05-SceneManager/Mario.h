@@ -200,6 +200,7 @@ class CMario : public CGameObject
 	void OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e);
 	void OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e);
 	void OnCollisionWithBomerangBro(LPCOLLISIONEVENT e);
+	void OnCollisionWithBomerang(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();

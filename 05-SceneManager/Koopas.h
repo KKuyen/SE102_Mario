@@ -7,10 +7,15 @@
 #define KOOPAS_SHELL_MOVING_SPEED 0.2f
 #define KOOPAS_JUMP_SPEED -0.05f 
 #define KOOPAS_FALL_SPEED -0.1f
+#define KOOPAS_VERTICAL_MOVE_SPEED 0.02f
 #define KOOPAS_FALL_SPEED_HORIZONTAL 0.1f
 #define KOOPAS_BBOX_WIDTH 16
 #define KOOPAS_BBOX_HEIGHT 25
 #define KOOPAS_BBOX_HEIGHT_SHELL 12
+#define MAX_VERTICAL_MOVE 180.0f
+#define MIN_VERTICAL_MOVE 50.0f
+
+
 
 #define KOOPAS_STATE_WALKING 100
 #define KOOPAS_STATE_WALKING_RIGHT 101
@@ -18,7 +23,10 @@
 #define KOOPAS_STATE_SHELL_MOVING 300
 #define KOOPAS_STATE_HELD 202
 #define KOOPAS_STATE_FALL 203
-#define KOOPAS_STATE_REVERSE 204
+ #define KOOPAS_STATE_REVERSE 204
+ #define KOOPAS_STATE_DOWN 206
+#define KOOPAS_STATE_UP 205
+
 
 
 #define ID_ANI_KOOPAS_WALKING 6000
@@ -33,6 +41,7 @@
 #define ID_ANI_KOOPAS_GREEN_SHELL_MOVING 7002
 #define ID_ANI_KOOPAS_GREEN_SHELL_MOVING_REVERSE 7012
 #define ID_ANI_KOOPAS_GREEN_FALL 7004
+#define ID_ANI_WINGED_RED_KOOPA	7005
 #define KOOPAS_REVIVE_TIME 4000 
 class CKoopas : public CGameObject
 {
@@ -59,7 +68,9 @@ public:
 	float ay;
 	int nx;
 	int color;
+	int type; //1: Winged Red Koopa	, 2: others
 	CMario* mario;
-	CKoopas(float x, float y);
+	CKoopas(float x, float y, int type);
 	virtual void SetState(int state);
+	int getType() { return type; }
 };

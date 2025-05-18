@@ -172,6 +172,8 @@
 #define MARIO_TELEPORT_OUT 2
 #define MARIO_TELEPORT_OUT_POSITION_Y 100
 #define MARIO_TELEPORT_NONE 0
+#define MOVABLEPLATFORM_NUM 13
+
 
 #define MARIO_SLOW_FALL_SPEED_Y 0.05f  // Tốc độ rơi chậm khi kìm
 #define MARIO_SLOW_FALL_GRAVITY 0.0005f // Trọng lực giảm khi kìm
@@ -207,9 +209,13 @@ class CMario : public CGameObject
 	void OnCollisionWithChimney(LPCOLLISIONEVENT e);
 	void OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e);
-	void OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e);
+ 	void OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e);
 	void OnCollisionWithButton(LPCOLLISIONEVENT e);
 	void OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e);
+ 	void OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e);
+	void OnCollisionWithBomerangBro(LPCOLLISIONEVENT e);
+	void OnCollisionWithBomerang(LPCOLLISIONEVENT e);
+	void OnCollisionWithCoinBrick(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -243,6 +249,7 @@ public:
 	float teleportState;
 	int renderedGoombaNum;
 	int renderedKoopas;
+ 	int renderedMovablePlatforms [MOVABLEPLATFORM_NUM];
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -269,9 +276,13 @@ public:
 		teleportState = 0;
 		renderedGoombaNum = 0;
 		renderedKoopas = 0;
-		isSlowFalling = false;      // Khởi tạo trạng thái kìm tốc độ
+ 		isSlowFalling = false;      // Khởi tạo trạng thái kìm tốc độ
 		slow_fall_start = 0;
-	
+ 		for (int i = 0; i < MOVABLEPLATFORM_NUM; i++)
+		{
+			renderedMovablePlatforms[i] = 0;
+		}
+
 		transition_start = -1;
 		target_level = MARIO_LEVEL_BIG;
 

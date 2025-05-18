@@ -1,0 +1,6 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+270000	443	222	458	237	30
+270001	460	222	475	237	30
+270002	477	222	492	237	30
+

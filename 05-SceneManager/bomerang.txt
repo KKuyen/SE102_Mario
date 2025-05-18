@@ -1,0 +1,13 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#Bullet 
+310000	17	209	31	224	10
+310001	42	209	57	224	10
+310002	68	209	82	224	10
+310003	92	208	107	222	10
+
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#ani bullet
+310000	310000	100	310001	100	310002	100	310003	100

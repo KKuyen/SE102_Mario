@@ -31,6 +31,7 @@
 #include "GrassPlatform.h"
 #include "MovablePlatform.h"
 #include "BomerangBro.h"
+#include "CoinBrick.h"
 
 using namespace std;
 
@@ -161,6 +162,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float animationId = (float)atof(tokens[3].c_str());
 		int type = atoi(tokens[4].c_str());
 		obj = new CGiftBox(x, y, animationId, type); break;
+	}
+	case OBJECT_TYPE_COIN_BRICK: {
+		int quantity = (int)atof(tokens[3].c_str());
+		obj = new CCoinBrick(x, y, quantity); break;
 	}
 	case OBJECT_TYPE_KOOPAS:
 	{

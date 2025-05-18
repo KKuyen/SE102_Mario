@@ -26,6 +26,8 @@
 #include "MovablePlatform.h"
 #include "BomerangBro.h"
 #include "Bomerang.h"
+ #include "CoinBrick.h"
+ 
 
 #define RENDER_POINT_1	704
 #define RENDER_POINT_2	736
@@ -250,6 +252,8 @@
 			OnCollisionWithWingedGoomba(e);
 		else if (dynamic_cast<CGiftBox*>(e->obj))
 			OnCollisionWithGiftBox(e);
+		else if (dynamic_cast<CCoinBrick*>(e->obj))
+			OnCollisionWithCoinBrick(e);
 		else if (dynamic_cast<CMushroom*>(e->obj))
 			OnCollisionWithMushroom(e);
 		else if (dynamic_cast<CBullet*>(e->obj))
@@ -403,6 +407,13 @@
 		}
 	 
  
+	}	
+	void CMario::OnCollisionWithCoinBrick(LPCOLLISIONEVENT e)
+	{
+		CCoinBrick* coinbrick = dynamic_cast<CCoinBrick*>(e->obj);
+		if (e->ny > 0) {
+			coinbrick->OpenCoinBox();
+		}
 	}
 
 	void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)

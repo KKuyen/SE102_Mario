@@ -158,6 +158,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Chimney.cpp" />
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="CoinBrick.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorBox.cpp" />
     <ClCompile Include="DarkBackground.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Chimney.h" />
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="CoinBrick.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorBox.h" />
     <ClInclude Include="DarkBackground.h" />

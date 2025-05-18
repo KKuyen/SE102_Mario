@@ -2,60 +2,101 @@
 
 #include "Sprite.h"
 #include "Sprites.h"
-
 #include "Textures.h"
 #include "Game.h"
 
-
 void CColorBox::Render()
 {
-	if (this->length <= 0) return;
-	if (isVertical == 1) {
-		float yy = y;
-		CSprites* s = CSprites::GetInstance();
-		s->Get(this->spriteIdBegin)->Draw(x, yy);
-		yy += this->cellHeight;
-		for (int i = 1; i < this->length - 1; i++)
-		{
-			s->Get(this->spriteIdMiddle)->Draw(x, yy);
-			yy += this->cellHeight;
-		}
-		if (length > 1)
-			s->Get(this->spriteIdEnd)->Draw(x, yy);
+    if (widthCells <= 0 || heightCells <= 0) return;
 
-	}
-	else {
-		float xx = x;
-		CSprites* s = CSprites::GetInstance();
+    CSprites* s = CSprites::GetInstance();
 
-		s->Get(this->spriteIdBegin)->Draw(xx, y);
-		xx += this->cellWidth;
-		for (int i = 1; i < this->length - 1; i++)
-		{
-			s->Get(this->spriteIdMiddle)->Draw(xx, y);
-			xx += this->cellWidth;
-		}
-		if (length > 1)
-			s->Get(this->spriteIdEnd)->Draw(xx, y);
-	}
+    for (int row = 0; row < heightCells; row++)
+    {
+        for (int col = 0; col < widthCells; col++)
+        {
+            int spriteIndex;
+            if (row == 0)
+            {
+                if (col == 0)
+                    spriteIndex = 1;
+                else if (col == widthCells - 1)
+                    spriteIndex = 3;
+                else
+					spriteIndex = 2;
+			}
+			else if (row == heightCells - 1)
+			{
+                if (col == 0)
+                    spriteIndex = 7;
+                else if (col == widthCells - 1)
+                    spriteIndex = 9;
+                else
+                    spriteIndex = 8;
+				
+			}
+			else
+			{
+                if (col == 0)
+                    spriteIndex = 4;
+                else if (col == widthCells - 1)
+                    spriteIndex = 6;
+                else
+                    spriteIndex = 5;
+			}
 
-	//RenderBoundingBox();
+
+            
+
+            int spriteId = baseSpriteId + spriteIndex;
+            LPSPRITE sprite = s->Get(spriteId);
+            if (sprite == nullptr)
+            {
+                return;
+            }
+            float renderX = x + col * CELL_WIDTH;
+            float renderY = y + row * CELL_HEIGHT;
+            sprite->Draw(renderX, renderY);
+        }
+    }
+
+    const float SHADOW_CELL_SIZE = 8.0f;
+    float shadowX = x + widthCells * CELL_WIDTH - 4;
+    float shadowY = y + 4;
+
+    for (int row = 0; row * SHADOW_CELL_SIZE < heightCells * 16 - 8; row++)
+    {
+        int shadowSpriteId;
+        if (row == 0)
+            shadowSpriteId = 74000;
+        else if (row == heightCells - 1)
+            shadowSpriteId = 75000;
+        else
+            shadowSpriteId = 75000;
+
+        LPSPRITE shadowSprite = s->Get(shadowSpriteId);
+        if (shadowSprite == nullptr)
+        {
+            return;
+        }
+
+        float renderShadowX = shadowX;
+        float renderShadowY = shadowY + row * SHADOW_CELL_SIZE;
+        shadowSprite->Draw(renderShadowX, renderShadowY);
+    }
 }
 
 void CColorBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	float cellWidth_div_2 = this->cellWidth / 2;
-	l = x - cellWidth_div_2;
-	t = y - this->cellHeight / 2;
-	r = l + this->cellWidth * this->length - 10;
-	b = t + this->cellHeight;
+    float CELL_WIDTH_div_2 = CELL_WIDTH / 2;
+    l = x - CELL_WIDTH_div_2;
+    t = y - CELL_HEIGHT / 2;
+    r = l + CELL_WIDTH * this->widthCells - 6.0f;
+    b = t + CELL_HEIGHT * this->heightCells;
 }
-
 
 int CColorBox::IsDirectionColliable(float nx, float ny)
 {
-	if (nx == 0 && ny == -1) return 1;
-	else return 0;
+    if (nx == 0 && ny == -1) return 1;
+    else return 0;
 }
- 
- 

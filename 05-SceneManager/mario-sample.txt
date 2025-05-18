@@ -7,8 +7,8 @@ height	240
 # type: 0: intro, 1: play scene 
 [SCENES]
 0	intro.txt
-1	scene01.txt
-2	scene02.txt
+1	scene1_1.txt
+2	scene1_4.txt
 5	scene0005.txt
 
 # id	file 
@@ -31,4 +31,6 @@ height	240
 130	textures\sprite10.png
 140	textures\sprite11.png
 150	textures\sprite12.png
+160	textures\sprite14.png
+170	textures\sprite15.png
 

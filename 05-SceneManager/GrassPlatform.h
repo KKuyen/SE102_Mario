@@ -5,21 +5,22 @@
 
 #define CELL_WIDTH 16
 #define CELL_HEIGHT 16
-#define EDGE_SPRITE_ID 190001
-#define MAIN_SPRITE_ID 190002
 
-class CDarkBackground : public CGameObject
+class CGrassPlatform : public CGameObject
 {
 protected:
     int widthCells;
     int heightCells;
+    int baseSpriteId;
 
 public:
     bool isPlatform;
-    CDarkBackground(float x, float y, int widthCells, int heightCells) : CGameObject(x, y)
+    CGrassPlatform(float x, float y, int widthCells, int heightCells,  bool isPlatform = 0) : CGameObject(x, y)
     {
         this->widthCells = widthCells;
         this->heightCells = heightCells;
+        this->isPlatform = isPlatform;
+        this->baseSpriteId = 250000;
     }
 
     void Render();
@@ -28,6 +29,6 @@ public:
 
     int IsDirectionColliable(float nx, float ny);
     int IsBlocking() {
-        return 0;
+        return 1;
     }
 };

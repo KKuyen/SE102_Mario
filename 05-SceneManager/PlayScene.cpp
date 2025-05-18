@@ -30,6 +30,11 @@
 #include "Transcript.h"
 #include "WIngedKoopas.h"
 #include "BreakableBrick.h"
+#include "GrassPlatform.h"
+#include "MovablePlatform.h"
+#include "BomerangBro.h"
+#include "CoinBrick.h"
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -38,6 +43,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
 	alreadyFly = false;
+	curentCX = 10;
 }
 
 
@@ -137,6 +143,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_BOMERANGBRO: {
+		obj = new CBomerangBro(x, y);
+		if (player != nullptr && dynamic_cast<CMario*>(player)) {
+			((CBomerangBro*)obj)->SetMario((CMario*)player);
+		}
+		break;
+	}
 	case OBJECT_TYPE_WINGED_GOOMBA: {
 		obj = new CWingedGoomba(x, y);
 		break;
@@ -153,11 +166,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int type = atoi(tokens[4].c_str());
 		obj = new CGiftBox(x, y, animationId, type); break;
 	}
+	case OBJECT_TYPE_COIN_BRICK: {
+		int quantity = (int)atof(tokens[3].c_str());
+		obj = new CCoinBrick(x, y, quantity); break;
+	}
 	case OBJECT_TYPE_KOOPAS:
-		obj = new CKoopas(x, y);
+	{
+		int type = (int)atof(tokens[3].c_str());
+		obj = new CKoopas(x, y, type);
 		break;
-
-
+	}
 	case OBJECT_TYPE_BACKGROUND: {
 		float width = (float)atof(tokens[3].c_str());
 		float height = (float)atof(tokens[4].c_str());
@@ -165,38 +183,39 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBackground(x, y,width, height, spriteId); break;
 	}
 	case OBJECT_TYPE_COLORBOX: {
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-		int isVertical = atoi(tokens[9].c_str());
-		int isPlatform = atoi(tokens[10].c_str());
+		int widthCells = atoi(tokens[3].c_str());
+		int heightCells = atoi(tokens[4].c_str());
+		int color = atoi(tokens[5].c_str());
+		int isPlatform = atoi(tokens[6].c_str());
 
 		obj = new CColorBox(
 			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end,
-			isVertical,isPlatform
+			widthCells, heightCells,
+ 			color, isPlatform
 		);
 
-		break; 
+		break;
+	}
+	case OBJECT_TYPE_GRASSPLATFORM: {
+		int widthCells = atoi(tokens[3].c_str());
+		int heightCells = atoi(tokens[4].c_str());
+		int isPlatform = atoi(tokens[5].c_str());
+
+		obj = new CGrassPlatform(
+			x, y,
+			widthCells, heightCells,
+			 isPlatform
+		);
+
+		break;
 	}
 	case OBJECT_TYPE_DARK_BACKGROUND: {
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-		int isVertical = atoi(tokens[9].c_str());
-
+		int widthCells = atoi(tokens[3].c_str());
+		int heightCells = atoi(tokens[4].c_str());
 		obj = new CDarkBackground(
 			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end,
-			isVertical
+			widthCells, heightCells
+
 		);
 
 		break;
@@ -240,6 +259,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
+	case OBJECT_TYPE_MOVABLEPLATFORM: obj = new CMovablePlatform(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -249,11 +269,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int sprite_begin = atoi(tokens[6].c_str());
 		int sprite_middle = atoi(tokens[7].c_str());
 		int sprite_end = atoi(tokens[8].c_str());
+		int isVertical = atoi(tokens[9].c_str());
+		int animationId = atoi(tokens[10].c_str());
 
 		obj = new CPlatform(
 			x, y,
 			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
+			sprite_begin, sprite_middle, sprite_end, isVertical, animationId
 		);
 
 		break;
@@ -261,8 +283,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_PORTAL:
 	{
-		int scene_id = atoi(tokens[3].c_str());
-		obj = new CPortal(x, y, scene_id);
+		float r = (float)atof(tokens[3].c_str());
+		float b = (float)atof(tokens[4].c_str());
+		int scene_id = atoi(tokens[5].c_str());
+		obj = new CPortal(x, y, r, b, scene_id);
 		break;
 	}
 	case OBJECT_TYPE_PIRANHA_PLANT:
@@ -369,70 +393,112 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
+
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
+    // We know that Mario is the first object in the list hence we won't add him into the colliable object list
+    // TO-DO: This is a "dirty" way, need a more organized way
 
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
+    vector<LPGAMEOBJECT> coObjects;
+    for (size_t i = 1; i < objects.size(); i++)
+    {
+        coObjects.push_back(objects[i]);
+    }
 
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &coObjects);
-	}
+    for (size_t i = 0; i < objects.size(); i++)
+    {
+        objects[i]->Update(dt, &coObjects);
+    }
 
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
+    // skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
+    if (player == NULL) return;
 
-	// Update camera to follow mario
+    // Update camera to follow mario
 
-	float cx, cy;
-	player->GetPosition(cx, cy);
+    float cx =0 , cy;
+    CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
+    if (currentScene->GetId() == 1) {
+        player->GetPosition(cx, cy);
 
-	CGame* game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+        CGame* game = CGame::GetInstance();
+        cx -= game->GetBackBufferWidth() / 2;
+        cy -= game->GetBackBufferHeight() / 2;
 
-	CMario* mario = dynamic_cast<CMario*>(player);
-	
-	 if(cy<-160)
+        CMario* mario = dynamic_cast<CMario*>(player);
 
-	{
-		 alreadyFly = true;
-	}
-	 else if (mario->vy > 0 && alreadyFly == true)
-	 {
+        if(cy<-160)
 
-	 }
-	 else if (cy > -40)
-	 {
-		 cy = 0.0f;
-		 alreadyFly = false;
-	 }
-	
-	else
-	{
-		// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
-		cy = 0.0f;
-	}
-	if(mario->teleportState==MARIO_TELEPORT_IN)
-		 cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+        {
+            alreadyFly = true;
+        }
+        else if (mario->vy > 0 && alreadyFly == true)
+        {
 
-	if (cx < 0) cx = 0;
-	if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+        }
+        else if (cy > -40)
+        {
+            cy = 0.0f;
+            alreadyFly = false;
+        }
+
+        else
+        {
+            // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+            cy = 0.0f;
+        }
+        if(mario->teleportState==MARIO_TELEPORT_IN)
+            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+
+        if (cx < 0) cx = 0;
+        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+    }
+    else{
+        //cy = 0;
+        ////Mai mot nho doi ve 0.7
+        //cx = curentCX + 0.7;
+        //curentCX += 0.7;
+        player->GetPosition(cx, cy);
+
+        CGame* game = CGame::GetInstance();
+        cx -= game->GetBackBufferWidth() / 2;
+        cy -= game->GetBackBufferHeight() / 2;
+
+        CMario* mario = dynamic_cast<CMario*>(player);
+
+        if(cy<-160)
+
+        {
+            alreadyFly = true;
+        }
+        else if (mario->vy > 0 && alreadyFly == true)
+        {
+
+        }
+        else if (cy > -40)
+        {
+            cy = 0.0f;
+            alreadyFly = false;
+        }
+
+        else
+        {
+            // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+            cy = 0.0f;
+        }
+        if (mario->teleportState == MARIO_TELEPORT_IN)
+            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+
+        if (cx < 0) cx = 0;
+        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+
+    }
+
+    // Đặt vị trí camera
+    CGame::GetInstance()->SetCamPos(cx, cy);
 
 
-	// Đặt vị trí camera
-	CGame::GetInstance()->SetCamPos(cx, cy);
-
-
-	PurgeDeletedObjects();
+    PurgeDeletedObjects();
 }
-
 void CPlayScene::Render()
 {
 	for (int i = 0; i < objects.size(); i++)
@@ -492,7 +558,12 @@ void CPlayScene::PurgeDeletedObjects()
 }
 void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 {
-	objects.insert(objects.begin() + 400, obj);
+	if (400 <= objects.size()) {
+		objects.insert(objects.begin() + 400, obj);
+	}
+	else {
+		objects.insert(objects.begin() + 20, obj);
+	}
 }
 void CPlayScene::PushBackGameObject(LPGAMEOBJECT obj)
 {

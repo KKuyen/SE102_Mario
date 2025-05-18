@@ -1,11 +1,11 @@
-#include "DarkBackground.h"
+#include "GrassPlatform.h"
 
 #include "Sprite.h"
 #include "Sprites.h"
 #include "Textures.h"
 #include "Game.h"
 
-void CDarkBackground::Render()
+void CGrassPlatform::Render()
 {
     if (widthCells <= 0 || heightCells <= 0) return;
 
@@ -15,16 +15,27 @@ void CDarkBackground::Render()
     {
         for (int col = 0; col < widthCells; col++)
         {
-            int spriteId;
-            if (col == 0)
+            int spriteIndex;
+            if (row == 0)
             {
-				spriteId = EDGE_SPRITE_ID;
+                if (col == 0)
+                    spriteIndex = 1;
+                else if (col == widthCells - 1)
+                    spriteIndex = 3;
+                else
+                    spriteIndex = 2;
             }
             else
             {
-				spriteId = MAIN_SPRITE_ID;
+                if (col == 0)
+                    spriteIndex = 4;
+                else if (col == widthCells - 1)
+                    spriteIndex = 6;
+                else
+                    spriteIndex = 5;
             }
 
+            int spriteId = baseSpriteId + spriteIndex;
             LPSPRITE sprite = s->Get(spriteId);
             if (sprite == nullptr)
             {
@@ -37,16 +48,16 @@ void CDarkBackground::Render()
     }
 }
 
-void CDarkBackground::GetBoundingBox(float& l, float& t, float& r, float& b)
+void CGrassPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
     float CELL_WIDTH_div_2 = CELL_WIDTH / 2;
-    l = x - CELL_WIDTH_div_2;
+    l = x - CELL_WIDTH_div_2- CELL_WIDTH;
     t = y - CELL_HEIGHT / 2;
-    r = l + CELL_WIDTH * this->widthCells;
+    r = l + CELL_WIDTH * this->widthCells ;
     b = t + CELL_HEIGHT * this->heightCells;
 }
 
-int CDarkBackground::IsDirectionColliable(float nx, float ny)
+int CGrassPlatform::IsDirectionColliable(float nx, float ny)
 {
     if (nx == 0 && ny == -1) return 1;
     else return 0;

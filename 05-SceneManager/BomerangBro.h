@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Mario.h"
 
 #define BOMERANG_BRO_GRAVITY 0.002f
 #define BOMERANG_BRO_WALKING_SPEED 0.02f
@@ -13,12 +14,15 @@
 
 #define BOMERANG_BRO_DIE_TIMEOUT 500
 
-#define BOMERANG_BRO_STATE_WALKING 100
+#define BOMERANG_BRO_STATE_WALKING_RIGHT 100
+#define BOMERANG_BRO_STATE_WALKING_LEFT 101
 #define BOMERANG_BRO_STATE_DIE 200
 #define BOMERANG_BRO_STATE_FALL 300
 
-#define ID_ANI_BOMERANG_BRO_WALKING 290005
+#define ID_ANI_BOMERANG_BRO_WALKING_RIGHT 290005
+#define ID_ANI_BOMERANG_BRO_WALKING_LEFT 290012
 #define ID_ANI_BOMERANG_BRO_DIE 290006
+
 
 class CBomerangBro : public CGameObject
 {
@@ -27,6 +31,7 @@ protected:
 	float ay;
 
 	ULONGLONG die_start;
+	CMario* mario;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -43,4 +48,6 @@ protected:
 public:
 	CBomerangBro(float x, float y);
 	virtual void SetState(int state);
+	void SetMario(CMario* m) { mario = m; }
+
 };

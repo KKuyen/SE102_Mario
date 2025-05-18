@@ -37,6 +37,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 {
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
+	alreadyFly = false;
 }
 
 
@@ -399,8 +400,19 @@ void CPlayScene::Update(DWORD dt)
 	CMario* mario = dynamic_cast<CMario*>(player);
 	
 	 if(cy<-160)
+
 	{
+		 alreadyFly = true;
 	}
+	 else if (mario->vy > 0 && alreadyFly == true)
+	 {
+
+	 }
+	 else if (cy > -40)
+	 {
+		 cy = 0.0f;
+		 alreadyFly = false;
+	 }
 	
 	else
 	{

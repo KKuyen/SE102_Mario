@@ -1386,7 +1386,27 @@
 		else if (level == MARIO_LEVEL_MAX)
 			aniId = GetAniIdMax();
 
-		animations->Get(aniId)->Render(x, y);
+		if (untouchable == 1)
+		{
+			// Calculate blink state based on time (100ms on, 100ms off)
+			ULONGLONG now = GetTickCount64();
+			int blinkPeriod = 100; // Total period for one blink cycle (on + off)
+			int blinkState = ((now - untouchable_start) % blinkPeriod) < (blinkPeriod / 2);
+
+			if (blinkState)
+			{
+				// Render with full opacity
+				animations->Get(aniId)->Render(x, y);
+			}
+			// Else, skip rendering to create "invisible" effect
+		}
+		else
+		{
+			// Normal rendering
+			animations->Get(aniId)->Render(x, y);
+		}
+
+
 
 		//RenderBoundingBox();
 	

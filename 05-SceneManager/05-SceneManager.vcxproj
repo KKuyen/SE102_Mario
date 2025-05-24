@@ -196,6 +196,7 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WingedGoomba.cpp" />
     <ClCompile Include="WingedKoopas.cpp" />
+    <ClCompile Include="WingedRedKoopa.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -249,6 +250,7 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WIngedGoomba.h" />
     <ClInclude Include="WIngedKoopas.h" />
+    <ClInclude Include="WingedRedKoopa.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="background.txt" />
@@ -282,6 +284,7 @@
     <Text Include="scene1_4.txt" />
     <Text Include="transcript.txt" />
     <Text Include="wingedgoomba.txt" />
+    <Text Include="winged_red_koopa.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -34,6 +34,7 @@
 #include "MovablePlatform.h"
 #include "BomerangBro.h"
 #include "CoinBrick.h"
+#include "WingedRedKoopa.h"
 
 using namespace std;
 
@@ -260,6 +261,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_MOVABLEPLATFORM: obj = new CMovablePlatform(x, y); break;
+	case WINGED_RED_KOOPA: obj = new CWingedRedKoopa(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -559,7 +561,7 @@ void CPlayScene::PurgeDeletedObjects()
 void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 {
 	if (400 <= objects.size()) {
-		objects.insert(objects.begin() + 400, obj);
+		objects.insert(objects.begin() + 200, obj);
 	}
 	else {
 		objects.insert(objects.begin() + 20, obj);

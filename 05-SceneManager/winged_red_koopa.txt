@@ -1,0 +1,11 @@
+# id left top right bottom texture_id
+[SPRITES]
+#Winged Red Koopa
+50000	265	358	280	385	160
+50001	286	358	301	385	160
+50002	307	358	322	385	160
+50003	329	358	344	385	160
+
+# ani_id sprite1_id time1 sprite2_id time2 ...
+[ANIMATIONS]
+7005	50000	100	50001	100	50002	100	50003	100

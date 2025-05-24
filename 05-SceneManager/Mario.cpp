@@ -605,13 +605,17 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 {
     CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
     koopas->mario = this;
+
+    // jump on top >> kill Goomba and deflect a bit 
     if (e->ny < 0)
     {
+
+
+
         if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING && koopas->GetState() != KOOPAS_STATE_REVERSE)
         {
             koopas->SetState(KOOPAS_STATE_SHELL);
-            if (koopas->getType() == 1)
-                koopas->SetState(KOOPAS_STATE_WALKING);
+
             vy = -MARIO_JUMP_DEFLECT_SPEED;
             LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
             LPSCENE s = CGame::GetInstance()->GetCurrentScene();
@@ -621,6 +625,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
         else if (koopas->GetState() == KOOPAS_STATE_REVERSE)
         {
             koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+
             if (vx > 0)
                 koopas->nx = 1;
             else
@@ -631,27 +636,58 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
             vy = -MARIO_JUMP_DEFLECT_SPEED;
             koopas->SetState(KOOPAS_STATE_FALL);
             koopas->ax = 0;
+
+
         }
         else if (koopas->GetState() == KOOPAS_STATE_SHELL)
         {
             koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+
             if (vx > 0)
                 koopas->nx = 1;
             else
                 koopas->nx = -1;
         }
+
+
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
+
         koopas->nx = nx;
         koopas->SetState(KOOPAS_STATE_REVERSE);
     }
     else if (isHolding && heldObject != NULL && !dynamic_cast<CKoopas*>(heldObject)) {
+
         koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+
         CWingedKoopas* koopas2 = dynamic_cast<CWingedKoopas*>(heldObject);
         SetHolding(false, nullptr);
         koopas2->nx = nx;
         koopas2->SetState(WINGED_KOOPAS_STATE_FALL);
+        /*if (!areFacingEachOther)
+        {
+            if (untouchable == 0)
+            {
+                if (goomba->GetState() != GOOMBA_STATE_DIE || GOOMBA_STATE_FALL)
+                {
+                    if (level > MARIO_LEVEL_SMALL)
+                    {
+
+                        level = level - 1;
+                        StartUntouchable();
+                    }
+                    else
+                    {
+                        DebugOut(L">>> Mario DIE >>> \n");
+                        SetState(MARIO_STATE_DIE);
+
+                    }
+                }
+            }
+        }
+    */
+
     }
     else
     {
@@ -663,6 +699,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
             {
                 if (level > MARIO_LEVEL_SMALL)
                 {
+
                     level = level - 1;
                     StartUntouchable();
                 }
@@ -670,12 +707,14 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
                 {
                     DebugOut(L">>> Mario DIE >>> \n");
                     SetState(MARIO_STATE_DIE);
+
                 }
             }
             else
             {
+
                 CGame* game = CGame::GetInstance();
-                if (game->IsKeyDown(DIK_A))
+                if (game->IsKeyDown(DIK_A)) // Run key
                 {
                     hold_start = GetTickCount64();
                     SetHolding(true, koopas);
@@ -686,6 +725,8 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
                     koopas->nx = this->nx;
                     koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
                 }
+
+
             }
         }
     }

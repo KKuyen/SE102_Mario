@@ -172,8 +172,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_KOOPAS:
 	{
-		int type = (int)atof(tokens[3].c_str());
-		obj = new CKoopas(x, y, type);
+		
+		obj = new CKoopas(x, y);
 		break;
 	}
 	case OBJECT_TYPE_BACKGROUND: {

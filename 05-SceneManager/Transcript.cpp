@@ -1,107 +1,121 @@
 #include "Transcript.h"
-#include "Game.h"
 #include "PlayScene.h"
+#include "debug.h"
+#include "GameManager.h"
+#include "NumberText.h"
 
 void CTranscript::Render()
 {
-    float screenWidth = (float)CGame::GetInstance()->GetBackBufferWidth();
-    float screenHeight = (float)CGame::GetInstance()->GetBackBufferHeight();
-    float camX, camY;
-    CGame::GetInstance()->GetCamPos(camX, camY);
-    float renderX = x + camX;
-    float renderY = y + camY;
-
-    CSprites* s = CSprites::GetInstance();
-    LPSPRITE sprite = s->Get(SPRITE_ID);
-    if (sprite != nullptr)
-    {
-        sprite->Draw(renderX, renderY);
-    }
-    else
-    {
-        DebugOut(L"[ERROR] Transcript sprite ID %d not found\n", SPRITE_ID);
-    }
-	//Draw score
-     for (int i = 0; i < 7; i++)
-    {
-        LPSPRITE digitSprite = s->Get(NUMBER_0 + scoreDigits[i]);
-        if (digitSprite != nullptr)
-        {
-            digitSprite->Draw(renderX -63 + i * 8, renderY -4);
-        }
-        else
-        {
-            DebugOut(L"[ERROR] Number sprite ID %d not found\n", NUMBER_0 + scoreDigits[i]);
-        }
-    }
-	 //Draw time
-     for (int i = 0; i < 3; i++)
-    {
-        int digitIndex = 2 - i; 
-        LPSPRITE digitSprite = s->Get(NUMBER_0 + timeDigits[digitIndex]);
-        if (digitSprite != nullptr)
-        {
-            digitSprite->Draw(renderX +8 + i * 8, renderY -4); 
-        }
-        else
-        {
-            DebugOut(L"[ERROR] Number sprite ID %d not found\n", NUMBER_0 + timeDigits[digitIndex]);
-        }
-    }
-	 //Draw life
-     LPSPRITE digitSprite = s->Get(NUMBER_0 + life);
-     if (digitSprite != nullptr)
-     {
-         digitSprite->Draw(renderX  -85, renderY - 4);
-     }
-     else
-     {
-         DebugOut(L"[ERROR] Number sprite ID %d not found\n", NUMBER_0 +life);
-     }
-	 //Draw dollar
-	 for (int i = 0; i < 2; i++)
-	 {
-		 int digitIndex = 2 - i;
-		 LPSPRITE digitSprite3 = s->Get(NUMBER_0 + dollarDigits[digitIndex]);
-		 if (digitSprite3 != nullptr)
-		 {
-             digitSprite3->Draw(renderX +18 + i * 8, renderY - 12);
-		 }
-		 else
-		 {
-			 DebugOut(L"[ERROR] Number sprite ID %d not found\n", NUMBER_0 + dollarDigits[digitIndex]);
-		 }
-	 }
-	 //Draw flag
-     for (int i = 0; i < flag; i++)
-     {
-		 LPSPRITE digitSprite = s->Get(NUMBER_0 + 10);
-		 if (digitSprite != nullptr)
-		 {
-			 digitSprite->Draw(renderX - 63 + i * 8, renderY - 12);
-		 }
-		 else
-		 {
-			 DebugOut(L"[ERROR] Number sprite ID %d not found\n", NUMBER_0 + 10);
-		 }
-     }
-     LPSPRITE digitSprite4 = s->Get(NUMBER_0 + 11);
-     if (digitSprite4 != nullptr)
-     {
-         digitSprite4->Draw(renderX - 10, renderY - 12);
-     }
-     else
-     {
-         DebugOut(L"[ERROR] Number sprite ID %d not found\n", NUMBER_0 + life);
-     }
-       
-    //RenderBoundingBox();
+	CSprites* s = CSprites::GetInstance();
+	CSprite* sprite = s->Get(this->spriteId);
+ 	sprite->Draw(x, y);
+	 
 }
 
 void CTranscript::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-    l = x - TRANSCRIPT_WIDTH / 2 + 1;
-    t = y - TRANSCRIPT_HEIGHT / 2;
-    r = l + TRANSCRIPT_WIDTH - 1;
-    b = t + TRANSCRIPT_HEIGHT;
+	l = x - this->width / 2 + 1;
+	t = y - this->height / 2 + 1;
+	r = l + this->width;
+	b = t + this->height;
+}
+
+
+void CTranscript::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (!isInitUI)
+	{
+		this->InitUI();
+	}
+	else {
+		UpdateElements(timer, CGameManager::GetInstance()->timer);
+		UpdateElements(coins, CGameManager::GetInstance()->coins);
+		UpdateElements(points, CGameManager::GetInstance()->points);
+		UpdateElements(lifes, CGameManager::GetInstance()->lifes);
+	}
+	CGameObject::Update(dt, coObjects);
+}
+
+void CTranscript::InitUI()
+{
+	isInitUI = true;
+	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+	CPlayScene* p = dynamic_cast<CPlayScene*>(s);
+	for (int i = 0; i < 3; i++)
+	{
+		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		p->PushBackGameObject(numtext);
+		timer.push_back(numtext);
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		p->PushBackGameObject(numtext);
+		coins.push_back(numtext);
+	}
+	for (int i = 0; i < 7; i++)
+	{
+		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		p->PushBackGameObject(numtext);
+		points.push_back(numtext);
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		p->PushBackGameObject(numtext);
+		lifes.push_back(numtext);
+	}
+	for (int i = 0; i < 1; i++)
+	{
+		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		CNumberText* temp = dynamic_cast<CNumberText*>(numtext);
+		temp->SetIdSprite(230010);
+		p->PushBackGameObject(numtext);
+		energy.push_back(numtext);
+	}
+}
+
+void CTranscript::SetPosition(float x, float y)
+{
+	this->x = x;
+	this->y = y;
+	if (timer.size() > 0)
+	{
+		for (int i = 0; i < timer.size(); i++)
+		{
+			timer[i]->SetPosition(x + i * 8 + 10, y - 4);
+		}
+	}
+	for (int i = 0; i < coins.size(); i++)
+	{
+		coins[i]->SetPosition(x + i * 8 + 18, y - 12);
+	}
+	for (int i = 0; i < points.size(); i++)
+	{
+		points[i]->SetPosition(x + i * 8 - 64, y - 4);
+	}
+	for (int i = 0; i < lifes.size(); i++)
+	{
+		lifes[i]->SetPosition(x + i * 8 - 86, y - 4);
+	}
+	for (int i = 0; i < energy.size(); i++)
+	{
+		energy[i]->SetPosition(x + i * 8 - 36, y - 12);
+	}
+}
+
+void CTranscript::UpdateElements(vector<LPGAMEOBJECT>& elements, DWORD value)
+{
+	std::string valueStr = std::to_string(value);
+	while (valueStr.length() < elements.size())
+	{
+		valueStr = "0" + valueStr;
+	}
+
+	int index = elements.size() - 1;
+	for (int i = valueStr.length() - 1; i >= 0 && index >= 0; --i, --index)
+	{
+		int digit = valueStr[i] - '0';
+		dynamic_cast<CNumberText*>(elements[index])->SetIdSprite(230000 + digit);
+	}
 }

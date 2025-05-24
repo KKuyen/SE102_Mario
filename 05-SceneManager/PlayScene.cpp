@@ -42,6 +42,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	player = NULL;
+	transcript = NULL;
 	key_handler = new CSampleKeyHandler(this);
 	alreadyFly = false;
 	curentCX = 10;
@@ -161,7 +162,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrick(x, y, spriteId); break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_TRANSCRIPT: obj = new CTranscript(x, y); break;
+	case OBJECT_TYPE_TRANSCRIPT:
+	{
+		int width = atoi(tokens[3].c_str());
+		int height = atoi(tokens[4].c_str());
+		int spriteId = atoi(tokens[5].c_str());
+		obj = new CTranscript(x, y, width, height, spriteId);
+		transcript = (CTranscript*)obj;
+		DebugOut(L"[DEBUG] Transcript object created at (%.1f, %.1f)\n", x, y);
+
+		objects.push_back(obj);
+	}
+	break;
 	case OBJECT_TYPE_GIFTBOX: {
 		float animationId = (float)atof(tokens[3].c_str());
 		int type = atoi(tokens[4].c_str());
@@ -411,6 +423,8 @@ void CPlayScene::Update(DWORD dt)
     {
         objects[i]->Update(dt, &coObjects);
     }
+	CGameManager::GetInstance()->Update(dt, nullptr);
+
 
     // skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
     if (player == NULL) return;
@@ -494,6 +508,11 @@ void CPlayScene::Update(DWORD dt)
         if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
 
     }
+	if (transcript != NULL)
+	{
+		//DebugOut(L"[DEBUG] About to call transcript->SetPosition\n");
+		transcript->SetPosition(cx + 10 + 115, cy + 216);
+	}
 
     // Đặt vị trí camera
     CGame::GetInstance()->SetCamPos(cx, cy);

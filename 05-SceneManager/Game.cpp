@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
+#include "GameManager.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -517,9 +518,11 @@ void CGame::SwitchScene()
 	if (next_scene < 0 || next_scene == current_scene) return; 
 
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
+	CGameManager::GetInstance()->timer = 300;
 
-	if (scenes[current_scene]!=NULL)
-		scenes[current_scene]->Unload();
+
+	//if (scenes[current_scene]!=NULL)
+	//	scenes[current_scene]->Unload();
 
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();

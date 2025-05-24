@@ -105,7 +105,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	DebugOut(L"[Koopas] revive condition: %d\n", (GetTickCount64() - revive_start) >= KOOPAS_REVIVE_TIME);
+	//DebugOut(L"[Koopas] revive condition: %d\n", (GetTickCount64() - revive_start) >= KOOPAS_REVIVE_TIME);
 
 	if (state == KOOPAS_STATE_HELD)
 	{

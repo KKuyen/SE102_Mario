@@ -5,8 +5,8 @@ coin.txt
 cloud.txt
 brick.txt
 grass.txt
-transcript.txt
 number.txt
+transcript.txt
 background.txt
 breakable_brick.txt
 chimney.txt
@@ -215,5 +215,5 @@ winged_red_koopa.txt
 33	1544	58	8
 
 #Transcript
-21	125	217
+21	50	50	152	28	210000
 

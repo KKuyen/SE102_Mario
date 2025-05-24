@@ -34,7 +34,7 @@ public:
 	float x;
 	float y;
 	int nx;
-	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	virtual void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void SetVy(float vy) { this->vy = vy; }
 	void SetVx(float vx) { this->vx = vx; }

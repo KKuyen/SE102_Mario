@@ -36,7 +36,7 @@ void CEffectGiftBoxCoin::EffectPoint() {
 		LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
 		LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 		LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-		p->AddGameObject(effectPoint);
+		p->PushBackGameObject(effectPoint);
 
 		this->Delete();
 	}

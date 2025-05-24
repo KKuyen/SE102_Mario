@@ -17,8 +17,8 @@ flower.txt
 bullet.txt
 leaf.txt
 darkBackground.txt
-transcript.txt
 number.txt
+transcript.txt
 piranha_plant.txt
 breakable_brick.txt
 explodeAni.txt
@@ -552,7 +552,7 @@ bomerang.txt
 #2	800	10
 #2	900	10
 #Transcript
-21	125	217
+#21	125	217
 
 
 
@@ -572,3 +572,4 @@ bomerang.txt
 33	112	108	5
 33	128	108	5
 3	64	70	0
+21	50	50	152	28	210000

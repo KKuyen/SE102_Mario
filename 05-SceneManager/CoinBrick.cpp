@@ -3,6 +3,7 @@
 #include "EffectGiftBoxCoin.h"
 #include "Mushroom.h"
 #include "Leaf.h"
+#include "Koopas.h"
 
 CCoinBrick::CCoinBrick(float x, float y, int quantity) :CGameObject(x, y)
 {
@@ -51,25 +52,44 @@ void CCoinBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 }
- 
-void CCoinBrick::OpenCoinBox()
-{
-	if (state == GIFTBOX_STATE_HIDDEN || state == GIFTBOX_STATE_BOUNCE)
-	{
-		return;
-	}
- 
-	LPGAMEOBJECT effectCoinBox = new CEffectGiftBoxCoin(x, y - 16);
-	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-	p->AddGameObject(effectCoinBox);
-	currentQuantity++;
+ void CCoinBrick::OpenCoinBox()
+ {
+     if (state == GIFTBOX_STATE_HIDDEN || state == GIFTBOX_STATE_BOUNCE)
+     {
+         return;
+     }
 
-	SetState(GIFTBOX_STATE_BOUNCE);
-	vy = -GIFTBOX_BOUNCE_SPEED;
+     // Check for CKoopas objects above this brick
+     LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+     LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+     if (p)
+     {
+         vector<LPGAMEOBJECT>& objects = p->GetObjects();
+         float l, t, r, b;
+         this->GetBoundingBox(l, t, r, b);
+         for (auto obj : objects)
+         {
+              CKoopas* koopas = dynamic_cast<CKoopas*>(obj);
+             if (koopas && !koopas->IsDeleted())
+             {
+                 float kl, kt, kr, kb;
+                 koopas->GetBoundingBox(kl, kt, kr, kb);
+                 // Check if the bottom of the koopas is above the top of the brick and horizontally overlaps
+                 if (kb <= t && kr > l && kl < r)
+                 {
+                     koopas->SetState(KOOPAS_STATE_SHELL);
+                 }
+             }
+         }
+     }
 
-}
- 
+     LPGAMEOBJECT effectCoinBox = new CEffectGiftBoxCoin(x, y - 16);
+     p->AddGameObject(effectCoinBox);
+     currentQuantity++;
+
+     SetState(GIFTBOX_STATE_BOUNCE);
+     vy = -GIFTBOX_BOUNCE_SPEED;
+ }
 void CCoinBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BOX_BBOX_WIDTH / 2 + 2;

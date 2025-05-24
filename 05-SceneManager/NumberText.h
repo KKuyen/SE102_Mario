@@ -14,14 +14,17 @@
 #define NUMBER_TEXT_7 230007
 #define NUMBER_TEXT_8 230008
 #define NUMBER_TEXT_9 230009
+#define NUMBER_TEXT_P_ANI 230013
 
 
 class CNumberText : public CGameObject {
 protected:
 	int idSprite;
+	bool isPMeter;
 public:
-	CNumberText(float x, float y) : CGameObject(x, y) {
+	CNumberText(float x, float y, bool isPMeter) : CGameObject(x, y) {
 		idSprite = NUMBER_TEXT_0;
+		this->isPMeter = isPMeter;
 	}
 	void Render();
 	void Update(DWORD dt) {}

@@ -43,42 +43,50 @@ void CTranscript::InitUI()
 	CPlayScene* p = dynamic_cast<CPlayScene*>(s);
 	for (int i = 0; i < 3; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
 		p->PushBackGameObject(numtext);
 		timer.push_back(numtext);
 	}
 	for (int i = 0; i < 2; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
 		p->PushBackGameObject(numtext);
 		coins.push_back(numtext);
 	}
 	for (int i = 0; i < 7; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
 		p->PushBackGameObject(numtext);
 		points.push_back(numtext);
 	}
 	for (int i = 0; i < 2; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
 		p->PushBackGameObject(numtext);
 		lifes.push_back(numtext);
 	}
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 6; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
 		CNumberText* temp = dynamic_cast<CNumberText*>(numtext);
 		temp->SetIdSprite(230010);
 		p->PushBackGameObject(numtext);
 		energy.push_back(numtext);
 	}
+	LPGAMEOBJECT numtext = new CNumberText(x, y, true);
+	CNumberText* temp = dynamic_cast<CNumberText*>(numtext);
+ 	p->PushBackGameObject(numtext);
+	PMeter = numtext;
 }
 
 void CTranscript::SetPosition(float x, float y)
 {
 	this->x = x;
 	this->y = y;
+	if (PMeter != nullptr)
+	{
+		PMeter->SetPosition(x-12, y - 12);
+	}
 	if (timer.size() > 0)
 	{
 		for (int i = 0; i < timer.size(); i++)
@@ -100,7 +108,7 @@ void CTranscript::SetPosition(float x, float y)
 	}
 	for (int i = 0; i < energy.size(); i++)
 	{
-		energy[i]->SetPosition(x + i * 8 - 36, y - 12);
+		energy[i]->SetPosition(x + i * 8 - 64, y - 12);
 	}
 }
 

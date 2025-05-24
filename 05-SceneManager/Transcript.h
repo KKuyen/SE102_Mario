@@ -18,6 +18,7 @@ protected:
 	vector<LPGAMEOBJECT> points;
 	vector<LPGAMEOBJECT> lifes;
 	vector<LPGAMEOBJECT> energy;
+	LPGAMEOBJECT PMeter;
 	bool isInitUI;
 public:
 	CTranscript(float x, float y, int widthh, int heightt, int sipriteIdd) : CGameObject(x, y)

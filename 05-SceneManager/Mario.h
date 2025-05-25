@@ -18,6 +18,8 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f
 #define MARIO_JUMP_FLY_SPEED_Y 0.5f
 #define MARIO_FLY_ACTIVATION_TIME 1500
+#define MARIO_TELEPORT_DURATION 1500
+
 #define MARIO_WHIP_TIME 250 
 
 
@@ -46,7 +48,7 @@
 #define MARIO_STATE_HOLD_RELEASE 801
 #define MARIO_STATE_GROWING 900
 #define MARIO_STATE_SHRINKING 901
-#define MARIO_STATE_DIVE_IN_CHIMNNEY 911
+//#define MARIO_STATE_DIVE_IN_CHIMNNEY 911
 
 
 #pragma region ANIMATION_ID
@@ -77,6 +79,7 @@
 #define ID_ANI_MARIO_HOLD_LEFT 1003
 #define ID_ANI_MARIO_HOLD_IDLE_RIGHT 1004
 #define ID_ANI_MARIO_HOLD_IDLE_LEFT 1005
+#define ID_ANI_MARIO_DIVE_IN 1006
 
 
 // SMALL MARIO
@@ -135,6 +138,7 @@
 #define ID_ANI_MARIO_WHIP_LEFT 4007
 #define ID_ANI_MARIO_DEF_GRAVITY_RIGHT 4010
 #define ID_ANI_MARIO_DEF_GRAVITY_LEFT 4011
+
 
 
 
@@ -251,6 +255,7 @@ public:
 	int renderedGoombaNum;
 	int renderedKoopas;
  	int renderedMovablePlatforms [MOVABLEPLATFORM_NUM];
+	ULONGLONG teleport_start;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -286,7 +291,7 @@ public:
 
 		transition_start = -1;
 		target_level = MARIO_LEVEL_BIG;
-
+		teleport_start = -1;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

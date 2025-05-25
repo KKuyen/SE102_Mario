@@ -40,6 +40,8 @@
 #define RENDER_POSITION_X1 855
 #define RENDER_POSITION_X2 925
 #define RENDER_POSITION_X3 995
+#define CHIMMNEY_1_POSITION_X 2265
+#define CHIMMNEY_2_POSITION_X 2326
 
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -88,19 +90,40 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
     if (teleport!=0)
     {
-        if(teleport== MARIO_TELEPORT_IN)
+        if(teleport== MARIO_TELEPORT_IN&& GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION&& teleport_start!=-1)
         {
             x = x - MARIO_TELEPORT_IN_POSITION_X_MOVE;
             y = MARIO_TELEPORT_IN_POSITION_Y;
             teleport = MARIO_TELEPORT_NONE;
             teleportState = 1;
+            SetState(MARIO_STATE_WALKING_RIGHT);
+            teleport_start = -1;
         }
-        if (teleport == MARIO_TELEPORT_OUT)
+        else if (teleport == MARIO_TELEPORT_OUT && GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION && teleport_start != -1)
         {
             y = MARIO_TELEPORT_OUT_POSITION_Y;
             teleport = MARIO_TELEPORT_NONE;
             teleportState = 0;
+            SetState(MARIO_STATE_WALKING_RIGHT);
+            teleport_start = -1;
         }
+        else
+        {
+            if (teleport == MARIO_TELEPORT_IN)
+            {
+                x = CHIMMNEY_1_POSITION_X;
+                y = y + 0.25;
+                return;
+            }
+            else
+            {
+                x = CHIMMNEY_2_POSITION_X;
+                y = y - 0.25;
+                return;
+
+            }
+        }
+      
     }
     if (isOnPlatform)
     {
@@ -494,15 +517,17 @@ void CMario::OnCollisionWithBomerangBro(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithChimney(LPCOLLISIONEVENT e)
 {
     CChimney* chimney = dynamic_cast<CChimney*>(e->obj);
-    if (e->ny < 0 && chimney->getType() == 2)
+    if (e->ny < 0 && chimney->getType() == 2&&teleport==0)
     {
         DebugOut(L"alo");
         teleport = MARIO_TELEPORT_IN;
+        teleport_start = GetTickCount64();
     }
-    if (chimney->getType() == 3)
+    if (chimney->getType() == 3 && teleport == 0)
     {
         DebugOut(L"alo");
         teleport = MARIO_TELEPORT_OUT;
+        teleport_start = GetTickCount64();
     }
 }
 
@@ -1133,7 +1158,13 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 int CMario::GetAniIdSmall()
 {
+
     int aniId = -1;
+    if (teleport != 0)
+    {
+        aniId = ID_ANI_MARIO_DIVE_IN;
+        return aniId;
+    }
     if (isHolding)
     {
         if (vx != 0)
@@ -1224,6 +1255,11 @@ int CMario::GetAniIdSmall()
 int CMario::GetAniIdBig()
 {
     int aniId = -1;
+    if (teleport != 0)
+    {
+        aniId = ID_ANI_MARIO_DIVE_IN;
+		return aniId;
+    }
     if (isHolding)
     {
         if (vx != 0)
@@ -1314,6 +1350,11 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdMax()
 {
     int aniId = -1;
+    if (teleport != 0)
+    {
+        aniId = ID_ANI_MARIO_DIVE_IN;
+        return aniId;
+    }
     if (isSlowFalling)
     {
         if (nx > 0)
@@ -1494,6 +1535,7 @@ void CMario::SetState(int state)
 
     switch (state)
     {
+  
         case MARIO_STATE_HOLD:
             if (!isHolding) break;
             break;

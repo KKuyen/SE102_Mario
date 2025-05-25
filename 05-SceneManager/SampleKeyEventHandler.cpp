@@ -97,8 +97,9 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	{
 		mario->SetState(MARIO_STATE_HOLD);
 	}	
-	if (game->IsKeyDown(DIK_RIGHT))
+	if (game->IsKeyDown(DIK_RIGHT) &&mario->teleport == 0)
 	{
+	
 		mario->maxVx = MARIO_RUNNING_SPEED;
 		mario->ax = MARIO_ACCEL_RUN_X;
 		if(mario->isFlying ==true)
@@ -113,7 +114,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		else
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	}
-	else if (game->IsKeyDown(DIK_LEFT))
+	else if (game->IsKeyDown(DIK_LEFT)&&mario->teleport==0)
 	{
 		mario->maxVx = -MARIO_RUNNING_SPEED;
 		mario->ax = -MARIO_ACCEL_RUN_X;

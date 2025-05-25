@@ -26,7 +26,7 @@ public:
 		timer = 300;
 		elapsedTime = 0;
  		lifes = 4;
-		energy = 6;
+		energy = 0;
 	}
 	void Render() {}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

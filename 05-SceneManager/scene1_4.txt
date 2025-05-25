@@ -16,6 +16,7 @@ koopas.txt
 bomerang_bro.txt
 bomerang.txt
 winged_red_koopa.txt
+effect.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -104,10 +105,6 @@ winged_red_koopa.txt
 6	1864	122	16	16	62010
 6	1928	42	16	16	62010
 6	2008	82	16	16	62011
-
-
-# MARIO
-0	120	10
 
 #Flying Platform
 5	232	122	16	16	4	0	0	0	0	14000
@@ -213,6 +210,9 @@ winged_red_koopa.txt
 #Coin brick
 33	1016	122	11
 33	1544	58	8
+
+# MARIO
+0	120	10
 
 #Transcript
 21	50	50	152	28	210000

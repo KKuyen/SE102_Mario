@@ -469,43 +469,43 @@ void CPlayScene::Update(DWORD dt)
         if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
     }
     else{
-        //cy = 0;
-        ////Mai mot nho doi ve 0.7
-        //cx = curentCX + 0.7;
-        //curentCX += 0.7;
-        player->GetPosition(cx, cy);
+        cy = 0;
+        //Mai mot nho doi ve 0.7
+        cx = curentCX + 0.7;
+        curentCX += 0.7;
+        //player->GetPosition(cx, cy);
 
-        CGame* game = CGame::GetInstance();
-        cx -= game->GetBackBufferWidth() / 2;
-        cy -= game->GetBackBufferHeight() / 2;
+        //CGame* game = CGame::GetInstance();
+        //cx -= game->GetBackBufferWidth() / 2;
+        //cy -= game->GetBackBufferHeight() / 2;
 
-        CMario* mario = dynamic_cast<CMario*>(player);
+        //CMario* mario = dynamic_cast<CMario*>(player);
 
-        if(cy<-160)
+        //if(cy<-160)
 
-        {
-            alreadyFly = true;
-        }
-        else if (mario->vy > 0 && alreadyFly == true)
-        {
+        //{
+        //    alreadyFly = true;
+        //}
+        //else if (mario->vy > 0 && alreadyFly == true)
+        //{
 
-        }
-        else if (cy > -40)
-        {
-            cy = 0.0f;
-            alreadyFly = false;
-        }
+        //}
+        //else if (cy > -40)
+        //{
+        //    cy = 0.0f;
+        //    alreadyFly = false;
+        //}
 
-        else
-        {
-            // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
-            cy = 0.0f;
-        }
-        if (mario->teleportState == MARIO_TELEPORT_IN)
-            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+        //else
+        //{
+        //    // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+        //    cy = 0.0f;
+        //}
+        //if (mario->teleportState == MARIO_TELEPORT_IN)
+        //    cy = CAMERA_POSITION_HIDDEN_MAP_Y;
 
-        if (cx < 0) cx = 0;
-        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+        //if (cx < 0) cx = 0;
+        //if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
 
     }
 	if (transcript != NULL)

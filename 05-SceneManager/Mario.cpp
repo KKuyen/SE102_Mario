@@ -249,7 +249,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         y = saved_y;
         return;
     }
-    isOnPlatform = false;
+    //isOnPlatform = false;
     CCollision::GetInstance()->Process(this, dt, coObjects);
 
     // --- ENERGY SYSTEM ---
@@ -279,14 +279,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
             lastEnergyUpdate = now;
         }
     }
-    // --- END ENERGY SYSTEM ---
+ 
 }
 
 void CMario::OnNoCollision(DWORD dt)
 {
     x += vx * dt;
     y += vy * dt;
-    isOnPlatform = false;
+    //isOnPlatform = false;
 }
 
 int CMario::GetDirection()
@@ -467,6 +467,10 @@ void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
 {
     CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj);
     if (e->ny < 0) {
+        // Mario đứng trên platform, luôn cho phép nhảy kể cả khi platform rơi
+        isOnPlatform = true;
+        // Mario sẽ bám vận tốc rơi của platform
+        vy = movablePlatform->vy;
         movablePlatform->Falling();
     }
 }

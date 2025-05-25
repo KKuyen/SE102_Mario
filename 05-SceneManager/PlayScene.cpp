@@ -35,7 +35,7 @@
 #include "BomerangBro.h"
 #include "CoinBrick.h"
 #include "WingedRedKoopa.h"
-
+#include "BreakableBrickChain.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -220,6 +220,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			 isPlatform
 		);
 
+		break;
+	}
+	case OBJECT_TYPE_BREAKABLE_BRICK_CHAIN:
+	{
+		if (tokens.size() < 5) return; // Need type, x, y, length, chainType
+		int length = atoi(tokens[3].c_str());
+		int chainType = atoi(tokens[4].c_str());
+		obj = new CBreakableBrickChain(x, y, length, chainType);
 		break;
 	}
 	case OBJECT_TYPE_DARK_BACKGROUND: {
@@ -484,6 +492,7 @@ void CPlayScene::Update(DWORD dt)
 
         CMario* mario = dynamic_cast<CMario*>(player);
 
+
         if(cy<-160)
 
         {
@@ -510,6 +519,7 @@ void CPlayScene::Update(DWORD dt)
 
         if (cx < 0) cx = 0;
         if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+
 
     }
 	if (transcript != NULL)

@@ -45,10 +45,12 @@
 #define RENDER_POSITION_X3 995
 #define CHIMMNEY_1_POSITION_X 2265
 #define CHIMMNEY_2_POSITION_X 2326
+#define CHIMMNEY_14_POSITION_X 1952
 
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+   
     CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
     if(currentScene->GetId()==1){
         if (x > RENDER_POINT_1 && renderedKoopas == 0)
@@ -95,12 +97,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
     {
         if(teleport== MARIO_TELEPORT_IN&& GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION&& teleport_start!=-1)
         {
-            x = x - MARIO_TELEPORT_IN_POSITION_X_MOVE;
-            y = MARIO_TELEPORT_IN_POSITION_Y;
+       
+            
+            if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
+            {
+                x = x - MARIO_TELEPORT_IN_POSITION_X_MOVE;
+                y = MARIO_TELEPORT_IN_POSITION_Y;
+              
+            }
+            else
+            {
+                x = x + MARIO_TELEPORT_IN_POSITION_X_MOVE+110;
+       
+            }
             teleport = MARIO_TELEPORT_NONE;
             teleportState = 1;
             SetState(MARIO_STATE_WALKING_RIGHT);
             teleport_start = -1;
+
+        
         }
         else if (teleport == MARIO_TELEPORT_OUT && GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION && teleport_start != -1)
         {
@@ -114,14 +129,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         {
             if (teleport == MARIO_TELEPORT_IN)
             {
-                x = CHIMMNEY_1_POSITION_X;
-                y = y + 0.25;
+                if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
+                {
+
+                    x = CHIMMNEY_1_POSITION_X;
+                 
+                }
+                else
+                {
+                    x = CHIMMNEY_14_POSITION_X;
+                }
+                y = y + 0.65;
                 return;
             }
             else
             {
                 x = CHIMMNEY_2_POSITION_X;
-                y = y - 0.25;
+                y = y - 0.65;
                 return;
 
             }
@@ -311,9 +335,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CMario::OnNoCollision(DWORD dt)
 {
     x += vx * dt;
-    y += vy * dt;
-    //isOnPlatform = false;
-}
+  
+    if (!onMovable)
+    {
+
+        y += vy * dt;
+        isOnPlatform = false;
+    }
+    }
+ 
+
 
 int CMario::GetDirection()
 {
@@ -327,6 +358,7 @@ int CMario::GetDirection()
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+    if (!dynamic_cast<CMovablePlatform*>(e->obj))
     if (e->ny != 0 && e->obj->IsBlocking())
     {
         vy = 0;
@@ -338,6 +370,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     {
         vx = 0;
     }
+	if (!dynamic_cast<CMovablePlatform*>(e->obj))
+	{
+        onMovable = false;
+	}
 
     if (dynamic_cast<CGoomba*>(e->obj))
         OnCollisionWithGoomba(e);
@@ -564,12 +600,17 @@ void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
 {
+    if (e->ny > 0)
+    {
+        return;
+    }
+    onMovable = true;
     CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj);
     if (e->ny < 0) {
         // Mario đứng trên platform, luôn cho phép nhảy kể cả khi platform rơi
         isOnPlatform = true;
         // Mario sẽ bám vận tốc rơi của platform
-        vy = movablePlatform->vy;
+        y = movablePlatform->y;
         movablePlatform->Falling();
     }
 }
@@ -1758,6 +1799,7 @@ void CMario::SetState(int state)
             nx = -1;
             break;
         case MARIO_STATE_JUMP:
+            onMovable = false;
             if (isOnPlatform)
             {
                 if (isFlying)

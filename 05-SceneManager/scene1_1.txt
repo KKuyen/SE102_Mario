@@ -566,14 +566,13 @@ bomerang.txt
 14	64	168
 
 #Coin brick
-33	64	108	5
-33	80	108	5
-33	96	108	5
-33	112	108	5
-33	128	108	5
+
 
 #Koopas
 3	64	70	0
 
 #Transcript
 21	50	50	152	28	210000
+
+#BreackableBrickChain
+20	64	108	5	2

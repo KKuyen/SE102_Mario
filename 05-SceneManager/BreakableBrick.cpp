@@ -13,8 +13,8 @@ void CBreakableBrick::Render()
 		CAnimations* animations = CAnimations::GetInstance();
 		animations->Get(ID_ANI_BREAKABLE_BRICK)->Render(x, y);
 	}
-	
-		RenderBoundingBox();
+
+	RenderBoundingBox();
 }
 
 void CBreakableBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -62,12 +62,12 @@ void CBreakableBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CKoopas*>(e->obj))
 	{
 		CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-		if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING )
+		if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
 		{
 			SetState(BREAKABLE_BRICK_STATE_BREAK);
 			koopas->SetVx(-koopas->GetVx());
 		}
-			
+
 
 
 	}
@@ -79,7 +79,7 @@ void CBreakableBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 			SetState(BREAKABLE_BRICK_STATE_BREAK);
 			koopas->SetVx(-koopas->GetVx());
 		}
-			
+
 
 
 	}

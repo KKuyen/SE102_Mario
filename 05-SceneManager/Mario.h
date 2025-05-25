@@ -221,7 +221,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBomerangBro(LPCOLLISIONEVENT e);
 	void OnCollisionWithBomerang(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoinBrick(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdMax();

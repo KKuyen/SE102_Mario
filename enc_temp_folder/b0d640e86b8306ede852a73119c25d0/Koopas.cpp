@@ -262,7 +262,7 @@ void CKoopas::Render()
 }
 void CKoopas::SetState(int state)
 {
-	y -= 3;
+	y -= 5;
 	CGameObject::SetState(state);
 	switch (state)
 	{

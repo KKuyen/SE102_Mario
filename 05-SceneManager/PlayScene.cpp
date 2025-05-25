@@ -425,7 +425,7 @@ void CPlayScene::Update(DWORD dt)
         cy -= game->GetBackBufferHeight() / 2;
 
         CMario* mario = dynamic_cast<CMario*>(player);
-	if (cy < -260)
+	if (cy < -2630)
 	{
 		cy = -200;
 

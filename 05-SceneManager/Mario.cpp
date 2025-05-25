@@ -31,6 +31,7 @@
 #include "BomerangBro.h"
 #include "Bomerang.h"
 #include "CoinBrick.h"
+#include "GreenMushroom.h"
 
 #define RENDER_POINT_1  704
 #define RENDER_POINT_2  736
@@ -347,8 +348,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithBomerangBro(e);
     else if (dynamic_cast<CBoomerang*>(e->obj))
         OnCollisionWithBomerang(e);
+    else if (dynamic_cast<CGreenMushroom*>(e->obj))
+    OnCollisionWithGreenMushroom(e);
 }
-
+void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e)
+{
+    CGreenMushroom* mushroom = dynamic_cast<CGreenMushroom*>(e->obj);
+    mushroom->SetState(GREEN_MUSHROOM_STATE_EATEN);
+}
 void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 {
     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
@@ -691,7 +698,14 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
     else if (isHolding && heldObject != NULL && !dynamic_cast<CKoopas*>(heldObject)) {
         if (areFacingEachOther)
         {
+
             koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            float x, y;
+            koopas->GetPosition(x, y);
+            CExplodeAni* exp = new CExplodeAni(x, y);
+            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+            p->AddGameObject(exp);
 
             CWingedKoopas* koopas2 = dynamic_cast<CWingedKoopas*>(heldObject);
             SetHolding(false, nullptr);
@@ -839,6 +853,12 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
         if (areFacingEachOther)
         {
             koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            float x, y;
+            koopas->GetPosition(x, y);
+            CExplodeAni* exp = new CExplodeAni(x, y);
+            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+            p->AddGameObject(exp);
             CKoopas* koopas2 = dynamic_cast<CKoopas*>(heldObject);
             SetHolding(false, nullptr);
             koopas2->nx = nx;
@@ -950,6 +970,14 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
         {
 
             goomba->SetState(GOOMBA_STATE_FALL);
+            float x, y;
+            goomba->GetPosition(x, y);
+            CExplodeAni* exp = new CExplodeAni(x, y);
+            
+            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+            p->AddGameObject(exp);
+
             if (dynamic_cast<CKoopas*>(heldObject))
             {
                 CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
@@ -1005,7 +1033,14 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
+        
         goomba->SetState(GOOMBA_STATE_FALL);
+        CExplodeAni* exp = new CExplodeAni(x, y);
+        float x, y;
+        goomba->GetPosition(x, y);
+        LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+        LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+        p->AddGameObject(exp);
     }
     else
     {
@@ -1065,7 +1100,14 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
     {
         if (areFacingEachOther)
         {
+
             goomba->SetState(WINGED_GOOMBA_STATE_FALL);
+            float x, y;
+            goomba->GetPosition(x, y);
+            CExplodeAni* exp = new CExplodeAni(x, y);
+            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+            p->AddGameObject(exp);
             if (dynamic_cast<CKoopas*>(heldObject))
             {
                 CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
@@ -1121,7 +1163,14 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
+
         goomba->SetState(WINGED_GOOMBA_STATE_FALL);
+        float x, y;
+        goomba->GetPosition(x, y);
+        CExplodeAni* exp = new CExplodeAni(x, y);
+        LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+        LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+        p->AddGameObject(exp);
     }
     else
     {

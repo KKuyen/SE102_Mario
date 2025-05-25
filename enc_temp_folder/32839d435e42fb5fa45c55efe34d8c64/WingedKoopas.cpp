@@ -234,7 +234,6 @@ void CWingedKoopas::Render()
 void CWingedKoopas::SetState(int state)
 {
 	CGameObject::SetState(state);
-	y -= 3;
 	switch (state)
 	{
 	case WINGED_KOOPAS_STATE_INACTIVE:
@@ -253,7 +252,7 @@ void CWingedKoopas::SetState(int state)
 		revive_start = 0;
 		break;
 	case WINGED_KOOPAS_STATE_SHELL:
-	
+		y -= 5;
 		vx = 0;
 		vy = WINGED_KOOPAS_JUMP_SPEED / 4;
 		ax = 0;

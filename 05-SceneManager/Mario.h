@@ -217,6 +217,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBomerangBro(LPCOLLISIONEVENT e);
 	void OnCollisionWithBomerang(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoinBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();

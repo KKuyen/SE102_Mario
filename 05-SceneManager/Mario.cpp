@@ -32,6 +32,7 @@
 #include "Bomerang.h"
 #include "CoinBrick.h"
 #include "GameManager.h"
+#include "WingedRedKoopa.h"
 
 #define RENDER_POINT_1  704
 #define RENDER_POINT_2  736
@@ -353,6 +354,66 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithBomerangBro(e);
     else if (dynamic_cast<CBoomerang*>(e->obj))
         OnCollisionWithBomerang(e);
+    else if (dynamic_cast<CWingedRedKoopa*>(e->obj))
+        OnCollisionWithWingedRedKoopa(e);
+}
+void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
+{
+    CWingedRedKoopa* koopas = dynamic_cast<CWingedRedKoopa*>(e->obj);
+    koopas->mario = this;
+
+    // jump on top >> kill Goomba and deflect a bit 
+    if (e->ny < 0)
+    {
+        if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+        {
+            koopas->SetState(KOOPAS_STATE_WALKING);
+
+        }
+
+    }
+  
+    else
+    {
+        if (untouchable == 0)
+        {
+            if (koopas->GetState() == KOOPAS_STATE_FALL)
+                return;
+            if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_HELD)
+            {
+                if (level > MARIO_LEVEL_SMALL)
+                {
+
+                    level = level - 1;
+                    StartUntouchable();
+                }
+                else
+                {
+                    DebugOut(L">>> Mario DIE >>> \n");
+                    SetState(MARIO_STATE_DIE);
+
+                }
+            }
+            else
+            {
+
+                CGame* game = CGame::GetInstance();
+                if (game->IsKeyDown(DIK_A)) // Run key
+                {
+                    hold_start = GetTickCount64();
+                    SetHolding(true, koopas);
+                    koopas->SetState(KOOPAS_STATE_HELD);
+                }
+                else
+                {
+                    koopas->nx = this->nx;
+                    koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+                }
+
+
+            }
+        }
+    }
 }
 
 void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)

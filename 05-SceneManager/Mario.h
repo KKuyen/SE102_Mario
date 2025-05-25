@@ -259,9 +259,11 @@ public:
 	int renderedKoopas;
  	int renderedMovablePlatforms [MOVABLEPLATFORM_NUM];
 	ULONGLONG teleport_start;
+	bool onMovable;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		onMovable = false;
 		isVisible = true;
 		isSitting = false;
 		maxVx = 0.0f;

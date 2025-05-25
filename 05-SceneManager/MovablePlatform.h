@@ -31,6 +31,7 @@ public:
 	int IsBlocking() { return 1; }
 	virtual int IsCollidable() { return 1; };
 	void Falling();
+	int IsDirectionColliable(float nx, float ny);
 
  
 };

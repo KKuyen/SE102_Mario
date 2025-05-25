@@ -49,6 +49,7 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+   
     CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
     if(currentScene->GetId()==1){
         if (x > RENDER_POINT_1 && renderedKoopas == 0)
@@ -115,13 +116,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
             if (teleport == MARIO_TELEPORT_IN)
             {
                 x = CHIMMNEY_1_POSITION_X;
-                y = y + 0.25;
+                y = y + 0.65;
                 return;
             }
             else
             {
                 x = CHIMMNEY_2_POSITION_X;
-                y = y - 0.25;
+                y = y - 0.65;
                 return;
 
             }
@@ -311,9 +312,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CMario::OnNoCollision(DWORD dt)
 {
     x += vx * dt;
-    y += vy * dt;
-    //isOnPlatform = false;
-}
+  
+    if (!onMovable)
+    {
+
+        y += vy * dt;
+        isOnPlatform = false;
+    }
+    }
+ 
+
 
 int CMario::GetDirection()
 {
@@ -327,6 +335,7 @@ int CMario::GetDirection()
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+    if (!dynamic_cast<CMovablePlatform*>(e->obj))
     if (e->ny != 0 && e->obj->IsBlocking())
     {
         vy = 0;
@@ -338,6 +347,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     {
         vx = 0;
     }
+	if (!dynamic_cast<CMovablePlatform*>(e->obj))
+	{
+        onMovable = false;
+	}
 
     if (dynamic_cast<CGoomba*>(e->obj))
         OnCollisionWithGoomba(e);
@@ -410,7 +423,7 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
         }
 
     }
-  
+
     else
     {
         if (untouchable == 0)
@@ -452,6 +465,7 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
             }
         }
     }
+}
 
 void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 {
@@ -563,12 +577,17 @@ void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
 {
+    if (e->ny > 0)
+    {
+        return;
+    }
+    onMovable = true;
     CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj);
     if (e->ny < 0) {
         // Mario đứng trên platform, luôn cho phép nhảy kể cả khi platform rơi
         isOnPlatform = true;
         // Mario sẽ bám vận tốc rơi của platform
-        vy = movablePlatform->vy;
+        y = movablePlatform->y;
         movablePlatform->Falling();
     }
 }
@@ -1757,6 +1776,7 @@ void CMario::SetState(int state)
             nx = -1;
             break;
         case MARIO_STATE_JUMP:
+            onMovable = false;
             if (isOnPlatform)
             {
                 if (isFlying)

@@ -78,6 +78,7 @@ void CCoinBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
                  if (kb <= t && kr > l && kl < r)
                  {
                      koopas->SetState(KOOPAS_STATE_SHELL);
+					 koopas->isReverse = true;
                  }
              }
          }

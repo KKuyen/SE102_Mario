@@ -9,6 +9,7 @@
 #include "GiftBox.h"
 #include "BreakableBrick.h"
 #include "GrassPlatform.h"
+#include "CoinBrick.h"
 
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
@@ -104,7 +105,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
-	DebugOut(L"[Koopas] revive condition: %d\n", (GetTickCount64() - revive_start) >= KOOPAS_REVIVE_TIME);
+	//DebugOut(L"[Koopas] revive condition: %d\n", (GetTickCount64() - revive_start) >= KOOPAS_REVIVE_TIME);
 
 	if (state == KOOPAS_STATE_HELD)
 	{
@@ -123,11 +124,16 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBreakableBrick*>(obj) || (dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1) || dynamic_cast<CBrick*>(obj))
+			if (dynamic_cast<CCoinBrick*>(obj) || dynamic_cast<CGrassPlatform*>(obj) || dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBreakableBrick*>(obj) || (dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1) || dynamic_cast<CBrick*>(obj))
 			{
 
 				float l, t, r, b;
 				obj->GetBoundingBox(l, t, r, b);
+				if (dynamic_cast<CPlatform*>(obj))
+				{
+					// Nếu là đối tượng Platform, điều chỉnh lại vị trí
+					l -= 16;
+				}
 
 
 				float koopasLeft, koopasTop, koopasRight, koopasBottom;

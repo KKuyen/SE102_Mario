@@ -151,6 +151,12 @@
     <ClCompile Include="WingedKoopas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WingedRedKoopa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NumberText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -213,9 +219,6 @@
     <ClInclude Include="EffectGiftBoxCoin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-        <ClCompile Include="EffectPoint.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClInclude Include="EffectSmoke.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -306,6 +309,13 @@
     <ClInclude Include="WIngedKoopas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EffectPoint.h" />
+    <ClInclude Include="WingedRedKoopa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NumberText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -342,6 +352,7 @@
     <Text Include="scene1_4.txt" />
     <Text Include="transcript.txt" />
     <Text Include="wingedgoomba.txt" />
+    <Text Include="winged_red_koopa.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

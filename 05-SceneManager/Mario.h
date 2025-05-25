@@ -221,11 +221,14 @@ class CMario : public CGameObject
 	void OnCollisionWithBomerangBro(LPCOLLISIONEVENT e);
 	void OnCollisionWithBomerang(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoinBrick(LPCOLLISIONEVENT e);
-	void OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e);
-	int GetAniIdBig();
+ 	void OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e);
+ 	void OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e);
+
+ 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdMax();
 	ULONGLONG hold_start;
+	ULONGLONG lastEnergyUpdate; // Thời điểm cập nhật energy gần nhất
 public:
 	ULONGLONG transition_start; // Thời điểm bắt đầu hiệu ứng
 	int target_level; // Cấp độ mục tiêu (để biết phóng to hay thu nhỏ)
@@ -291,8 +294,9 @@ public:
 
 		transition_start = -1;
 		target_level = MARIO_LEVEL_BIG;
-		teleport_start = -1;
-	}
+ 		teleport_start = -1;
+ 		lastEnergyUpdate = 0;
+ 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);

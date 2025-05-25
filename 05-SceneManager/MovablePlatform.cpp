@@ -37,6 +37,8 @@ void CMovablePlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
  
 
 void CMovablePlatform::Falling() {
-	vx = 0;
-	vy = PLATFORM_GRAVITY;
+ 	if (vy == 0) {
+		vx = 0;
+		vy = PLATFORM_GRAVITY;
+	}
 }

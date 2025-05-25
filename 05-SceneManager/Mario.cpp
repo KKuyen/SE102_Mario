@@ -32,6 +32,8 @@
 #include "Bomerang.h"
 #include "CoinBrick.h"
 #include "GreenMushroom.h"
+#include "GameManager.h"
+#include "WingedRedKoopa.h"
 
 #define RENDER_POINT_1  704
 #define RENDER_POINT_2  736
@@ -273,15 +275,44 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         y = saved_y;
         return;
     }
-    isOnPlatform = false;
+    //isOnPlatform = false;
     CCollision::GetInstance()->Process(this, dt, coObjects);
+
+    // --- ENERGY SYSTEM ---
+    int runningState = (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT);
+    int &energy = CGameManager::GetInstance()->energy;
+    ULONGLONG now = GetTickCount64();
+    const int ENERGY_MAX = 6;
+    const DWORD ENERGY_INTERVAL = 200;
+
+    if (lastEnergyUpdate == 0) lastEnergyUpdate = now;
+
+    if (runningState)
+    {
+        if (energy < ENERGY_MAX && now - lastEnergyUpdate >= ENERGY_INTERVAL)
+        {
+            energy++;
+            if (energy > ENERGY_MAX) energy = ENERGY_MAX;
+            lastEnergyUpdate = now;
+        }
+    }
+    else
+    {
+        if (energy > 0 && now - lastEnergyUpdate >= ENERGY_INTERVAL)
+        {
+            energy--;
+            if (energy < 0) energy = 0;
+            lastEnergyUpdate = now;
+        }
+    }
+ 
 }
 
 void CMario::OnNoCollision(DWORD dt)
 {
     x += vx * dt;
     y += vy * dt;
-    isOnPlatform = false;
+    //isOnPlatform = false;
 }
 
 int CMario::GetDirection()
@@ -348,14 +379,80 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
         OnCollisionWithBomerangBro(e);
     else if (dynamic_cast<CBoomerang*>(e->obj))
         OnCollisionWithBomerang(e);
-    else if (dynamic_cast<CGreenMushroom*>(e->obj))
+     else if (dynamic_cast<CGreenMushroom*>(e->obj))
     OnCollisionWithGreenMushroom(e);
+    else if (dynamic_cast<CWingedRedKoopa*>(e->obj))
+        OnCollisionWithWingedRedKoopa(e);
 }
-void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e)
-{
-    CGreenMushroom* mushroom = dynamic_cast<CGreenMushroom*>(e->obj);
+void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e) {
+    CGreenMushroom *mushroom = dynamic_cast<CGreenMushroom *>(e->obj);
     mushroom->SetState(GREEN_MUSHROOM_STATE_EATEN);
 }
+
+
+void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
+{
+    CWingedRedKoopa* koopas = dynamic_cast<CWingedRedKoopa*>(e->obj);
+    koopas->mario = this;
+
+    // jump on top >> kill Goomba and deflect a bit 
+    if (e->ny < 0)
+    {
+        if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
+        {
+            koopas->SetState(KOOPAS_STATE_WALKING);
+            vy = -MARIO_JUMP_DEFLECT_SPEED;
+            LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+            p->AddGameObject(effectPoint);
+
+        }
+
+    }
+  
+    else
+    {
+        if (untouchable == 0)
+        {
+            if (koopas->GetState() == KOOPAS_STATE_FALL)
+                return;
+            if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_HELD)
+            {
+                if (level > MARIO_LEVEL_SMALL)
+                {
+
+                    level = level - 1;
+                    StartUntouchable();
+                }
+                else
+                {
+                    DebugOut(L">>> Mario DIE >>> \n");
+                    SetState(MARIO_STATE_DIE);
+
+                }
+            }
+            else
+            {
+
+                CGame* game = CGame::GetInstance();
+                if (game->IsKeyDown(DIK_A)) // Run key
+                {
+                    hold_start = GetTickCount64();
+                    SetHolding(true, koopas);
+                    koopas->SetState(KOOPAS_STATE_HELD);
+                }
+                else
+                {
+                    koopas->nx = this->nx;
+                    koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+                }
+
+
+            }
+        }
+    }
+
 void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 {
     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
@@ -468,6 +565,10 @@ void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
 {
     CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj);
     if (e->ny < 0) {
+        // Mario đứng trên platform, luôn cho phép nhảy kể cả khi platform rơi
+        isOnPlatform = true;
+        // Mario sẽ bám vận tốc rơi của platform
+        vy = movablePlatform->vy;
         movablePlatform->Falling();
     }
 }
@@ -500,7 +601,7 @@ void CMario::OnCollisionWithBomerangBro(LPCOLLISIONEVENT e)
             LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
             LPSCENE s = CGame::GetInstance()->GetCurrentScene();
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(effectPoint);
+            p->PushBackGameObject(effectPoint);
         }
     }
     if (untouchable == 0)
@@ -548,7 +649,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
     LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
     LPSCENE s = CGame::GetInstance()->GetCurrentScene();
     LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-    p->AddGameObject(effectPoint);
+    p->PushBackGameObject(effectPoint);
 }
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
@@ -568,7 +669,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
     LPGAMEOBJECT effectSmoke = new CEffectSmoke(x, y);
     LPSCENE s = CGame::GetInstance()->GetCurrentScene();
     LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-    p->AddGameObject(effectPoint);
+    p->PushBackGameObject(effectPoint);
     p->PushBackGameObject(effectSmoke);
 }
 
@@ -658,7 +759,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
             LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
             LPSCENE s = CGame::GetInstance()->GetCurrentScene();
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(effectPoint);
+            p->PushBackGameObject(effectPoint);
         }
         else if (koopas->GetState() == KOOPAS_STATE_REVERSE)
         {
@@ -817,7 +918,7 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
                 LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
                 LPSCENE s = CGame::GetInstance()->GetCurrentScene();
                 LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-                p->AddGameObject(effectPoint);
+                p->PushBackGameObject(effectPoint);
             }
             else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
             {
@@ -961,7 +1062,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
             LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
             LPSCENE s = CGame::GetInstance()->GetCurrentScene();
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(effectPoint);
+            p->PushBackGameObject(effectPoint);
         }
     }
     else if (isHolding && heldObject != NULL)
@@ -1084,7 +1185,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
             LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 200);
             LPSCENE s = CGame::GetInstance()->GetCurrentScene();
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(effectPoint);
+            p->PushBackGameObject(effectPoint);
         }
         if (goomba->GetState() == WINGED_GOOMBA_STATE_FLYING)
         {
@@ -1093,7 +1194,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
             LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
             LPSCENE s = CGame::GetInstance()->GetCurrentScene();
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(effectPoint);
+            p->PushBackGameObject(effectPoint);
         }
     }
     else if (isHolding && heldObject != NULL)
@@ -1197,6 +1298,9 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
     e->obj->Delete();
     coin++;
+    CGameManager::GetInstance()->points += 50;
+    CGameManager::GetInstance()->coins += 1;
+
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)

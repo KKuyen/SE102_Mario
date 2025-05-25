@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "Animations.h"
 #include "Effect.h"
+#include "GameManager.h"
 
 #define ID_ANI_COINBOX 600000
 
@@ -21,6 +22,8 @@ public:
 	CEffectGiftBoxCoin(float x, float y) : CEffect(x, y) {
 		this->initY = y;
 		this->vy = COINBOX_VY_START;
+		CGameManager::GetInstance()->coins += 1;
+
 	};
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

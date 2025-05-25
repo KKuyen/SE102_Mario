@@ -17,8 +17,8 @@ flower.txt
 bullet.txt
 leaf.txt
 darkBackground.txt
-transcript.txt
 number.txt
+transcript.txt
 piranha_plant.txt
 breakable_brick.txt
 explodeAni.txt
@@ -535,12 +535,12 @@ bomerang.txt
 
 
 # WINGEDGOOMBA
-10	100	10
+#10	100	10
 # WINGEDKOOPas
 18	1430	10
 18	1385	10
 18	1330	10
-18	130	10
+#18	130	10
 3	590	130	0
 
 # WINGEDGOOMBA
@@ -551,7 +551,7 @@ bomerang.txt
 #2	800	10
 #2	900	10
 #Transcript
-21	125	217
+#21	125	217
 
 
 
@@ -566,3 +566,13 @@ bomerang.txt
 
 #Coin brick
 33	64	108	5
+33	80	108	5
+33	96	108	5
+33	112	108	5
+33	128	108	5
+
+#Koopas
+3	64	70	0
+
+#Transcript
+21	50	50	152	28	210000

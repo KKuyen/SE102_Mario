@@ -34,6 +34,7 @@
 #include "MovablePlatform.h"
 #include "BomerangBro.h"
 #include "CoinBrick.h"
+#include "WingedRedKoopa.h"
 
 using namespace std;
 
@@ -41,6 +42,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	player = NULL;
+	transcript = NULL;
 	key_handler = new CSampleKeyHandler(this);
 	alreadyFly = false;
 	curentCX = 10;
@@ -160,7 +162,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBrick(x, y, spriteId); break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_TRANSCRIPT: obj = new CTranscript(x, y); break;
+	case OBJECT_TYPE_TRANSCRIPT:
+	{
+		int width = atoi(tokens[3].c_str());
+		int height = atoi(tokens[4].c_str());
+		int spriteId = atoi(tokens[5].c_str());
+		obj = new CTranscript(x, y, width, height, spriteId);
+		transcript = (CTranscript*)obj;
+		DebugOut(L"[DEBUG] Transcript object created at (%.1f, %.1f)\n", x, y);
+
+		objects.push_back(obj);
+	}
+	break;
 	case OBJECT_TYPE_GIFTBOX: {
 		float animationId = (float)atof(tokens[3].c_str());
 		int type = atoi(tokens[4].c_str());
@@ -260,6 +273,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_MOVABLEPLATFORM: obj = new CMovablePlatform(x, y); break;
+	case WINGED_RED_KOOPA: obj = new CWingedRedKoopa(x, y); break;
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -409,6 +423,8 @@ void CPlayScene::Update(DWORD dt)
     {
         objects[i]->Update(dt, &coObjects);
     }
+	CGameManager::GetInstance()->Update(dt, nullptr);
+
 
     // skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
     if (player == NULL) return;
@@ -457,45 +473,51 @@ void CPlayScene::Update(DWORD dt)
         if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
     }
     else{
-        //cy = 0;
-        ////Mai mot nho doi ve 0.7
-        //cx = curentCX + 0.7;
-        //curentCX += 0.7;
-        player->GetPosition(cx, cy);
+        cy = 0;
+        //Mai mot nho doi ve 0.7
+        cx = curentCX + 0.7;
+        curentCX += 0.7;
+        //player->GetPosition(cx, cy);
 
-        CGame* game = CGame::GetInstance();
-        cx -= game->GetBackBufferWidth() / 2;
-        cy -= game->GetBackBufferHeight() / 2;
+        //CGame* game = CGame::GetInstance();
+        //cx -= game->GetBackBufferWidth() / 2;
+        //cy -= game->GetBackBufferHeight() / 2;
 
-        CMario* mario = dynamic_cast<CMario*>(player);
+        //CMario* mario = dynamic_cast<CMario*>(player);
 
-        if(cy<-160)
+        //if(cy<-160)
 
-        {
-            alreadyFly = true;
-        }
-        else if (mario->vy > 0 && alreadyFly == true)
-        {
+        //{
+        //    alreadyFly = true;
+        //}
+        //else if (mario->vy > 0 && alreadyFly == true)
+        //{
 
-        }
-        else if (cy > -40)
-        {
-            cy = 0.0f;
-            alreadyFly = false;
-        }
-		
-        else
-        {
-            // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
-            cy = 0.0f;
-        }
-        if (mario->teleportState == MARIO_TELEPORT_IN)
-            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
 
-        if (cx < 0) cx = 0;
-        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+        //}
+        //else if (cy > -40)
+        //{
+        //    cy = 0.0f;
+        //    alreadyFly = false;
+        //}
+
+        //else
+        //{
+        //    // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+        //    cy = 0.0f;
+        //}
+        //if (mario->teleportState == MARIO_TELEPORT_IN)
+        //    cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+
+        //if (cx < 0) cx = 0;
+        //if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
 
     }
+	if (transcript != NULL)
+	{
+		//DebugOut(L"[DEBUG] About to call transcript->SetPosition\n");
+		transcript->SetPosition(cx + 10 + 115, cy + 216);
+	}
 
     // Đặt vị trí camera
     CGame::GetInstance()->SetCamPos(cx, cy);
@@ -563,7 +585,7 @@ void CPlayScene::PurgeDeletedObjects()
 void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 {
 	if (400 <= objects.size()) {
-		objects.insert(objects.begin() + 400, obj);
+		objects.insert(objects.begin() + 200, obj);
 	}
 	else {
 		objects.insert(objects.begin() + 20, obj);

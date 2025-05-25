@@ -183,6 +183,7 @@
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MovablePlatform.cpp" />
     <ClCompile Include="Mushroom.cpp" />
+    <ClCompile Include="NumberText.cpp" />
     <ClCompile Include="PiranhaPlant.cpp" />
     <ClCompile Include="PiranhaPlant.h" />
     <ClCompile Include="Platform.cpp" />
@@ -196,6 +197,7 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WingedGoomba.cpp" />
     <ClCompile Include="WingedKoopas.cpp" />
+    <ClCompile Include="WingedRedKoopa.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -236,6 +238,7 @@
     <ClInclude Include="Mario.h" />
     <ClInclude Include="MovablePlatform.h" />
     <ClInclude Include="Mushroom.h" />
+    <ClInclude Include="NumberText.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
@@ -249,6 +252,7 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WIngedGoomba.h" />
     <ClInclude Include="WIngedKoopas.h" />
+    <ClInclude Include="WingedRedKoopa.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="background.txt" />
@@ -282,6 +286,7 @@
     <Text Include="scene1_4.txt" />
     <Text Include="transcript.txt" />
     <Text Include="wingedgoomba.txt" />
+    <Text Include="winged_red_koopa.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

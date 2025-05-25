@@ -15,7 +15,7 @@ protected:
 
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;					
-
+	LPGAMEOBJECT transcript;
 	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_SPRITES(string line);
@@ -43,6 +43,7 @@ public:
 	void Clear();
 	vector<LPGAMEOBJECT>& GetObjects() { return objects; }
 	void PurgeDeletedObjects();
+	int GetIdScene() { return this->id; }
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 };

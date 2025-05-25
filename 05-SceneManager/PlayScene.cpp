@@ -425,8 +425,12 @@ void CPlayScene::Update(DWORD dt)
         cy -= game->GetBackBufferHeight() / 2;
 
         CMario* mario = dynamic_cast<CMario*>(player);
+	if (cy < -260)
+	{
+		cy = -200;
 
-        if(cy<-160)
+	}
+        else if(cy<-160)
 
         {
             alreadyFly = true;
@@ -440,7 +444,7 @@ void CPlayScene::Update(DWORD dt)
             cy = 0.0f;
             alreadyFly = false;
         }
-
+		
         else
         {
             // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
@@ -479,7 +483,7 @@ void CPlayScene::Update(DWORD dt)
             cy = 0.0f;
             alreadyFly = false;
         }
-
+		
         else
         {
             // Khi không bay, giữ camera ở vị trí mặc định theo trục Y

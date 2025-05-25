@@ -547,7 +547,6 @@ bomerang.txt
 10	1100	10
 #GOOMBA
 2	224	168
-#29	124	150
 2	560	168
 #2	800	10
 #2	900	10
@@ -565,4 +564,5 @@ bomerang.txt
 # BREAKABLE BRICK
 14	64	168
 
+#Coin brick
 33	64	108	5

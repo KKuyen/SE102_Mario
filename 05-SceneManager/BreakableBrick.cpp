@@ -14,7 +14,7 @@ void CBreakableBrick::Render()
 		animations->Get(ID_ANI_BREAKABLE_BRICK)->Render(x, y);
 	}
 	
-		//RenderBoundingBox();
+		RenderBoundingBox();
 }
 
 void CBreakableBrick::GetBoundingBox(float& l, float& t, float& r, float& b)

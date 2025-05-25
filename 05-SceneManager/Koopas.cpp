@@ -51,7 +51,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		mario = dynamic_cast<CMario*>(e->obj);
 	}
 	if (state == KOOPAS_STATE_REVERSE &&
-		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+		(dynamic_cast<CPlatform*>(e->obj)  || dynamic_cast<CGrassPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
 	{
 
 		ax = 0;
@@ -61,7 +61,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		state = KOOPAS_STATE_SHELL;
 	}
 	if (state == KOOPAS_STATE_FALL &&
-		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CGrassPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
 	{
 		return;
 	}

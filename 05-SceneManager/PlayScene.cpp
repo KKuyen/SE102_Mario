@@ -254,7 +254,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_FLOWER: {
 		int flowerType = atoi(tokens[3].c_str());
-		obj = new CFlower(x, y);
+		obj = new CFlower(x, y, flowerType);
 		if (flowerType == 1) {
 			obj->SetState(FLOWER_STATE_RIGHT_POP_UP);
 		}
@@ -263,7 +263,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		else if (flowerType == 3) {
 			obj->SetState(FLOWER_STATE_LEFT_POP_UP);
-			((CFlower*)obj)->color = 2;
 			
 		}
 		if (player != nullptr && dynamic_cast<CMario*>(player)) {
@@ -477,40 +476,40 @@ void CPlayScene::Update(DWORD dt)
         //Mai mot nho doi ve 0.7
         cx = curentCX + 0.7;
         curentCX += 0.7;
-        //player->GetPosition(cx, cy);
+        player->GetPosition(cx, cy);
 
-        //CGame* game = CGame::GetInstance();
-        //cx -= game->GetBackBufferWidth() / 2;
-        //cy -= game->GetBackBufferHeight() / 2;
+        CGame* game = CGame::GetInstance();
+        cx -= game->GetBackBufferWidth() / 2;
+        cy -= game->GetBackBufferHeight() / 2;
 
-        //CMario* mario = dynamic_cast<CMario*>(player);
+        CMario* mario = dynamic_cast<CMario*>(player);
 
-        //if(cy<-160)
+        if(cy<-160)
 
-        //{
-        //    alreadyFly = true;
-        //}
-        //else if (mario->vy > 0 && alreadyFly == true)
-        //{
+        {
+            alreadyFly = true;
+        }
+        else if (mario->vy > 0 && alreadyFly == true)
+        {
 
 
-        //}
-        //else if (cy > -40)
-        //{
-        //    cy = 0.0f;
-        //    alreadyFly = false;
-        //}
+        }
+        else if (cy > -40)
+        {
+            cy = 0.0f;
+            alreadyFly = false;
+        }
 
-        //else
-        //{
-        //    // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
-        //    cy = 0.0f;
-        //}
-        //if (mario->teleportState == MARIO_TELEPORT_IN)
-        //    cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+        else
+        {
+            // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+            cy = 0.0f;
+        }
+        if (mario->teleportState == MARIO_TELEPORT_IN)
+            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
 
-        //if (cx < 0) cx = 0;
-        //if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+        if (cx < 0) cx = 0;
+        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
 
     }
 	if (transcript != NULL)

@@ -3,6 +3,8 @@
 #include "Bullet.h"
 #include "PlayScene.h"
 #include "Game.h"
+#include "debug.h"
+
 void CFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 
@@ -29,11 +31,30 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		mario->GetPosition(mario_x, mario_y);
 		bool isMarioRight = (mario_x > x);  
 		bool isUpFire = (mario_y < FIRE_DOWN_ZONE_Y);
-		if(mario_x< FIRE_LEFT_ZONE_X || mario_x> FIRE_RIGHT_ZONE_X)
+		int leftZoneX = 0;
+		int rightZoneX = 0;
+		int leftEdgeX = 0;
+		int rightEdgeX = 0;
+		if (color == 2)
+		{
+			leftZoneX = FIRE_LEFT_ZONE_X2;
+			rightZoneX = FIRE_RIGHT_ZONE_X2;
+			leftEdgeX = 1856;
+			rightEdgeX = 1887;
+		}
+		else
+		{
+			leftZoneX = FIRE_LEFT_ZONE_X;
+			rightZoneX = FIRE_RIGHT_ZONE_X;
+			leftEdgeX = 352;
+			rightEdgeX = 384;
+
+		}
+		if(mario_x< leftZoneX || mario_x> rightZoneX)
 		{
 			isMarioInRange = TOO_FAR;
 		}
-		else if (352-mario_x <= 16 && mario_x -384<= 10)
+		else if (leftEdgeX -mario_x <= 16 && mario_x - rightEdgeX <= 10)
 		{
 			isMarioInRange = TOO_CLOSE;
 

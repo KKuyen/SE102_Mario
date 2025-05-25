@@ -410,7 +410,7 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
         }
 
     }
-  
+
     else
     {
         if (untouchable == 0)
@@ -452,6 +452,7 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
             }
         }
     }
+}
 
 void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 {
@@ -658,9 +659,9 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
     CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
     saved_x = x;
     saved_y = y;
+    leaf->Delete();
     if (level == MARIO_LEVEL_BIG && !isWaitingForLevelUp)
     {
-        leaf->Delete();
         isVisible = false;
         isWaitingForLevelUp = true;
         timeWaitingStart = GetTickCount();

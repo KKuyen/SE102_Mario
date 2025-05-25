@@ -39,9 +39,13 @@
 #define FIRE_LEFT_ZONE_X 240
 #define FIRE_RIGHT_ZONE_X 500
 
+#define FIRE_LEFT_ZONE_X2 1744
+#define FIRE_RIGHT_ZONE_X2 2004
+
 #define PAUSE_TIME 1700
 #define FIRE_TIME 1000
 
+#include "debug.h"
 
 class CFlower : public CGameObject
 {
@@ -60,14 +64,14 @@ protected:
 
 public:
 	int color;
-	CFlower(float x, float y, int color=1) :CGameObject(x, y) {
+	CFlower(float x, float y, int color) :CGameObject(x, y) {
 		initY = y;
 		start = 0;
 		mario = nullptr;
 		isFired = false;
 		isMarioInRange = TOO_FAR;
-		color = color;
-	
+		this->color = color;
+
 	}
 	void SetMario(CMario* m) { mario = m; } 
 };

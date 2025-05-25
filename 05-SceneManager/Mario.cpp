@@ -41,6 +41,7 @@
 #define RENDER_POSITION_X2 925
 #define RENDER_POSITION_X3 995
 
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
     CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
@@ -605,6 +606,11 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
 {
     CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
     koopas->mario = this;
+    bool areFacingEachOther = 1;
+    if ((nx > 0 && koopas->vx > 0 && koopas->x < x) || (nx < 0 && koopas->vx < 0 && koopas->x > x))
+    {
+        areFacingEachOther = 0;
+    }
 
     // jump on top >> kill Goomba and deflect a bit 
     if (e->ny < 0)
@@ -658,22 +664,37 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
         koopas->SetState(KOOPAS_STATE_REVERSE);
     }
     else if (isHolding && heldObject != NULL && !dynamic_cast<CKoopas*>(heldObject)) {
-
-        koopas->SetState(WINGED_KOOPAS_STATE_FALL);
-
-        CWingedKoopas* koopas2 = dynamic_cast<CWingedKoopas*>(heldObject);
-        SetHolding(false, nullptr);
-        koopas2->nx = nx;
-        koopas2->SetState(WINGED_KOOPAS_STATE_FALL);
-        /*if (!areFacingEachOther)
+        if (areFacingEachOther)
         {
+            koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+
+            CWingedKoopas* koopas2 = dynamic_cast<CWingedKoopas*>(heldObject);
+            SetHolding(false, nullptr);
+            koopas2->nx = nx;
+            koopas2->SetState(WINGED_KOOPAS_STATE_FALL);
+        }
+        else
+        {
+            if (dynamic_cast<CKoopas*>(heldObject))
+            {
+                CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(KOOPAS_STATE_FALL);
+            }
+            else if (dynamic_cast<CWingedKoopas*>(heldObject))
+            {
+                CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            }
             if (untouchable == 0)
             {
-                if (goomba->GetState() != GOOMBA_STATE_DIE || GOOMBA_STATE_FALL)
+                if (koopas->GetState() != KOOPAS_STATE_FALL)
                 {
                     if (level > MARIO_LEVEL_SMALL)
                     {
-
                         level = level - 1;
                         StartUntouchable();
                     }
@@ -681,12 +702,11 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
                     {
                         DebugOut(L">>> Mario DIE >>> \n");
                         SetState(MARIO_STATE_DIE);
-
                     }
                 }
             }
         }
-    */
+   
 
     }
     else
@@ -736,6 +756,12 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
 {
     CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(e->obj);
     koopas->mario = this;
+    bool areFacingEachOther = 1;
+    if((nx > 0 && koopas->vx > 0 && koopas->x < x)|| (nx < 0 && koopas->vx < 0 && koopas->x > x))
+    {
+        areFacingEachOther = 0;
+    }
+
     if (e->ny < 0)
     {
         if (koopas->canFly)
@@ -785,11 +811,47 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
         }
     }
     else if (isHolding && heldObject != NULL && !dynamic_cast<CWingedKoopas*>(heldObject)) {
-        koopas->SetState(WINGED_KOOPAS_STATE_FALL);
-        CKoopas* koopas2 = dynamic_cast<CKoopas*>(heldObject);
-        SetHolding(false, nullptr);
-        koopas2->nx = nx;
-        koopas2->SetState(KOOPAS_STATE_FALL);
+        if (areFacingEachOther)
+        {
+            koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            CKoopas* koopas2 = dynamic_cast<CKoopas*>(heldObject);
+            SetHolding(false, nullptr);
+            koopas2->nx = nx;
+            koopas2->SetState(KOOPAS_STATE_FALL);
+        }
+        else
+        {
+            if (dynamic_cast<CKoopas*>(heldObject))
+            {
+                CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(KOOPAS_STATE_FALL);
+            }
+            else if (dynamic_cast<CWingedKoopas*>(heldObject))
+            {
+                CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            }
+            if (untouchable == 0)
+            {
+                if (koopas->GetState() != WINGED_KOOPAS_STATE_FALL)
+                {
+                    if (level > MARIO_LEVEL_SMALL)
+                    {
+                        level = level - 1;
+                        StartUntouchable();
+                    }
+                    else
+                    {
+                        DebugOut(L">>> Mario DIE >>> \n");
+                        SetState(MARIO_STATE_DIE);
+                    }
+                }
+            }
+        }
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
@@ -841,7 +903,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     goomba->GetSpeed(goomba_vx, goomba_vy);
     float epsilon = 0.01f;
     bool areFacingEachOther = 1;
-
+    if ((nx > 0 && goomba_vx > 0 && goomba->x < x) || (nx < 0 && goomba_vx < 0 && goomba->x > x))
+    {
+        areFacingEachOther = 0;
+    }
     if (e->ny < 0)
     {
         if (goomba->GetState() != GOOMBA_STATE_DIE)
@@ -856,24 +921,61 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     }
     else if (isHolding && heldObject != NULL)
     {
-        goomba->SetState(GOOMBA_STATE_FALL);
-        if (dynamic_cast<CKoopas*>(heldObject))
+        if (areFacingEachOther)
         {
-            CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
-            SetHolding(false, nullptr);
-            koopas->nx = nx;
-            koopas->SetState(KOOPAS_STATE_FALL);
-        }
-        else if (dynamic_cast<CWingedKoopas*>(heldObject))
-        {
-            CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
-            SetHolding(false, nullptr);
-            koopas->nx = nx;
-            koopas->SetState(WINGED_KOOPAS_STATE_FALL);
-        }
+
+            goomba->SetState(GOOMBA_STATE_FALL);
+            if (dynamic_cast<CKoopas*>(heldObject))
+            {
+                CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(KOOPAS_STATE_FALL);
+            }
+            else if (dynamic_cast<CWingedKoopas*>(heldObject))
+            {
+                CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            }
+            else
+            {
+                DebugOut(L"error");
+            }
+    }
         else
         {
-            DebugOut(L"error");
+            if (dynamic_cast<CKoopas*>(heldObject))
+            {
+                CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(KOOPAS_STATE_FALL);
+            }
+            else if (dynamic_cast<CWingedKoopas*>(heldObject))
+            {
+                CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            }
+            if (untouchable == 0)
+            {
+                if (goomba->GetState() != WINGED_GOOMBA_STATE_DIE || WINGED_GOOMBA_STATE_FALL)
+                {
+                    if (level > MARIO_LEVEL_SMALL)
+                    {
+                        level = level - 1;
+                        StartUntouchable();
+                    }
+                    else
+                    {
+                        DebugOut(L">>> Mario DIE >>> \n");
+                        SetState(MARIO_STATE_DIE);
+                    }
+                }
+            }
         }
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
@@ -908,6 +1010,10 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
     goomba->GetSpeed(goomba_vx, goomba_vy);
     float epsilon = 0.01f;
     bool areFacingEachOther = 1;
+    if((nx > 0 && goomba_vx > 0 && goomba->x < x)|| (nx < 0 && goomba_vx < 0 && goomba->x > x))
+    {
+        areFacingEachOther = 0;
+    }
 
     if (e->ny < 0)
     {
@@ -932,24 +1038,60 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
     }
     else if (isHolding && heldObject != NULL)
     {
-        goomba->SetState(WINGED_GOOMBA_STATE_FALL);
-        if (dynamic_cast<CKoopas*>(heldObject))
+        if (areFacingEachOther)
         {
-            CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
-            SetHolding(false, nullptr);
-            koopas->nx = nx;
-            koopas->SetState(KOOPAS_STATE_FALL);
-        }
-        else if (dynamic_cast<CWingedKoopas*>(heldObject))
-        {
-            CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
-            SetHolding(false, nullptr);
-            koopas->nx = nx;
-            koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            goomba->SetState(WINGED_GOOMBA_STATE_FALL);
+            if (dynamic_cast<CKoopas*>(heldObject))
+            {
+                CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(KOOPAS_STATE_FALL);
+            }
+            else if (dynamic_cast<CWingedKoopas*>(heldObject))
+            {
+                CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            }
+            else
+            {
+                DebugOut(L"error");
+            }
         }
         else
         {
-            DebugOut(L"error");
+            if (dynamic_cast<CKoopas*>(heldObject))
+            {
+                CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(KOOPAS_STATE_FALL);
+            }
+            else if (dynamic_cast<CWingedKoopas*>(heldObject))
+            {
+                CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+                SetHolding(false, nullptr);
+                koopas->nx = nx;
+                koopas->SetState(WINGED_KOOPAS_STATE_FALL);
+            }
+            if (untouchable == 0)
+            {
+                if (goomba->GetState() != GOOMBA_STATE_DIE || GOOMBA_STATE_FALL)
+                {
+                    if (level > MARIO_LEVEL_SMALL)
+                    {
+                        level = level - 1;
+                        StartUntouchable();
+                    }
+                    else
+                    {
+                        DebugOut(L">>> Mario DIE >>> \n");
+                        SetState(MARIO_STATE_DIE);
+                    }
+                }
+            }
         }
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)

@@ -357,6 +357,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     else if (dynamic_cast<CWingedRedKoopa*>(e->obj))
         OnCollisionWithWingedRedKoopa(e);
 }
+
 void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
 {
     CWingedRedKoopa* koopas = dynamic_cast<CWingedRedKoopa*>(e->obj);
@@ -368,6 +369,11 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
         if (koopas->GetState() != KOOPAS_STATE_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_MOVING)
         {
             koopas->SetState(KOOPAS_STATE_WALKING);
+            vy = -MARIO_JUMP_DEFLECT_SPEED;
+            LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+            p->AddGameObject(effectPoint);
 
         }
 

@@ -18,17 +18,17 @@ protected:
 	vector<LPGAMEOBJECT> points;
 	vector<LPGAMEOBJECT> lifes;
 	vector<LPGAMEOBJECT> energy;
-	LPGAMEOBJECT PMeter;
+	CNumberText* PMeter;
 	bool isInitUI;
 public:
-	CTranscript(float x, float y, int widthh, int heightt, int sipriteIdd) : CGameObject(x, y)
-	{
-		this->width = widthh;
-		this->height = heightt;
-		this->spriteId = sipriteIdd;
-		posX = posY = 0;
-		isInitUI = false;
-	}
+    CTranscript(float x, float y, int widthh, int heightt, int sipriteIdd) : CGameObject(x, y)
+    {
+       this->width = widthh;
+       this->height = heightt;
+       this->spriteId = sipriteIdd;
+       posX = posY = 0;
+       isInitUI = false;
+    }
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
@@ -37,4 +37,5 @@ public:
 	void InitUI();
 	void SetPosition(float x, float y);
 	void UpdateElements(vector<LPGAMEOBJECT>& elements, DWORD value);
+	void UpdateEnergy(vector<LPGAMEOBJECT>& energy, int value);
 };

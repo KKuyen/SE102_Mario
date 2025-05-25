@@ -32,6 +32,7 @@ void CTranscript::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		UpdateElements(coins, CGameManager::GetInstance()->coins);
 		UpdateElements(points, CGameManager::GetInstance()->points);
 		UpdateElements(lifes, CGameManager::GetInstance()->lifes);
+		UpdateEnergy(energy, CGameManager::GetInstance()->energy);
 	}
 	CGameObject::Update(dt, coObjects);
 }
@@ -43,37 +44,37 @@ void CTranscript::InitUI()
 	CPlayScene* p = dynamic_cast<CPlayScene*>(s);
 	for (int i = 0; i < 3; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		p->PushBackGameObject(numtext);
 		timer.push_back(numtext);
 	}
 	for (int i = 0; i < 2; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		p->PushBackGameObject(numtext);
 		coins.push_back(numtext);
 	}
 	for (int i = 0; i < 7; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		p->PushBackGameObject(numtext);
 		points.push_back(numtext);
 	}
 	for (int i = 0; i < 2; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		p->PushBackGameObject(numtext);
 		lifes.push_back(numtext);
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		LPGAMEOBJECT numtext = new CNumberText(x, y, false);
+		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		CNumberText* temp = dynamic_cast<CNumberText*>(numtext);
 		temp->SetIdSprite(230010);
 		p->PushBackGameObject(numtext);
 		energy.push_back(numtext);
 	}
-	LPGAMEOBJECT numtext = new CNumberText(x, y, true);
+	CNumberText* numtext = new CNumberText(x, y, CGameManager::GetInstance()->energy);
 	CNumberText* temp = dynamic_cast<CNumberText*>(numtext);
  	p->PushBackGameObject(numtext);
 	PMeter = numtext;
@@ -83,9 +84,9 @@ void CTranscript::SetPosition(float x, float y)
 {
 	this->x = x;
 	this->y = y;
-	if (PMeter != nullptr)
+	if (PMeter !=nullptr)
 	{
-		PMeter->SetPosition(x-12, y - 12);
+		PMeter->SetPosition(x-11, y - 12);
 	}
 	if (timer.size() > 0)
 	{
@@ -125,5 +126,21 @@ void CTranscript::UpdateElements(vector<LPGAMEOBJECT>& elements, DWORD value)
 	{
 		int digit = valueStr[i] - '0';
 		dynamic_cast<CNumberText*>(elements[index])->SetIdSprite(230000 + digit);
+	}
+}
+
+void CTranscript::UpdateEnergy(vector<LPGAMEOBJECT>& energy, int value)
+{
+	PMeter->setEnergy(value);
+	for (int i = 0; i < energy.size(); i++)
+	{
+		if (i < value)
+		{
+			dynamic_cast<CNumberText*>(energy[i])->SetIdSprite(230014);
+		}
+		else
+		{
+			dynamic_cast<CNumberText*>(energy[i])->SetIdSprite(230010);
+		}
 	}
 }

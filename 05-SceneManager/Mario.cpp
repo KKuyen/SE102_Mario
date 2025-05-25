@@ -33,7 +33,6 @@
 #include "CoinBrick.h"
 #include "GameManager.h"
 
-
 #define RENDER_POINT_1  704
 #define RENDER_POINT_2  736
 #define RENDER_POINT_3  816
@@ -252,6 +251,35 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
     }
     isOnPlatform = false;
     CCollision::GetInstance()->Process(this, dt, coObjects);
+
+    // --- ENERGY SYSTEM ---
+    int runningState = (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT);
+    int &energy = CGameManager::GetInstance()->energy;
+    ULONGLONG now = GetTickCount64();
+    const int ENERGY_MAX = 6;
+    const DWORD ENERGY_INTERVAL = 200;
+
+    if (lastEnergyUpdate == 0) lastEnergyUpdate = now;
+
+    if (runningState)
+    {
+        if (energy < ENERGY_MAX && now - lastEnergyUpdate >= ENERGY_INTERVAL)
+        {
+            energy++;
+            if (energy > ENERGY_MAX) energy = ENERGY_MAX;
+            lastEnergyUpdate = now;
+        }
+    }
+    else
+    {
+        if (energy > 0 && now - lastEnergyUpdate >= ENERGY_INTERVAL)
+        {
+            energy--;
+            if (energy < 0) energy = 0;
+            lastEnergyUpdate = now;
+        }
+    }
+    // --- END ENERGY SYSTEM ---
 }
 
 void CMario::OnNoCollision(DWORD dt)

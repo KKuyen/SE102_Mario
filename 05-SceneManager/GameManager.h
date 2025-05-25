@@ -17,6 +17,7 @@ public:
 	int lifes;
 	int coins;
 	float elapsedTime;
+	int energy;
 
  	static CGameManager* GetInstance();
 	CGameManager(float x = 0, float y = 0) : CGameObject(x, y)
@@ -25,6 +26,7 @@ public:
 		timer = 300;
 		elapsedTime = 0;
  		lifes = 4;
+		energy = 6;
 	}
 	void Render() {}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

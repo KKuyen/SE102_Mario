@@ -222,6 +222,7 @@ class CMario : public CGameObject
 	int GetAniIdSmall();
 	int GetAniIdMax();
 	ULONGLONG hold_start;
+	ULONGLONG lastEnergyUpdate; // Thời điểm cập nhật energy gần nhất
 public:
 	ULONGLONG transition_start; // Thời điểm bắt đầu hiệu ứng
 	int target_level; // Cấp độ mục tiêu (để biết phóng to hay thu nhỏ)
@@ -286,7 +287,7 @@ public:
 
 		transition_start = -1;
 		target_level = MARIO_LEVEL_BIG;
-
+		lastEnergyUpdate = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

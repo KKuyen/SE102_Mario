@@ -35,7 +35,7 @@
 #include "BomerangBro.h"
 #include "CoinBrick.h"
 #include "WingedRedKoopa.h"
-
+#include "BreakableBrickChain.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -220,6 +220,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			 isPlatform
 		);
 
+		break;
+	}
+	case OBJECT_TYPE_BREAKABLE_BRICK_CHAIN:
+	{
+		if (tokens.size() < 5) return; // Need type, x, y, length, chainType
+		int length = atoi(tokens[3].c_str());
+		int chainType = atoi(tokens[4].c_str());
+		obj = new CBreakableBrickChain(x, y, length, chainType);
 		break;
 	}
 	case OBJECT_TYPE_DARK_BACKGROUND: {
@@ -477,20 +485,20 @@ void CPlayScene::Update(DWORD dt)
         //Mai mot nho doi ve 0.7
         cx = curentCX + 0.7;
         curentCX += 0.7;
-        //player->GetPosition(cx, cy);
+        //player->getposition(cx, cy);
 
-        //CGame* game = CGame::GetInstance();
-        //cx -= game->GetBackBufferWidth() / 2;
-        //cy -= game->GetBackBufferHeight() / 2;
+        //cgame* game = cgame::getinstance();
+        //cx -= game->getbackbufferwidth() / 2;
+        //cy -= game->getbackbufferheight() / 2;
 
-        //CMario* mario = dynamic_cast<CMario*>(player);
+        //cmario* mario = dynamic_cast<cmario*>(player);
 
         //if(cy<-160)
 
         //{
-        //    alreadyFly = true;
+        //    alreadyfly = true;
         //}
-        //else if (mario->vy > 0 && alreadyFly == true)
+        //else if (mario->vy > 0 && alreadyfly == true)
         //{
 
 
@@ -498,19 +506,52 @@ void CPlayScene::Update(DWORD dt)
         //else if (cy > -40)
         //{
         //    cy = 0.0f;
-        //    alreadyFly = false;
+        //    alreadyfly = false;
         //}
 
         //else
         //{
-        //    // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+        //    // khi không bay, giữ camera ở vị trí mặc định theo trục y
         //    cy = 0.0f;
         //}
-        //if (mario->teleportState == MARIO_TELEPORT_IN)
-        //    cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+        //if (mario->teleportstate == mario_teleport_in)
+        //    cy = camera_position_hidden_map_y;
 
         //if (cx < 0) cx = 0;
-        //if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+        //if (cx > righ_map_limit) cx = righ_map_limit;
+		player->GetPosition(cx, cy);
+
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetBackBufferWidth() / 2;
+		cy -= game->GetBackBufferHeight() / 2;
+
+		CMario* mario = dynamic_cast<CMario*>(player);
+
+		if (cy < -160)
+
+		{
+			alreadyFly = true;
+		}
+		else if (mario->vy > 0 && alreadyFly == true)
+		{
+
+
+		}
+		else if (cy > -40)
+		{
+			cy = 0.0f;
+			alreadyFly = false;
+		}
+
+		else
+		{
+			// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+			cy = 0.0f;
+		}
+		
+
+		if (cx < 0) cx = 0;
+		if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
 
     }
 	if (transcript != NULL)

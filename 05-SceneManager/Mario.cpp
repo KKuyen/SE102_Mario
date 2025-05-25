@@ -45,6 +45,7 @@
 #define RENDER_POSITION_X3 995
 #define CHIMMNEY_1_POSITION_X 2265
 #define CHIMMNEY_2_POSITION_X 2326
+#define CHIMMNEY_14_POSITION_X 1952
 
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -96,12 +97,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
     {
         if(teleport== MARIO_TELEPORT_IN&& GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION&& teleport_start!=-1)
         {
-            x = x - MARIO_TELEPORT_IN_POSITION_X_MOVE;
-            y = MARIO_TELEPORT_IN_POSITION_Y;
+       
+            
+            if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
+            {
+                x = x - MARIO_TELEPORT_IN_POSITION_X_MOVE;
+                y = MARIO_TELEPORT_IN_POSITION_Y;
+              
+            }
+            else
+            {
+                x = x + MARIO_TELEPORT_IN_POSITION_X_MOVE+110;
+       
+            }
             teleport = MARIO_TELEPORT_NONE;
             teleportState = 1;
             SetState(MARIO_STATE_WALKING_RIGHT);
             teleport_start = -1;
+
+        
         }
         else if (teleport == MARIO_TELEPORT_OUT && GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION && teleport_start != -1)
         {
@@ -115,7 +129,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         {
             if (teleport == MARIO_TELEPORT_IN)
             {
-                x = CHIMMNEY_1_POSITION_X;
+                if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
+                {
+
+                    x = CHIMMNEY_1_POSITION_X;
+                 
+                }
+                else
+                {
+                    x = CHIMMNEY_14_POSITION_X;
+                }
                 y = y + 0.65;
                 return;
             }

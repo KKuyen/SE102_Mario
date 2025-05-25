@@ -157,6 +157,12 @@
     <ClCompile Include="NumberText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BreakableBrickChain.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakableBrickChain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">

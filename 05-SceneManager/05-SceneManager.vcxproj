@@ -153,6 +153,8 @@
     <ClCompile Include="BomerangBro.cpp" />
     <ClCompile Include="BreakableBrick.cpp" />
     <ClCompile Include="BreakableBrick.h" />
+    <ClCompile Include="BreakableBrickChain.cpp" />
+    <ClCompile Include="BreakableBrickChain.h" />
     <ClCompile Include="BreakableBrickPart.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Bullet.cpp" />

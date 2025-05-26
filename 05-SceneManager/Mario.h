@@ -260,6 +260,7 @@ public:
  	int renderedMovablePlatforms [MOVABLEPLATFORM_NUM];
 	ULONGLONG teleport_start;
 	bool onMovable;
+	bool isBomerangBroRendered;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
@@ -269,6 +270,7 @@ public:
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
+		isBomerangBroRendered = false;
 
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;

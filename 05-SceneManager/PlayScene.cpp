@@ -45,6 +45,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	transcript = NULL;
 	key_handler = new CSampleKeyHandler(this);
 	alreadyFly = false;
+	alreadyTeleport = false;
 	curentCX = 10;
 }
 
@@ -480,17 +481,44 @@ void CPlayScene::Update(DWORD dt)
         if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
     }
     else{
-        cy = 0;
-        //Mai mot nho doi ve 0.7
-        cx = curentCX + 0.7;
-        curentCX += 0.7;
-        //player->GetPosition(cx, cy);
+		CMario* mario = dynamic_cast<CMario*>(player);
+		cy = 0;
+		//Mai mot nho doi ve 0.7
+		if (mario->teleport == MARIO_TELEPORT_IN && GetTickCount64() - mario->teleport_start <= MARIO_TELEPORT_DURATION && mario->teleport_start != -1)
+		{
+			alreadyTeleport = true;
+			cx = mario->x-100;
+		}
+		else
+		{
+			if (alreadyTeleport == true)
+			{
+				alreadyTeleport = false;
+				curentCX += 290;
+				cx = curentCX + 290;
+				
+			}
+			else
+			{
+				curentCX += 1;
 
-        //CGame* game = CGame::GetInstance();
-        //cx -= game->GetBackBufferWidth() / 2;
-        //cy -= game->GetBackBufferHeight() / 2;
+				cx = curentCX + 1;
+			}
 
-        //CMario* mario = dynamic_cast<CMario*>(player);
+
+		}
+
+
+		
+	
+     
+      /*  player->GetPosition(cx, cy);
+
+        CGame* game = CGame::GetInstance();
+        cx -= game->GetBackBufferWidth() / 2;
+        cy -= game->GetBackBufferHeight() / 2;*/
+
+
 
 
         //if(cy<-160)
@@ -509,16 +537,14 @@ void CPlayScene::Update(DWORD dt)
         //    alreadyFly = false;
         //}
 
-        //else
-        //{
-        //    // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
-        //    cy = 0.0f;
-        //}
-        //if (mario->teleportState == MARIO_TELEPORT_IN)
-        //    cy = CAMERA_POSITION_HIDDEN_MAP_Y;
 
-        //if (cx < 0) cx = 0;
-        //if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+       /* if (mario->teleportState == MARIO_TELEPORT_IN)
+            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+
+        if (cx < 0) cx = 0;
+        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;*/
+
+
 
 
     }

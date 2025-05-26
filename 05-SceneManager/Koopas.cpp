@@ -152,8 +152,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 					isOnPlatform = true;
-					platformLeft = l;
-					platformRight = r + 16;
+					platformLeft = l - 6;
+					platformRight = r + 6;
 					break;
 				}
 			}

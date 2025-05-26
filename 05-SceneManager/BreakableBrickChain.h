@@ -8,10 +8,16 @@
 class CBreakableBrickChain : public CGameObject
 {
 public:
+	int chainType; // 1 for horizontal, 2 for vertical
+    int length;
     CBreakableBrickChain(float x, float y, int length, int chainType);
-    void Render() {}
+    void Render() {
+        //RenderBoundingBox();
+
+    
+    }
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
-    void GetBoundingBox(float& l, float& t, float& r, float& b) {}
+    void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 
 typedef CBreakableBrickChain* LPBREAKABLEBRICKCHAIN;

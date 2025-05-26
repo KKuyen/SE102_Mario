@@ -10,6 +10,7 @@
 #include "BreakableBrick.h"
 #include "GrassPlatform.h"
 #include "CoinBrick.h"
+#include "BreakableBrickChain.h"
 
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
@@ -51,7 +52,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		mario = dynamic_cast<CMario*>(e->obj);
 	}
 	if (state == KOOPAS_STATE_REVERSE &&
-		(dynamic_cast<CPlatform*>(e->obj)  || dynamic_cast<CGrassPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CBreakableBrickChain*>(e->obj)  || dynamic_cast<CGrassPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
 	{
 
 		ax = 0;
@@ -124,21 +125,22 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		bool isOnPlatform = false;
 		float platformLeft, platformRight;
+		CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
 
 		// Tìm đối tượng mà Koopas đang đứng
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			// Truyền vào các loại đối tượng
-			if (dynamic_cast<CCoinBrick*>(obj) || dynamic_cast<CGrassPlatform*>(obj) || dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBreakableBrick*>(obj) || (dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1) || dynamic_cast<CBrick*>(obj))
+			if (dynamic_cast<CCoinBrick*>(obj) || dynamic_cast<CBreakableBrickChain*>(obj) || dynamic_cast<CGrassPlatform*>(obj) || dynamic_cast<CPlatform*>(obj) ||( dynamic_cast<CBreakableBrick*>(obj) && currentScene->GetId() == 1)|| (dynamic_cast<CColorBox*>(obj) && dynamic_cast<CColorBox*>(obj)->isPlatform == 1) || dynamic_cast<CBrick*>(obj))
 			{
 
 				float l, t, r, b;
 				obj->GetBoundingBox(l, t, r, b);
-				if (dynamic_cast<CPlatform*>(obj))
+				if (dynamic_cast<CBreakableBrickChain*>(obj))
 				{
-					// Nếu là đối tượng Platform, điều chỉnh lại vị trí
 					l -= 16;
 				}
+ 
 
 
 				float koopasLeft, koopasTop, koopasRight, koopasBottom;

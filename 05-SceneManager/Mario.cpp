@@ -50,17 +50,17 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (vx == 0 &&(state == MARIO_STATE_RUNNING_RIGHT|| state == MARIO_STATE_RUNNING_LEFT))
+	{
+		isFlying = false;
+		run_start = 0;
+        
+	}
    
     CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
     if(currentScene->GetId()==1){
-        if (x > RENDER_POINT_1 && renderedKoopas == 0)
-        {
-            CWingedKoopas* koopas = new CWingedKoopas(RENDER_POSITION_X1, RENDER_POSITION_Y2);
-            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(koopas);
-            renderedKoopas = 1;
-        }
+       
+       
 
         if (x > RENDER_POINT_1 && renderedGoombaNum == 0)
         {

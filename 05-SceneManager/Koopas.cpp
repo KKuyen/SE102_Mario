@@ -102,6 +102,11 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
+	if(x>2230&&y>185)
+	{
+		isDeleted = true;
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -198,9 +203,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CKoopas::Render()
 {
 	int aniId;
+	
 	if (color == 1)
 	{
+		
 		aniId = ID_ANI_KOOPAS_WALKING;
+		
+
 		if (state == KOOPAS_STATE_WALKING_RIGHT)
 			aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 		if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
@@ -230,7 +239,9 @@ void CKoopas::Render()
 	}
 	else
 	{
+
 		aniId = ID_ANI_KOOPAS_GREEN_WALKING;
+	
 		if (state == KOOPAS_STATE_WALKING_RIGHT)
 			aniId = ID_ANI_KOOPAS_GREEN_WALKING_RIGHT;
 		if (state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD)
@@ -314,6 +325,7 @@ void CKoopas::SetState(int state)
 		ay = KOOPAS_GRAVITY_FALL; // Trọng lực sẽ kéo xuống
 		revive_start = 0;
 		break;
+
 	case KOOPAS_STATE_REVERSE:
 		this->isReverse = true;
 		vx = nx * KOOPAS_FALL_SPEED_HORIZONTAL;

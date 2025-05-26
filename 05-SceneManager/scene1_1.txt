@@ -442,8 +442,7 @@ bomerang.txt
 4	1761	-103
 4	1841	-103
 
-# BREAKABLE BRICK
-14	64	168
+
 #BRICK
 1	624	168	21000
 
@@ -473,14 +472,14 @@ bomerang.txt
 1	2256	184	20001
 
 #[?] Gift Box: x, y, animationId, type(0: coin, 1 : mushroom, 2: leaf)
-9	176	121	91000	0
+
 9	192	121	91000	0
-9	224	73	91000	0
+
 9	240	73	91000	1
 9	416	89	91000	0
 9	656	153	91000	2
 9	704	121	91000	0
-9	1472	137	91000	0
+9	1472	137	91000	2
 9	1440	-103	91000	0
 
 #Brick Gift Box: x, y, animationId
@@ -536,16 +535,14 @@ bomerang.txt
 3	2099	100	0
 
 
-# WINGEDGOOMBA
-#10	100	10
+
 # WINGEDKOOPas
 18	1430	10
 18	1385	10
 18	1330	10
-#18	130	10
 
-# WINGEDGOOMBA
-10	1100	10
+
+
 #GOOMBA
 2	224	168
 2	560	168
@@ -556,23 +553,17 @@ bomerang.txt
 
 
 
-# HIDDEN BUTTON
 
-16	120	140	3
 # PIRANHA PLANT
 # Format: type x y max_y
 #12	300	150	115
-# BREAKABLE BRICK
-14	64	168
+
 
 #Coin brick
 
 
-#Koopas
-3	64	70	0
+
 
 #Transcript
 21	50	50	152	28	210000
 
-#BreackableBrickChain
-20	64	108	5	2

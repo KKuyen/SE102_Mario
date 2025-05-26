@@ -508,10 +508,7 @@ void CPlayScene::Update(DWORD dt)
 
 		}
 
-		
-      
-	
-        //Mai mot nho doi ve 0.7
+
 		
 	
      
@@ -540,16 +537,14 @@ void CPlayScene::Update(DWORD dt)
         //    alreadyFly = false;
         //}
 
-        //else
-        //{
-        //    // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
-        //    cy = 0.0f;
-        //}
+
        /* if (mario->teleportState == MARIO_TELEPORT_IN)
             cy = CAMERA_POSITION_HIDDEN_MAP_Y;
 
         if (cx < 0) cx = 0;
         if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;*/
+
+
 
 
     }

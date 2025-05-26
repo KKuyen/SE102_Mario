@@ -46,6 +46,10 @@
 #define CHIMMNEY_1_POSITION_X 2265
 #define CHIMMNEY_2_POSITION_X 2326
 #define CHIMMNEY_14_POSITION_X 1952
+#define BOMERANG_BRO_RENDER_POS 2200
+#define BOMERANG_BRO_X 2105
+#define BOMERANG_BRO_Y 122
+
 
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -89,8 +93,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
             p->AddGameObject(goomba);
             renderedGoombaNum = 3;
         }
+
     }
     else {
+        if (x >= BOMERANG_BRO_RENDER_POS && isBomerangBroRendered == false)
+        {
+            CBomerangBro* bomerang_bro = new CBomerangBro(BOMERANG_BRO_X, BOMERANG_BRO_Y);
+
+            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+            p->AddGameObject(bomerang_bro);
+			bomerang_bro->SetMario(this);
+            isBomerangBroRendered = true;
+
+        }
+
     }
 
     if (teleport!=0)
@@ -120,6 +137,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         else if (teleport == MARIO_TELEPORT_OUT && GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION && teleport_start != -1)
         {
             y = MARIO_TELEPORT_OUT_POSITION_Y;
+			DebugOut(L"[TELEPORT OUTTTTTTTTTTTTTTTTTTTTTTTTTTTT]");
             teleport = MARIO_TELEPORT_NONE;
             teleportState = 0;
             SetState(MARIO_STATE_WALKING_RIGHT);
@@ -162,14 +180,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         // Kiểm tra thời gian kìm tối đa
         if (GetTickCount64() - slow_fall_start > MARIO_SLOW_FALL_MAX_TIME)
         {
-            DebugOut(L"[SLOW FALL] Time: %llu ms\n", GetTickCount64() - slow_fall_start);
-            isSlowFalling = false;
+             isSlowFalling = false;
             ay = MARIO_GRAVITY; // Trở lại trọng lực bình thường
         }
         else
         {
-            DebugOut(L"[SLOW FALL] Time: %llu ms\n", GetTickCount64() - slow_fall_start);
-            // Áp dụng tốc độ rơi chậm và trọng lực nhỏ
+             // Áp dụng tốc độ rơi chậm và trọng lực nhỏ
             if (vy > MARIO_SLOW_FALL_SPEED_Y)
                 vy = MARIO_SLOW_FALL_SPEED_Y;
             ay = MARIO_SLOW_FALL_GRAVITY;

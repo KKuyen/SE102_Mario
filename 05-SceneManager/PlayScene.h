@@ -27,6 +27,7 @@ protected:
 	void LoadAssets(LPCWSTR assetFile);
 	
 public: 
+	bool alreadyTeleport;
 	bool alreadyFly;
 	CPlayScene(int id, LPCWSTR filePath);
 	float curentCX;

@@ -1354,11 +1354,13 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+    // Debug output to verify collision
+    DebugOut(L"[DEBUG] Mario collided with Coin at (%.1f, %.1f)\n", e->obj->x, e->obj->y);
+
     e->obj->Delete();
     coin++;
     CGameManager::GetInstance()->points += 50;
     CGameManager::GetInstance()->coins += 1;
-
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)

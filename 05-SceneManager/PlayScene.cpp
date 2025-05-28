@@ -47,6 +47,9 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	alreadyFly = false;
 	alreadyTeleport = false;
 	curentCX = 10;
+	justSwitchedToScene2 = false;
+	scene2PauseStart = 0;
+	scene2PauseDone = false;
 }
 
 
@@ -162,7 +165,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float spriteId = (float)atof(tokens[3].c_str());
 		obj = new CBrick(x, y, spriteId); break;
 	}
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_COIN: {
+		obj = new CCoin(x, y);
+		DebugOut(L"[DEBUG] Coin object created at (%.1f, %.1f)\n", x, y); // Add debug output
+		break;
+	}
 	case OBJECT_TYPE_TRANSCRIPT:
 	{
 		int width = atoi(tokens[3].c_str());
@@ -418,30 +425,71 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-    // We know that Mario is the first object in the list hence we won't add him into the colliable object list
-    // TO-DO: This is a "dirty" way, need a more organized way
-
-    vector<LPGAMEOBJECT> coObjects;
-    for (size_t i = 1; i < objects.size(); i++)
-    {
-        coObjects.push_back(objects[i]);
-    }
-
-    for (size_t i = 0; i < objects.size(); i++)
-    {
-        objects[i]->Update(dt, &coObjects);
-    }
-	CGameManager::GetInstance()->Update(dt, nullptr);
-
-
-    // skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-    if (player == NULL) return;
-
-    // Update camera to follow mario
-
-    float cx =0 , cy;
+    float cx = 0, cy;
     CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
-    if (currentScene->GetId() == 1) {
+
+    // --- BEGIN: Scene 2 transition pause logic ---
+    if (currentScene->GetId() == 2)
+    {
+        if (!justSwitchedToScene2)
+        {
+            justSwitchedToScene2 = true;
+            scene2PauseStart = GetTickCount64();
+            scene2PauseDone = false;
+        }
+
+        if (!scene2PauseDone)
+        {
+            if (GetTickCount64() - scene2PauseStart < 2000)
+            {
+                // Pause for 2 seconds: do not increment curentCX or update MovablePlatform
+                cy = 0;
+                cx = curentCX; // fixed camera position
+
+                // Update all objects except MovablePlatform
+                vector<LPGAMEOBJECT> coObjects;
+                for (size_t i = 1; i < objects.size(); i++)
+                    coObjects.push_back(objects[i]);
+                for (size_t i = 0; i < objects.size(); i++)
+                {
+                    // Skip MovablePlatform update during pause
+                    if (dynamic_cast<CMovablePlatform*>(objects[i]) == nullptr)
+                        objects[i]->Update(dt, &coObjects);
+                }
+                CGameManager::GetInstance()->Update(dt, nullptr);
+
+                goto set_camera_and_exit;
+            }
+            else
+            {
+                scene2PauseDone = true;
+            }
+        }
+
+        // After pause, normal logic for scene 2
+        vector<LPGAMEOBJECT> coObjects;
+        for (size_t i = 1; i < objects.size(); i++)
+            coObjects.push_back(objects[i]);
+        for (size_t i = 0; i < objects.size(); i++)
+            objects[i]->Update(dt, &coObjects);
+        CGameManager::GetInstance()->Update(dt, nullptr);
+
+        cy = 0;
+        curentCX += 0.7f;
+        cx = curentCX + 0.7f;
+    }
+    else
+    {
+        justSwitchedToScene2 = false;
+        scene2PauseDone = false;
+
+        vector<LPGAMEOBJECT> coObjects;
+        for (size_t i = 1; i < objects.size(); i++)
+            coObjects.push_back(objects[i]);
+        for (size_t i = 0; i < objects.size(); i++)
+            objects[i]->Update(dt, &coObjects);
+        CGameManager::GetInstance()->Update(dt, nullptr);
+
         player->GetPosition(cx, cy);
 
         CGame* game = CGame::GetInstance();
@@ -449,13 +497,11 @@ void CPlayScene::Update(DWORD dt)
         cy -= game->GetBackBufferHeight() / 2;
 
         CMario* mario = dynamic_cast<CMario*>(player);
-	if (cy < -215)
-	{
-		cy = -215;
-
-	}
+        if (cy < -215)
+        {
+            cy = -215;
+        }
         else if(cy<-160)
-
         {
             alreadyFly = true;
         }
@@ -468,10 +514,8 @@ void CPlayScene::Update(DWORD dt)
             cy = 0.0f;
             alreadyFly = false;
         }
-		
         else
         {
-            // Khi không bay, giữ camera ở vị trí mặc định theo trục Y
             cy = 0.0f;
         }
         if(mario->teleportState==MARIO_TELEPORT_IN)
@@ -480,86 +524,18 @@ void CPlayScene::Update(DWORD dt)
         if (cx < 0) cx = 0;
         if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
     }
-    else{
-		CMario* mario = dynamic_cast<CMario*>(player);
-		cy = 0;
-		//Mai mot nho doi ve 0.7
-		if (mario->teleport == MARIO_TELEPORT_IN && GetTickCount64() - mario->teleport_start <= MARIO_TELEPORT_DURATION && mario->teleport_start != -1)
-		{
-			alreadyTeleport = true;
-			cx = mario->x-100;
-		}
-		else
-		{
-			if (alreadyTeleport == true)
-			{
-				alreadyTeleport = false;
-				curentCX += 290;
-				cx = curentCX + 290;
-				
-			}
-			else
-			{
-				curentCX += 1;
 
-				cx = curentCX + 1;
-			}
-
-
-		}
-
-
-		
-	
-     
-      /*  player->GetPosition(cx, cy);
-
-        CGame* game = CGame::GetInstance();
-        cx -= game->GetBackBufferWidth() / 2;
-        cy -= game->GetBackBufferHeight() / 2;*/
-
-
-
-
-        //if(cy<-160)
-
-        //{
-        //    alreadyFly = true;
-        //}
-        //else if (mario->vy > 0 && alreadyFly == true)
-        //{
-
-
-        //}
-        //else if (cy > -40)
-        //{
-        //    cy = 0.0f;
-        //    alreadyFly = false;
-        //}
-
-
-       /* if (mario->teleportState == MARIO_TELEPORT_IN)
-            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
-
-        if (cx < 0) cx = 0;
-        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;*/
-
-
-
-
+set_camera_and_exit:
+    if (transcript != NULL)
+    {
+        transcript->SetPosition(cx + 10 + 115, cy + 216);
     }
-	if (transcript != NULL)
-	{
-		//DebugOut(L"[DEBUG] About to call transcript->SetPosition\n");
-		transcript->SetPosition(cx + 10 + 115, cy + 216);
-	}
 
-    // Đặt vị trí camera
     CGame::GetInstance()->SetCamPos(cx, cy);
-
 
     PurgeDeletedObjects();
 }
+
 void CPlayScene::Render()
 {
 	for (int i = 0; i < objects.size(); i++)

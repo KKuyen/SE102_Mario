@@ -25,6 +25,11 @@ protected:
 	void _ParseSection_OBJECTS(string line);
 
 	void LoadAssets(LPCWSTR assetFile);
+
+	// Add these variables to track scene 2 transition and pause
+	bool justSwitchedToScene2 = false;
+	ULONGLONG scene2PauseStart = 0;
+	bool scene2PauseDone = false;
 	
 public: 
 	bool alreadyTeleport;

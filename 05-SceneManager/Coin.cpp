@@ -8,6 +8,10 @@ void CCoin::Render()
 	//RenderBoundingBox();
 }
 
+// Ensure the coin is collidable and not blocking
+int CCoin::IsCollidable() { return 1; }
+int CCoin::IsBlocking() { return 0; }
+
 void CCoin::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - COIN_BBOX_WIDTH / 2;

@@ -484,10 +484,13 @@ void CPlayScene::Update(DWORD dt)
 		CMario* mario = dynamic_cast<CMario*>(player);
 		cy = 0;
 		//Mai mot nho doi ve 0.7
+		
 		if (mario->teleport == MARIO_TELEPORT_IN && GetTickCount64() - mario->teleport_start <= MARIO_TELEPORT_DURATION && mario->teleport_start != -1)
 		{
 			alreadyTeleport = true;
-			cx = mario->x-100;
+			curentCX = 1791;
+			cx = curentCX;
+
 		}
 		else
 		{
@@ -500,13 +503,30 @@ void CPlayScene::Update(DWORD dt)
 			}
 			else
 			{
-				curentCX += 1;
+				if (curentCX + 1 >= 1791&& curentCX< 1982)
+				{
+					cx = curentCX;
+					curentCX += 0.7;
 
-				cx = curentCX + 1;
+					cx = curentCX + 0.7;
+				}
+				
+				else
+				{
+					curentCX += 0.7;
+
+					cx = curentCX + 0.7;
+				}
 			}
 
 
 		}
+		if (curentCX > 2310)
+		{
+			curentCX = 2310;
+			cx = 2310;
+		}
+		
 
 
 		

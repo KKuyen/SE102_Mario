@@ -38,7 +38,7 @@
 #include "BreakableBrickChain.h"
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath):
+CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	player = NULL;
@@ -47,9 +47,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	alreadyFly = false;
 	alreadyTeleport = false;
 	curentCX = 10;
-	justSwitchedToScene2 = false;
-	scene2PauseStart = 0;
-	scene2PauseDone = false;
 }
 
 
@@ -82,7 +79,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	if (tex == NULL)
 	{
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
-		return; 
+		return;
 	}
 
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
@@ -95,7 +92,7 @@ void CPlayScene::_ParseSection_ASSETS(string line)
 	if (tokens.size() < 1) return;
 
 	wstring path = ToWSTR(tokens[0]);
-	
+
 	LoadAssets(path.c_str());
 }
 
@@ -113,7 +110,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
-		int frame_time = atoi(tokens[i+1].c_str());
+		int frame_time = atoi(tokens[i + 1].c_str());
 		ani->Add(sprite_id, frame_time);
 	}
 
@@ -121,7 +118,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 }
 
 /*
-	Parse a line in section [OBJECTS] 
+	Parse a line in section [OBJECTS]
 */
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
@@ -134,21 +131,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float x = (float)atof(tokens[1].c_str());
 	float y = (float)atof(tokens[2].c_str());
 
-	CGameObject *obj = NULL;
- 	switch (object_type)
+	CGameObject* obj = NULL;
+	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
+		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
- 
+		obj = new CMario(x, y);
+		player = (CMario*)obj;
+
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_BOMERANGBRO: {
 		obj = new CBomerangBro(x, y);
 		if (player != nullptr && dynamic_cast<CMario*>(player)) {
@@ -165,11 +162,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float spriteId = (float)atof(tokens[3].c_str());
 		obj = new CBrick(x, y, spriteId); break;
 	}
-	case OBJECT_TYPE_COIN: {
-		obj = new CCoin(x, y);
-		DebugOut(L"[DEBUG] Coin object created at (%.1f, %.1f)\n", x, y); // Add debug output
-		break;
-	}
+	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_TRANSCRIPT:
 	{
 		int width = atoi(tokens[3].c_str());
@@ -193,7 +186,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_KOOPAS:
 	{
-		
+
 		obj = new CKoopas(x, y);
 		break;
 	}
@@ -201,7 +194,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float width = (float)atof(tokens[3].c_str());
 		float height = (float)atof(tokens[4].c_str());
 		float spriteId = (float)atof(tokens[5].c_str());
-		obj = new CBackground(x, y,width, height, spriteId); break;
+		obj = new CBackground(x, y, width, height, spriteId); break;
 	}
 	case OBJECT_TYPE_COLORBOX: {
 		int widthCells = atoi(tokens[3].c_str());
@@ -212,7 +205,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CColorBox(
 			x, y,
 			widthCells, heightCells,
- 			color, isPlatform
+			color, isPlatform
 		);
 
 		break;
@@ -225,7 +218,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CGrassPlatform(
 			x, y,
 			widthCells, heightCells,
-			 isPlatform
+			isPlatform
 		);
 
 		break;
@@ -279,10 +272,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		else if (flowerType == 3) {
 			obj->SetState(FLOWER_STATE_LEFT_POP_UP);
-			
+
 		}
 		if (player != nullptr && dynamic_cast<CMario*>(player)) {
- 			((CFlower*)obj)->SetMario((CMario*)player);
+			((CFlower*)obj)->SetMario((CMario*)player);
 		}
 		break;
 	}
@@ -329,15 +322,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_HIDDEN_BUTTON:
 	{
 		int type = atoi(tokens[3].c_str());
-		
-			obj = new CHiddenButton(x, y, type); 
-		
-		
+
+		obj = new CHiddenButton(x, y, type);
+
+
 
 		break;
 	}
-	case OBJECT_TYPE_WINGED_KOOPAS: obj= new CWingedKoopas(x, y); break;
-	
+	case OBJECT_TYPE_WINGED_KOOPAS: obj = new CWingedKoopas(x, y); break;
+
 
 
 	default:
@@ -395,7 +388,7 @@ void CPlayScene::Load()
 	f.open(sceneFilePath);
 
 	// current resource section flag
-	int section = SCENE_SECTION_UNKNOWN;					
+	int section = SCENE_SECTION_UNKNOWN;
 
 	char str[MAX_SCENE_LINE];
 	while (f.getline(str, MAX_SCENE_LINE))
@@ -405,15 +398,15 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
-		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
+		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
 		// data section
 		//
 		switch (section)
-		{ 
-			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
-			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+		{
+		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
+		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 		}
 	}
 
@@ -425,111 +418,73 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-    float cx = 0, cy;
-    CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
+	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
+	// TO-DO: This is a "dirty" way, need a more organized way
 
-    // --- BEGIN: Scene 2 transition pause logic ---
-    if (currentScene->GetId() == 2)
-    {
-        if (!justSwitchedToScene2)
-        {
-            justSwitchedToScene2 = true;
-            scene2PauseStart = GetTickCount64();
-            scene2PauseDone = false;
-        }
+	vector<LPGAMEOBJECT> coObjects;
+	for (size_t i = 1; i < objects.size(); i++)
+	{
+		coObjects.push_back(objects[i]);
+	}
 
-        if (!scene2PauseDone)
-        {
-            if (GetTickCount64() - scene2PauseStart < 2000)
-            {
-                // Pause for 2 seconds: do not increment curentCX or update MovablePlatform
-                cy = 0;
-                cx = curentCX; // fixed camera position
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Update(dt, &coObjects);
+	}
+	CGameManager::GetInstance()->Update(dt, nullptr);
 
-                // Update all objects except MovablePlatform
-                vector<LPGAMEOBJECT> coObjects;
-                for (size_t i = 1; i < objects.size(); i++)
-                    coObjects.push_back(objects[i]);
-                for (size_t i = 0; i < objects.size(); i++)
-                {
-                    // Skip MovablePlatform update during pause
-                    if (dynamic_cast<CMovablePlatform*>(objects[i]) == nullptr)
-                        objects[i]->Update(dt, &coObjects);
-                }
-                CGameManager::GetInstance()->Update(dt, nullptr);
 
-                goto set_camera_and_exit;
-            }
-            else
-            {
-                scene2PauseDone = true;
-            }
-        }
+	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
+	if (player == NULL) return;
 
-        // After pause, normal logic for scene 2
-        vector<LPGAMEOBJECT> coObjects;
-        for (size_t i = 1; i < objects.size(); i++)
-            coObjects.push_back(objects[i]);
-        for (size_t i = 0; i < objects.size(); i++)
-            objects[i]->Update(dt, &coObjects);
-        CGameManager::GetInstance()->Update(dt, nullptr);
+	// Update camera to follow mario
 
-        cy = 0;
-        curentCX += 0.7f;
-        cx = curentCX + 0.7f;
-    }
-    else
-    {
-        justSwitchedToScene2 = false;
-        scene2PauseDone = false;
+	float cx = 0, cy;
+	CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
+	if (currentScene->GetId() == 1) {
+		player->GetPosition(cx, cy);
 
-        vector<LPGAMEOBJECT> coObjects;
-        for (size_t i = 1; i < objects.size(); i++)
-            coObjects.push_back(objects[i]);
-        for (size_t i = 0; i < objects.size(); i++)
-            objects[i]->Update(dt, &coObjects);
-        CGameManager::GetInstance()->Update(dt, nullptr);
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetBackBufferWidth() / 2;
+		cy -= game->GetBackBufferHeight() / 2;
 
-        player->GetPosition(cx, cy);
+		CMario* mario = dynamic_cast<CMario*>(player);
+		if (cy < -215)
+		{
+			cy = -215;
 
-        CGame* game = CGame::GetInstance();
-        cx -= game->GetBackBufferWidth() / 2;
-        cy -= game->GetBackBufferHeight() / 2;
+		}
+		else if (cy < -160)
 
-        CMario* mario = dynamic_cast<CMario*>(player);
-        if (cy < -215)
-        {
-            cy = -215;
-        }
-        else if(cy<-160)
-        {
-            alreadyFly = true;
-        }
-        else if (mario->vy > 0 && alreadyFly == true)
-        {
+		{
+			alreadyFly = true;
+		}
+		else if (mario->vy > 0 && alreadyFly == true)
+		{
 
-        }
-        else if (cy > -40)
-        {
-            cy = 0.0f;
-            alreadyFly = false;
-        }
-        else
-        {
-            cy = 0.0f;
-        }
-        if(mario->teleportState==MARIO_TELEPORT_IN)
-            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+		}
+		else if (cy > -40)
+		{
+			cy = 0.0f;
+			alreadyFly = false;
+		}
 
-        if (cx < 0) cx = 0;
-        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
-    }
+		else
+		{
+			// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
+			cy = 0.0f;
+		}
+		if (mario->teleportState == MARIO_TELEPORT_IN)
+			cy = CAMERA_POSITION_HIDDEN_MAP_Y;
 
-    else{
+		if (cx < 0) cx = 0;
+		if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
+	}
+	else {
 		CMario* mario = dynamic_cast<CMario*>(player);
 		cy = 0;
 		//Mai mot nho doi ve 0.7
-		
+
 		if (mario->teleport == MARIO_TELEPORT_IN && GetTickCount64() - mario->teleport_start <= MARIO_TELEPORT_DURATION && mario->teleport_start != -1)
 		{
 			alreadyTeleport = true;
@@ -544,18 +499,18 @@ void CPlayScene::Update(DWORD dt)
 				alreadyTeleport = false;
 				curentCX += 290;
 				cx = curentCX + 290;
-				
+
 			}
 			else
 			{
-				if (curentCX + 1 >= 1791&& curentCX< 1982)
+				if (curentCX + 1 >= 1791 && curentCX < 1982)
 				{
 					cx = curentCX;
 					curentCX += 0.7;
 
 					cx = curentCX + 0.7;
 				}
-				
+
 				else
 				{
 					curentCX += 0.7;
@@ -571,58 +526,60 @@ void CPlayScene::Update(DWORD dt)
 			curentCX = 2310;
 			cx = 2310;
 		}
-		
-
-
-		
-	
-     
-      /*  player->GetPosition(cx, cy);
-
-        CGame* game = CGame::GetInstance();
-        cx -= game->GetBackBufferWidth() / 2;
-        cy -= game->GetBackBufferHeight() / 2;*/
 
 
 
 
-        //if(cy<-160)
-
-        //{
-        //    alreadyFly = true;
-        //}
-        //else if (mario->vy > 0 && alreadyFly == true)
-        //{
 
 
-        //}
-        //else if (cy > -40)
-        //{
-        //    cy = 0.0f;
-        //    alreadyFly = false;
-        //}
+		/*  player->GetPosition(cx, cy);
 
-
-       /* if (mario->teleportState == MARIO_TELEPORT_IN)
-            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
-
-        if (cx < 0) cx = 0;
-        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;*/
+		  CGame* game = CGame::GetInstance();
+		  cx -= game->GetBackBufferWidth() / 2;
+		  cy -= game->GetBackBufferHeight() / 2;*/
 
 
 
 
-set_camera_and_exit:
-    if (transcript != NULL)
-    {
-        transcript->SetPosition(cx + 10 + 115, cy + 216);
-    }
+		  //if(cy<-160)
 
-    CGame::GetInstance()->SetCamPos(cx, cy);
+		  //{
+		  //    alreadyFly = true;
+		  //}
+		  //else if (mario->vy > 0 && alreadyFly == true)
+		  //{
 
-    PurgeDeletedObjects();
+
+		  //}
+		  //else if (cy > -40)
+		  //{
+		  //    cy = 0.0f;
+		  //    alreadyFly = false;
+		  //}
+
+
+		 /* if (mario->teleportState == MARIO_TELEPORT_IN)
+			  cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+
+		  if (cx < 0) cx = 0;
+		  if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;*/
+
+
+
+
+	}
+	if (transcript != NULL)
+	{
+		//DebugOut(L"[DEBUG] About to call transcript->SetPosition\n");
+		transcript->SetPosition(cx + 10 + 115, cy + 216);
+	}
+
+	// Đặt vị trí camera
+	CGame::GetInstance()->SetCamPos(cx, cy);
+
+
+	PurgeDeletedObjects();
 }
-
 void CPlayScene::Render()
 {
 	for (int i = 0; i < objects.size(); i++)
@@ -645,7 +602,7 @@ void CPlayScene::Clear()
 /*
 	Unload scene
 
-	TODO: Beside objects, we need to clean up sprites, animations and textures as well 
+	TODO: Beside objects, we need to clean up sprites, animations and textures as well
 
 */
 void CPlayScene::Unload()

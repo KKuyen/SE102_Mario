@@ -525,6 +525,93 @@ void CPlayScene::Update(DWORD dt)
         if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
     }
 
+    else{
+		CMario* mario = dynamic_cast<CMario*>(player);
+		cy = 0;
+		//Mai mot nho doi ve 0.7
+		
+		if (mario->teleport == MARIO_TELEPORT_IN && GetTickCount64() - mario->teleport_start <= MARIO_TELEPORT_DURATION && mario->teleport_start != -1)
+		{
+			alreadyTeleport = true;
+			curentCX = 1791;
+			cx = curentCX;
+
+		}
+		else
+		{
+			if (alreadyTeleport == true)
+			{
+				alreadyTeleport = false;
+				curentCX += 290;
+				cx = curentCX + 290;
+				
+			}
+			else
+			{
+				if (curentCX + 1 >= 1791&& curentCX< 1982)
+				{
+					cx = curentCX;
+					curentCX += 0.7;
+
+					cx = curentCX + 0.7;
+				}
+				
+				else
+				{
+					curentCX += 0.7;
+
+					cx = curentCX + 0.7;
+				}
+			}
+
+
+		}
+		if (curentCX > 2310)
+		{
+			curentCX = 2310;
+			cx = 2310;
+		}
+		
+
+
+		
+	
+     
+      /*  player->GetPosition(cx, cy);
+
+        CGame* game = CGame::GetInstance();
+        cx -= game->GetBackBufferWidth() / 2;
+        cy -= game->GetBackBufferHeight() / 2;*/
+
+
+
+
+        //if(cy<-160)
+
+        //{
+        //    alreadyFly = true;
+        //}
+        //else if (mario->vy > 0 && alreadyFly == true)
+        //{
+
+
+        //}
+        //else if (cy > -40)
+        //{
+        //    cy = 0.0f;
+        //    alreadyFly = false;
+        //}
+
+
+       /* if (mario->teleportState == MARIO_TELEPORT_IN)
+            cy = CAMERA_POSITION_HIDDEN_MAP_Y;
+
+        if (cx < 0) cx = 0;
+        if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;*/
+
+
+
+
 set_camera_and_exit:
     if (transcript != NULL)
     {

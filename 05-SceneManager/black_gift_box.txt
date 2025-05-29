@@ -1,0 +1,20 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#Mushroom red
+370000	131	157	146	172	40
+#Mushroom green
+370001	19	24	34	39	100
+#LEAF LEFT
+371001	55	24	70	37	100
+#LEAF RIGHT
+371002	71	66	86	79	100
+#Star
+372000	94	159	107	172	40
+#FlowerBlue
+372001	112	158	127	173	40
+
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+371001	371001	200
+371002	371002	200

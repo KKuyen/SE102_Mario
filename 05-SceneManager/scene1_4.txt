@@ -21,6 +21,7 @@ effect.txt
 mushroom.txt
 giftBox.txt
 leaf.txt
+black_gift_box.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -234,3 +235,7 @@ leaf.txt
 #Transcript
 21	50	50	152	28	210000
 
+#Black gift box
+6	2451	101	16	16	190003
+37	2451	101
+  

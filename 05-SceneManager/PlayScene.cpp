@@ -36,6 +36,7 @@
 #include "CoinBrick.h"
 #include "WingedRedKoopa.h"
 #include "BreakableBrickChain.h"
+#include "BlackGiftBox.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
@@ -223,6 +224,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
+	case BLACK_GIFT_BOX:
+	{
+		obj = new CBlackGiftBox(x, y);
+		objects.push_back(obj);
+	}
+	break;
 	case OBJECT_TYPE_BREAKABLE_BRICK_CHAIN:
 	{
 		if (tokens.size() < 5) return; // Need type, x, y, length, chainType
@@ -526,47 +533,6 @@ void CPlayScene::Update(DWORD dt)
 			curentCX = 2310;
 			cx = 2310;
 		}
-
-
-
-
-
-
-		/*  player->GetPosition(cx, cy);
-
-		  CGame* game = CGame::GetInstance();
-		  cx -= game->GetBackBufferWidth() / 2;
-		  cy -= game->GetBackBufferHeight() / 2;*/
-
-
-
-
-		  //if(cy<-160)
-
-		  //{
-		  //    alreadyFly = true;
-		  //}
-		  //else if (mario->vy > 0 && alreadyFly == true)
-		  //{
-
-
-		  //}
-		  //else if (cy > -40)
-		  //{
-		  //    cy = 0.0f;
-		  //    alreadyFly = false;
-		  //}
-
-
-		 /* if (mario->teleportState == MARIO_TELEPORT_IN)
-			  cy = CAMERA_POSITION_HIDDEN_MAP_Y;
-
-		  if (cx < 0) cx = 0;
-		  if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;*/
-
-
-
-
 	}
 	if (transcript != NULL)
 	{

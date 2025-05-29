@@ -511,7 +511,13 @@ void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
     if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0) || e->ny > 0)
     {
+      
         brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+    }
+    else if(e->ny<0)
+    {
+     
+       
     }
 }
 

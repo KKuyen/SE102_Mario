@@ -24,6 +24,7 @@ breakable_brick.txt
 explodeAni.txt
 bomerang_bro.txt
 bomerang.txt
+black_gift_box.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -367,7 +368,7 @@ bomerang.txt
 6	2785	168	16	16	63004
 
 #Portal 
-50	150	100	165	115	2
+50	2815	120	2830	184	2
 
 
 #Colorbox
@@ -384,12 +385,6 @@ bomerang.txt
 7	1264	153	7	2	2	1
 7	2176	41	3	9	2	1
 7	2144	137	3	3	0	1
-
-
-  
-
-# MARIO
-0	20	10
 
 #Flower
 13	360	146	1
@@ -561,9 +556,13 @@ bomerang.txt
 
 #Coin brick
 
-
-
-
 #Transcript
 21	50	50	152	28	210000
 
+#Black gift box
+6	2691	100	16	16	190003
+37	2691	100
+  
+
+# MARIO
+0	20	10

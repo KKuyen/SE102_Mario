@@ -163,6 +163,9 @@
     <ClCompile Include="BreakableBrickChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BlackGiftBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -322,6 +325,9 @@
     <ClInclude Include="NumberText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BlackGiftBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -359,6 +365,7 @@
     <Text Include="transcript.txt" />
     <Text Include="wingedgoomba.txt" />
     <Text Include="winged_red_koopa.txt" />
+    <Text Include="black_gift_box.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

@@ -34,6 +34,7 @@
 #include "GreenMushroom.h"
 #include "GameManager.h"
 #include "WingedRedKoopa.h"
+#include "BlackGiftBox.h"
 
 #define RENDER_POINT_1  704
 #define RENDER_POINT_2  736
@@ -435,12 +436,20 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
     OnCollisionWithGreenMushroom(e);
     else if (dynamic_cast<CWingedRedKoopa*>(e->obj))
         OnCollisionWithWingedRedKoopa(e);
-}
+	else if (dynamic_cast<CBlackGiftBox*>(e->obj))
+		OnCollisionWithBlackGiftBox(e);
+ }
 void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e) {
     CGreenMushroom *mushroom = dynamic_cast<CGreenMushroom *>(e->obj);
     mushroom->SetState(GREEN_MUSHROOM_STATE_EATEN);
 }
-
+void CMario::OnCollisionWithBlackGiftBox(LPCOLLISIONEVENT e) {
+    CBlackGiftBox* m = dynamic_cast<CBlackGiftBox*>(e->obj);
+    if (e->ny > 0) {
+        m->OpenGiftBox();
+        //this->SetState(MARIO_STATE_WIN);
+    }
+}
 
 void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
 {
@@ -1360,11 +1369,13 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+    // Debug output to verify collision
+    DebugOut(L"[DEBUG] Mario collided with Coin at (%.1f, %.1f)\n", e->obj->x, e->obj->y);
+
     e->obj->Delete();
     coin++;
     CGameManager::GetInstance()->points += 50;
     CGameManager::GetInstance()->coins += 1;
-
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)

@@ -370,7 +370,6 @@ black_gift_box.txt
 #Portal 
 50	2815	120	2830	184	2
 
-
 #Colorbox
 #0: pink, 1: blue, 2: green, 3: white
 #float x, float y, int widthCells, int heightCells,   int color, bool isPlatform

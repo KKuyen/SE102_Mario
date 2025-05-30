@@ -4,6 +4,7 @@
 #include "PlayScene.h"
 
 void CBlackGiftBox::Render() {
+	if (isEaten) return;
 	int aniId = GetAniId();
 	CSprites::GetInstance()->Get(aniId)->Draw(x, y);
 }
@@ -18,8 +19,12 @@ void CBlackGiftBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CBlackGiftBox::OpenGiftBox()
 {
- 
- }
+	LPGAMEOBJECT effectCoinBox = new CEffectPoint(x, y, ID_ANI_FLOWER_EF);
+	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+	p->PushBackGameObject(effectCoinBox);
+	isEaten = true;
+}
 
 void CBlackGiftBox::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

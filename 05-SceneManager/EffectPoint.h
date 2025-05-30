@@ -9,8 +9,6 @@
 #define ID_ANI_POINT_1000 610001
 #define ID_ANI_POINT_200 610002
 
-#define ID_ANI_MUSHROOM_EF 120000
- 
 
 #define EF_POINT_WIDTH 12
 #define EF_POINT_HEIGHT 8
@@ -26,7 +24,7 @@ private:
 	CEffectPoint(float x, float y, int pointt) : CEffect(x, y) {
 		this->point = pointt;
 		this->vy = POINT_VY_START;
- 		if(pointt>0)
+ 		if(pointt>0 && pointt<=1000)
 			CGameManager::GetInstance()->points += pointt;
 		 
 	};

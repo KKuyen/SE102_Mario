@@ -10,9 +10,6 @@ void CEffectPoint::Render()
 	case 100:
 		sprites->Get(ID_ANI_POINT_100)->Draw(x, y);
 		break;
-	case 0:
-		ani->Get(ID_ANI_MUSHROOM_EF)->Render(x, y);
-		break;
 	case 1000:
 		sprites->Get(ID_ANI_POINT_1000)->Draw(x, y);
 		break;
@@ -20,7 +17,7 @@ void CEffectPoint::Render()
 		sprites->Get(ID_ANI_POINT_200)->Draw(x, y);
 		break;
 	default:
-		sprites->Get(ID_ANI_POINT_100)->Draw(x, y);
+		ani->Get(point)->Render(x, y);
 		break;
 	}
 	//RenderBoundingBox();

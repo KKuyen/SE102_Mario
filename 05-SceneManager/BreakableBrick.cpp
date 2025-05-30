@@ -24,6 +24,10 @@ void CBreakableBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + BREAKABLE_BRICK_BBOX_WIDTH;
 	b = t + BREAKABLE_BRICK_BBOX_HEIGHT;
 }
+void CBreakableBrick :: Upp(float& t)
+{
+	t += 1;
+}
 
 void CBreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

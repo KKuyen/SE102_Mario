@@ -1,4 +1,4 @@
-#include "BreakableBrickChain.h"
+﻿#include "BreakableBrickChain.h"
 #include "Game.h"
 #include "PlayScene.h"
 
@@ -32,22 +32,15 @@ CBreakableBrickChain::CBreakableBrickChain(float x, float y, int length, int cha
 }
 void CBreakableBrickChain::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-    if (this->chainType == BREAKABLE_BRICK_CHAIN_TYPE_HORIZONTAL)
+    if (chainType == BREAKABLE_BRICK_CHAIN_TYPE_HORIZONTAL)
     {
-		float cellWidth_div_2 = BREAKABLE_BRICK_BBOX_WIDTH / 2;
-		l = x - cellWidth_div_2;
-		t = y - BREAKABLE_BRICK_BBOX_HEIGHT / 2;
-		r = l + BREAKABLE_BRICK_BBOX_WIDTH * this->length-8;
-		b = t + BREAKABLE_BRICK_BBOX_HEIGHT;
-	}
-	else 
-	{
-		float cellHeight_div_2 =  BREAKABLE_BRICK_BBOX_HEIGHT / 2;
-		l = x - BREAKABLE_BRICK_BBOX_WIDTH / 2;
-		t = y - cellHeight_div_2;
-		r = l + BREAKABLE_BRICK_BBOX_WIDTH;
-		b = t + BREAKABLE_BRICK_BBOX_HEIGHT * this->length;
-	}
-    
-	 
+        l = x - BREAKABLE_BRICK_BBOX_WIDTH / 2;
+        t = y - BREAKABLE_BRICK_BBOX_HEIGHT / 2;
+        r = l + BREAKABLE_BRICK_BBOX_WIDTH * length;
+        b = t + BREAKABLE_BRICK_BBOX_HEIGHT;
+    }
+    else // VERTICAL
+    {
+        l = t = r = b = 0; // Không cần bounding box cho vertical
+    }
 }

@@ -25,6 +25,7 @@ explodeAni.txt
 bomerang_bro.txt
 bomerang.txt
 black_gift_box.txt
+grass.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

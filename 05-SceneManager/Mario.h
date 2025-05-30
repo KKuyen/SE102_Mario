@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
+#include "Game.h" // Ensure the header file for CGame is included
 
 #include "Animation.h"
 #include "Animations.h"
@@ -187,6 +188,18 @@
 
 
 #define MARIO_TRANSITION_TIME 500
+struct MarioState {
+    float x, y; // Vị trí
+    float vx, vy; // Vận tốc
+    int level; // Cấp độ (small, big)
+    int coin; // Số xu
+    int untouchable; // Trạng thái bất tử
+    ULONGLONG untouchable_start; // Thời gian bắt đầu bất tử
+    bool isSitting; // Trạng thái ngồi
+    bool isOnPlatform; // Trạng thái trên nền
+    int nx; // Hướng (1 hoặc -1)
+    int state; // Trạng thái hiện tại
+};
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -270,6 +283,8 @@ public:
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		CGame* cgame = CGame::GetInstance();
+		level = cgame->marioLevel;
 		typeout = 1;
 		onMovable = false;
 		isVisible = true;
@@ -280,7 +295,6 @@ public:
 		isBomerangBroRendered = false;
 		isWon = false;
 
-		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;

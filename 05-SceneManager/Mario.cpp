@@ -64,7 +64,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             isWon = false;
         if (x > 2815)
             CGame::GetInstance()->InitiateSwitchScene(2);
-        //return;
+        return;
     }
     if (teleport_start_out != -1 && GetTickCount64() - teleport_start_out <= MARIO_TELEPORT_DURATION)
 
@@ -2034,4 +2034,6 @@ void CMario::SetLevel(int l)
         y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
     }
     level = l;
+    CGame* cgame = CGame::GetInstance();
+    cgame->marioLevel=l;
 }

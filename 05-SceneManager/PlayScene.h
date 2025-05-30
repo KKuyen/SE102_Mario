@@ -14,7 +14,7 @@ class CPlayScene: public CScene
 protected: 
 
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+					
 	LPGAMEOBJECT transcript;
 	vector<LPGAMEOBJECT> objects;
 
@@ -33,6 +33,7 @@ protected:
 	ULONGLONG scene2CameraDelayStart = 0; // Delay timer for curentCX logic after scene switch
 	
 public: 
+	LPGAMEOBJECT player;
 	bool alreadyTeleport;
 	bool alreadyFly;
 	CPlayScene(int id, LPCWSTR filePath);

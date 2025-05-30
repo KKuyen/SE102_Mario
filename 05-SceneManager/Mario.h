@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "GameObject.h"
+#include "Game.h" // Ensure the header file for CGame is included
 
 #include "Animation.h"
 #include "Animations.h"
@@ -17,8 +18,8 @@
 #define MARIO_JUMP_SPEED_Y		0.40f
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f
 #define MARIO_JUMP_FLY_SPEED_Y 0.5f
-#define MARIO_FLY_ACTIVATION_TIME 1500
-#define MARIO_TELEPORT_DURATION 1500
+#define MARIO_FLY_ACTIVATION_TIME 1100
+#define MARIO_TELEPORT_DURATION 1000
 
 #define MARIO_WHIP_TIME 250 
 
@@ -173,10 +174,10 @@
 #define MARIO_UNTOUCHABLE_TIME 2500
 
 #define MARIO_TELEPORT_IN 1
-#define MARIO_TELEPORT_IN_POSITION_Y 240
-#define MARIO_TELEPORT_IN_POSITION_X_MOVE 145
+#define MARIO_TELEPORT_IN_POSITION_Y 200
+#define MARIO_TELEPORT_IN_POSITION_X_MOVE 163
 #define MARIO_TELEPORT_OUT 2
-#define MARIO_TELEPORT_OUT_POSITION_Y 100
+#define MARIO_TELEPORT_OUT_POSITION_Y 160
 #define MARIO_TELEPORT_NONE 0
 #define MOVABLEPLATFORM_NUM 13
 
@@ -187,6 +188,18 @@
 
 
 #define MARIO_TRANSITION_TIME 500
+struct MarioState {
+    float x, y; // Vị trí
+    float vx, vy; // Vận tốc
+    int level; // Cấp độ (small, big)
+    int coin; // Số xu
+    int untouchable; // Trạng thái bất tử
+    ULONGLONG untouchable_start; // Thời gian bắt đầu bất tử
+    bool isSitting; // Trạng thái ngồi
+    bool isOnPlatform; // Trạng thái trên nền
+    int nx; // Hướng (1 hoặc -1)
+    int state; // Trạng thái hiện tại
+};
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -263,11 +276,16 @@ public:
 	int renderedKoopas;
  	int renderedMovablePlatforms [MOVABLEPLATFORM_NUM];
 	ULONGLONG teleport_start;
+	ULONGLONG teleport_start_out;
 	bool onMovable;
 	bool isBomerangBroRendered;
+	bool typeout;
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		CGame* cgame = CGame::GetInstance();
+		level = cgame->marioLevel;
+		typeout = 1;
 		onMovable = false;
 		isVisible = true;
 		isSitting = false;
@@ -277,7 +295,6 @@ public:
 		isBomerangBroRendered = false;
 		isWon = false;
 
-		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -306,6 +323,7 @@ public:
 		transition_start = -1;
 		target_level = MARIO_LEVEL_BIG;
  		teleport_start = -1;
+		teleport_start_out = -1;
  		lastEnergyUpdate = 0;
  	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

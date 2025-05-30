@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Windows.h>
 #include <d3d10.h>
 #include <d3dx10.h>
@@ -61,6 +61,7 @@ class CGame
 	void _ParseSection_SCENES(string line);
 
 public:
+	int marioLevel;
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
 
@@ -117,6 +118,11 @@ public:
 
 
 	~CGame();
+	CGame()
+	{
+		// ... các khởi tạo khác ...
+		marioLevel = 1; // Giá trị mặc định
+	}
 };
 typedef CGame* LPGAME;
 

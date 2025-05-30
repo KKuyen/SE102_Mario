@@ -53,14 +53,13 @@
 
 
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
     if (isWon && isOnPlatform)
     {
         vx = 0.08f; // tốc độ chạy liên tục
         x += vx * dt;
-		winDistance += vx * dt;
+        winDistance += vx * dt;
         if (winDistance >= 140)
             isWon = false;
         if (x > 2815)
@@ -68,300 +67,342 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
             CGame::GetInstance()->InitiateSwitchScene(2);
         }
         //return;
-    }
-	if (vx == 0 &&(state == MARIO_STATE_RUNNING_RIGHT|| state == MARIO_STATE_RUNNING_LEFT))
-	{
-		isFlying = false;
-		run_start = 0;
-        
-	}
-   
-    CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
-    if(currentScene->GetId()==1){
-       
-       
-
-        if (x > RENDER_POINT_1 && renderedGoombaNum == 0)
-        {
-            LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X1, RENDER_POSITION_Y);
-
-            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(goomba);
-            renderedGoombaNum = 1;
-        }
-        if (x > RENDER_POINT_2 && renderedGoombaNum == 1)
-        {
-            LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X2, RENDER_POSITION_Y);
-
-            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(goomba);
-            renderedGoombaNum = 2;
-        }
-        if (x > RENDER_POINT_3 && renderedGoombaNum == 2)
-        {
-            LPGAMEOBJECT goomba = new CWingedGoomba(RENDER_POSITION_X3, RENDER_POSITION_Y);
-
-            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(goomba);
-            renderedGoombaNum = 3;
-        }
 
     }
-    else {
-        if (x >= BOMERANG_BRO_RENDER_POS && isBomerangBroRendered == false)
-        {
-            CBomerangBro* bomerang_bro = new CBomerangBro(BOMERANG_BRO_X, BOMERANG_BRO_Y);
+    if (teleport_start_out != -1 && GetTickCount64() - teleport_start_out <= MARIO_TELEPORT_DURATION)
 
-            LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-            LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-            p->AddGameObject(bomerang_bro);
-			bomerang_bro->SetMario(this);
-            isBomerangBroRendered = true;
-
-        }
-
-    }
-
-    if (teleport!=0)
     {
-        if(teleport== MARIO_TELEPORT_IN&& GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION&& teleport_start!=-1)
-        {
+
        
-            
             if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
             {
-                x = x - MARIO_TELEPORT_IN_POSITION_X_MOVE;
-                y = MARIO_TELEPORT_IN_POSITION_Y;
+                if (x <= CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE + 10)
+                {
+                    x = CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE ;
+                    y += 0.65;
+                    return;
+                }
+                else
+                {
+                    y -= 0.6511;
+
+                    return;
+
+                }
+            }
+
+        
+        else 
+        {
+
+          
+          
+                x = CHIMMNEY_14_POSITION_X + MARIO_TELEPORT_IN_POSITION_X_MOVE + 110;
+                return;
+           
+
+        }
+      
+    }
+    if (vx == 0 && (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNING_LEFT))
+    {
+        isFlying = false;
+        run_start = 0;
+
+    }
+
+        CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
+        if (currentScene->GetId() == 1) {
+
+
+
+            if (x > RENDER_POINT_1 && renderedGoombaNum == 0)
+            {
+                LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X1, RENDER_POSITION_Y);
+
+                LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+                LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+                p->AddGameObject(goomba);
+                renderedGoombaNum = 1;
+            }
+            if (x > RENDER_POINT_2 && renderedGoombaNum == 1)
+            {
+                LPGAMEOBJECT goomba = new CGoomba(RENDER_POSITION_X2, RENDER_POSITION_Y);
+
+                LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+                LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+                p->AddGameObject(goomba);
+                renderedGoombaNum = 2;
+            }
+            if (x > RENDER_POINT_3 && renderedGoombaNum == 2)
+            {
+                LPGAMEOBJECT goomba = new CWingedGoomba(RENDER_POSITION_X3, RENDER_POSITION_Y);
+
+                LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+                LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+                p->AddGameObject(goomba);
+                renderedGoombaNum = 3;
+            }
+
+        }
+        else {
+            if (x >= BOMERANG_BRO_RENDER_POS && isBomerangBroRendered == false)
+            {
+                CBomerangBro* bomerang_bro = new CBomerangBro(BOMERANG_BRO_X, BOMERANG_BRO_Y);
+
+                LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+                LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+                p->AddGameObject(bomerang_bro);
+                bomerang_bro->SetMario(this);
+                isBomerangBroRendered = true;
+
+            }
+
+        }
+
+        if (teleport != 0)
+        {
+            if (teleport == MARIO_TELEPORT_IN && GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION && teleport_start != -1)
+            {
+
+
+                if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
+                {
+                    x = x - MARIO_TELEPORT_IN_POSITION_X_MOVE;
+                    y = MARIO_TELEPORT_IN_POSITION_Y;
+
+                }
+                else
+                {
+                    x = x + MARIO_TELEPORT_IN_POSITION_X_MOVE + 110;
+
+                }
+                teleport = MARIO_TELEPORT_NONE;
+                teleportState = 1;
+                SetState(MARIO_STATE_WALKING_RIGHT);
+                teleport_start = -1;
+
+                teleport_start_out = GetTickCount64();
+               
+
+            }
+            else if (teleport == MARIO_TELEPORT_OUT && GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION && teleport_start != -1)
+            {
+                y = MARIO_TELEPORT_OUT_POSITION_Y;
+                DebugOut(L"[TELEPORT OUTTTTTTTTTTTTTTTTTTTTTTTTTTTT]");
+
+                teleport = MARIO_TELEPORT_NONE;
+                teleportState = 0;
+                SetState(MARIO_STATE_WALKING_RIGHT);
+                teleport_start = -1;
+               
+                teleport_start_out = GetTickCount64();
               
             }
             else
             {
-                x = x + MARIO_TELEPORT_IN_POSITION_X_MOVE+110;
-       
-            }
-            teleport = MARIO_TELEPORT_NONE;
-            teleportState = 1;
-            SetState(MARIO_STATE_WALKING_RIGHT);
-            teleport_start = -1;
+                if (teleport == MARIO_TELEPORT_IN)
+                {
+                    if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
+                    {
 
-        
+                        x = CHIMMNEY_1_POSITION_X;
+
+                    }
+                    else
+                    {
+                        x = CHIMMNEY_14_POSITION_X;
+                    }
+                    y = y + 0.65;
+                    return;
+                }
+                else
+                {
+                    x = CHIMMNEY_2_POSITION_X;
+                    y = y - 0.65;
+                    return;
+
+                }
+            }
+
         }
-        else if (teleport == MARIO_TELEPORT_OUT && GetTickCount64() - teleport_start > MARIO_TELEPORT_DURATION && teleport_start != -1)
+        if (isOnPlatform)
         {
-            y = MARIO_TELEPORT_OUT_POSITION_Y;
-			DebugOut(L"[TELEPORT OUTTTTTTTTTTTTTTTTTTTTTTTTTTTT]");
-            teleport = MARIO_TELEPORT_NONE;
-            teleportState = 0;
-            SetState(MARIO_STATE_WALKING_RIGHT);
-            teleport_start = -1;
+            isSlowFalling = false;
+            slow_fall_start = 0;
+        }
+        if (level == MARIO_LEVEL_MAX && vy > 0 && isSlowFalling)
+        {
+            // Kiểm tra thời gian kìm tối đa
+            if (GetTickCount64() - slow_fall_start > MARIO_SLOW_FALL_MAX_TIME)
+            {
+                isSlowFalling = false;
+                ay = MARIO_GRAVITY; // Trở lại trọng lực bình thường
+            }
+            else
+            {
+                // Áp dụng tốc độ rơi chậm và trọng lực nhỏ
+                if (vy > MARIO_SLOW_FALL_SPEED_Y)
+                    vy = MARIO_SLOW_FALL_SPEED_Y;
+                ay = MARIO_SLOW_FALL_GRAVITY;
+            }
+        }
+        else if (!isSlowFalling && vy > 0)
+        {
+            // Nếu không kìm, sử dụng trọng lực bình thường
+            ay = MARIO_GRAVITY;
+        }
+        vy += ay * dt;
+        vx += ax * dt;
+
+        if (abs(vx) > abs(maxVx)) vx = maxVx;
+
+        if (!isOnPlatform)
+        {
+            beforeLand = true;
+        }
+        if (isOnPlatform && beforeLand)
+        {
+            isFlying = false;
+            run_start = 0;
+            beforeLand = false;
+        }
+        if (state == MARIO_STATE_SLIP_RIGHT)
+        {
+            if (vx <= 0)
+            {
+                SetState(MARIO_STATE_IDLE);
+            }
+        }
+        if (state == MARIO_STATE_SLIP_LEFT)
+        {
+            if (vx >= 0)
+            {
+                SetState(MARIO_STATE_IDLE);
+            }
+        }
+        // Kiểm tra thời gian giữ nút chạy để kích hoạt bay
+        if (level == MARIO_LEVEL_MAX && run_start != 0)
+        {
+            if (GetTickCount64() - run_start >= MARIO_FLY_ACTIVATION_TIME)
+            {
+                isFlying = true;
+            }
+        }
+        // reset untouchable timer if untouchable time has passed
+        if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+        {
+            untouchable_start = 0;
+            untouchable = 0;
+        }
+        // Update held object position
+        if (heldObject != NULL)
+        {
+            float mx, my;
+            GetPosition(mx, my);
+            if (dynamic_cast<CKoopas*>(heldObject))
+            {
+                CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
+                if (GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
+                {
+                    koopas->SetVy(KOOPAS_JUMP_SPEED);
+                    koopas->ay = KOOPAS_GRAVITY;
+                    koopas->nx = nx;
+                    koopas->SetState(KOOPAS_STATE_WALKING);
+                    SetHolding(false, nullptr);
+                    hold_start = 0;
+                    if (level > MARIO_LEVEL_SMALL)
+                    {
+                        level = level - 1;
+                        StartUntouchable();
+                    }
+                    else
+                    {
+                        DebugOut(L">>> Mario DIE >>> \n");
+                        SetState(MARIO_STATE_DIE);
+                    }
+                }
+                else
+                {
+                    heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
+                }
+            }
+            else if (dynamic_cast<CWingedKoopas*>(heldObject))
+            {
+                CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
+                if (GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
+                {
+                    koopas->SetVy(KOOPAS_JUMP_SPEED);
+                    koopas->ay = KOOPAS_GRAVITY;
+                    koopas->nx = nx;
+                    koopas->SetState(KOOPAS_STATE_WALKING);
+                    SetHolding(false, nullptr);
+                    hold_start = 0;
+                    if (level > MARIO_LEVEL_SMALL)
+                    {
+                        level = level - 1;
+                        StartUntouchable();
+                    }
+                    else
+                    {
+                        DebugOut(L">>> Mario DIE >>> \n");
+                        SetState(MARIO_STATE_DIE);
+                    }
+                }
+                else
+                {
+                    heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
+                }
+            }
+        }
+        // Kiểm tra thời gian chờ để biến thành Mario chồn
+        if (isWaitingForLevelUp && GetTickCount() - timeWaitingStart >= 400)
+        {
+            SetLevel(MARIO_LEVEL_MAX);
+            isVisible = true;
+            isWaitingForLevelUp = false;
+        }
+        // Không cập nhật vị trí nếu Mario đang hóa chồn
+        if (!isVisible)
+        {
+            vx = 0;
+            vy = 0;
+            x = saved_x;
+            y = saved_y;
+            return;
+        }
+        //isOnPlatform = false;
+        CCollision::GetInstance()->Process(this, dt, coObjects);
+
+        // --- ENERGY SYSTEM ---
+        int runningState = (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT);
+        int& energy = CGameManager::GetInstance()->energy;
+        ULONGLONG now = GetTickCount64();
+        const int ENERGY_MAX = 6;
+        const DWORD ENERGY_INTERVAL = 200;
+
+        if (lastEnergyUpdate == 0) lastEnergyUpdate = now;
+
+        if (runningState)
+        {
+            if (energy < ENERGY_MAX && now - lastEnergyUpdate >= ENERGY_INTERVAL)
+            {
+                energy++;
+                if (energy > ENERGY_MAX) energy = ENERGY_MAX;
+                lastEnergyUpdate = now;
+            }
         }
         else
         {
-            if (teleport == MARIO_TELEPORT_IN)
+            if (energy > 0 && now - lastEnergyUpdate >= ENERGY_INTERVAL)
             {
-                if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
-                {
-
-                    x = CHIMMNEY_1_POSITION_X;
-                 
-                }
-                else
-                {
-                    x = CHIMMNEY_14_POSITION_X;
-                }
-                y = y + 0.65;
-                return;
-            }
-            else
-            {
-                x = CHIMMNEY_2_POSITION_X;
-                y = y - 0.65;
-                return;
-
+                energy--;
+                if (energy < 0) energy = 0;
+                lastEnergyUpdate = now;
             }
         }
-      
-    }
-    if (isOnPlatform)
-    {
-        isSlowFalling = false;
-        slow_fall_start = 0;
-    }
-    if (level == MARIO_LEVEL_MAX && vy > 0 && isSlowFalling)
-    {
-        // Kiểm tra thời gian kìm tối đa
-        if (GetTickCount64() - slow_fall_start > MARIO_SLOW_FALL_MAX_TIME)
-        {
-             isSlowFalling = false;
-            ay = MARIO_GRAVITY; // Trở lại trọng lực bình thường
-        }
-        else
-        {
-             // Áp dụng tốc độ rơi chậm và trọng lực nhỏ
-            if (vy > MARIO_SLOW_FALL_SPEED_Y)
-                vy = MARIO_SLOW_FALL_SPEED_Y;
-            ay = MARIO_SLOW_FALL_GRAVITY;
-        }
-    }
-    else if (!isSlowFalling && vy > 0)
-    {
-        // Nếu không kìm, sử dụng trọng lực bình thường
-        ay = MARIO_GRAVITY;
-    }
-    vy += ay * dt;
-    vx += ax * dt;
 
-    if (abs(vx) > abs(maxVx)) vx = maxVx;
-
-    if (!isOnPlatform)
-    {
-        beforeLand = true;
     }
-    if (isOnPlatform && beforeLand)
-    {
-        isFlying = false;
-        run_start = 0;
-        beforeLand = false;
-    }
-    if (state == MARIO_STATE_SLIP_RIGHT)
-    {
-        if (vx <= 0)
-        {
-            SetState(MARIO_STATE_IDLE);
-        }
-    }
-    if (state == MARIO_STATE_SLIP_LEFT)
-    {
-        if (vx >= 0)
-        {
-            SetState(MARIO_STATE_IDLE);
-        }
-    }
-    // Kiểm tra thời gian giữ nút chạy để kích hoạt bay
-    if (level == MARIO_LEVEL_MAX && run_start != 0)
-    {
-        if (GetTickCount64() - run_start >= MARIO_FLY_ACTIVATION_TIME)
-        {
-            isFlying = true;
-        }
-    }
-    // reset untouchable timer if untouchable time has passed
-    if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
-    {
-        untouchable_start = 0;
-        untouchable = 0;
-    }
-    // Update held object position
-    if (heldObject != NULL)
-    {
-        float mx, my;
-        GetPosition(mx, my);
-        if (dynamic_cast<CKoopas*>(heldObject))
-        {
-            CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
-            if (GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
-            {
-                koopas->SetVy(KOOPAS_JUMP_SPEED);
-                koopas->ay = KOOPAS_GRAVITY;
-                koopas->nx = nx;
-                koopas->SetState(KOOPAS_STATE_WALKING);
-                SetHolding(false, nullptr);
-                hold_start = 0;
-                if (level > MARIO_LEVEL_SMALL)
-                {
-                    level = level - 1;
-                    StartUntouchable();
-                }
-                else
-                {
-                    DebugOut(L">>> Mario DIE >>> \n");
-                    SetState(MARIO_STATE_DIE);
-                }
-            }
-            else
-            {
-                heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
-            }
-        }
-        else if (dynamic_cast<CWingedKoopas*>(heldObject))
-        {
-            CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
-            if (GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
-            {
-                koopas->SetVy(KOOPAS_JUMP_SPEED);
-                koopas->ay = KOOPAS_GRAVITY;
-                koopas->nx = nx;
-                koopas->SetState(KOOPAS_STATE_WALKING);
-                SetHolding(false, nullptr);
-                hold_start = 0;
-                if (level > MARIO_LEVEL_SMALL)
-                {
-                    level = level - 1;
-                    StartUntouchable();
-                }
-                else
-                {
-                    DebugOut(L">>> Mario DIE >>> \n");
-                    SetState(MARIO_STATE_DIE);
-                }
-            }
-            else
-            {
-                heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
-            }
-        }
-    }
-    // Kiểm tra thời gian chờ để biến thành Mario chồn
-    if (isWaitingForLevelUp && GetTickCount() - timeWaitingStart >= 400)
-    {
-        SetLevel(MARIO_LEVEL_MAX);
-        isVisible = true;
-        isWaitingForLevelUp = false;
-    }
-    // Không cập nhật vị trí nếu Mario đang hóa chồn
-    if (!isVisible)
-    {
-        vx = 0;
-        vy = 0;
-        x = saved_x;
-        y = saved_y;
-        return;
-    }
-    //isOnPlatform = false;
-    CCollision::GetInstance()->Process(this, dt, coObjects);
-
-    // --- ENERGY SYSTEM ---
-    int runningState = (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT);
-    int &energy = CGameManager::GetInstance()->energy;
-    ULONGLONG now = GetTickCount64();
-    const int ENERGY_MAX = 6;
-    const DWORD ENERGY_INTERVAL = 200;
-
-    if (lastEnergyUpdate == 0) lastEnergyUpdate = now;
-
-    if (runningState)
-    {
-        if (energy < ENERGY_MAX && now - lastEnergyUpdate >= ENERGY_INTERVAL)
-        {
-            energy++;
-            if (energy > ENERGY_MAX) energy = ENERGY_MAX;
-            lastEnergyUpdate = now;
-        }
-    }
-    else
-    {
-        if (energy > 0 && now - lastEnergyUpdate >= ENERGY_INTERVAL)
-        {
-            energy--;
-            if (energy < 0) energy = 0;
-            lastEnergyUpdate = now;
-        }
-    }
- 
-}
 
 void CMario::OnNoCollision(DWORD dt)
 {
@@ -1606,16 +1647,20 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdMax()
 {
     int aniId = -1;
+
+    if (teleport != 0||(teleport_start_out!=-1&& GetTickCount64()- teleport_start_out<= MARIO_TELEPORT_DURATION))
+         {
+        aniId = ID_ANI_MARIO_DIVE_IN;
+        return aniId;
+    }
+
 	if (isWon)
 	{
 		aniId = ID_ANI_MARIO_MAX_WALKING_RIGHT;
 		return aniId;
 	}
-    if (teleport != 0)
-    {
-        aniId = ID_ANI_MARIO_DIVE_IN;
-        return aniId;
-    }
+ 
+   
     if (isSlowFalling)
     {
         if (nx > 0)
@@ -1992,4 +2037,6 @@ void CMario::SetLevel(int l)
         y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
     }
     level = l;
+    CGame* cgame = CGame::GetInstance();
+    cgame->marioLevel=l;
 }

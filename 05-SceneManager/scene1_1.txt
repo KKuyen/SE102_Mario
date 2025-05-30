@@ -370,7 +370,7 @@ grass.txt
 6	2785	168	16	16	63004
 
 #Portal 
-50	2815	120	2830	184	2
+50	2815	200	2870	184	2
 
 #Colorbox
 #0: pink, 1: blue, 2: green, 3: white

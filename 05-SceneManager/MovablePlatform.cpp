@@ -1,6 +1,7 @@
-#include "MovablePlatform.h"
+﻿#include "MovablePlatform.h"
 #include "Mario.h"
 #include "Game.h"
+#include "Debug.h"
 
 void CMovablePlatform::Render()
 {
@@ -29,9 +30,11 @@ void CMovablePlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else {
 		float cx, cy;
 		CGame::GetInstance()->GetCamPos(cx, cy);
-		if (x <= cx + SCREEN_WIDTH) {
-			isActive = 1;
-		}
+ 		if(cx<2540)
+			if (x < cx + SCREEN_WIDTH) {
+ 				isActive = 1;
+			}
+		
 	}
 }
  

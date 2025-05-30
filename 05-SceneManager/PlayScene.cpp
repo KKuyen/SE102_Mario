@@ -50,7 +50,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	curentCX = 10;
 }
 
-
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
@@ -62,6 +61,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define MAX_SCENE_LINE 1024
 #define CAMERA_POSITION_HIDDEN_MAP_Y 192
 #define RIGH_MAP_LIMIT 2540
+#define SCENE_2_PAUSE_DURATION 2000 // 2 giây dừng camera
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -332,13 +332,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		obj = new CHiddenButton(x, y, type);
 
-
-
 		break;
 	}
 	case OBJECT_TYPE_WINGED_KOOPAS: obj = new CWingedKoopas(x, y); break;
-
-
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
@@ -347,7 +343,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// General object setup
 	obj->SetPosition(x, y);
-
 
 	objects.push_back(obj);
 }
@@ -419,9 +414,15 @@ void CPlayScene::Load()
 
 	f.close();
 
+	// Đánh dấu nếu vừa chuyển sang scene 2
+	if (id == 2)
+	{
+		justSwitchedToScene2 = true;
+		isSwitchedToScene2 = true;
+	}
+
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
-
 
 void CPlayScene::Update(DWORD dt)
 {
@@ -440,12 +441,10 @@ void CPlayScene::Update(DWORD dt)
 	}
 	CGameManager::GetInstance()->Update(dt, nullptr);
 
-
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
 	// Update camera to follow mario
-
 	float cx = 0, cy;
 	CScene* currentScene = CGame::GetInstance()->GetCurrentScene();
 	if (currentScene->GetId() == 1) {
@@ -459,23 +458,19 @@ void CPlayScene::Update(DWORD dt)
 		if (cy < -215)
 		{
 			cy = -215;
-
 		}
 		else if (cy < -160)
-
 		{
 			alreadyFly = true;
 		}
 		else if (mario->vy > 0 && alreadyFly == true)
 		{
-
 		}
 		else if (cy > -40)
 		{
 			cy = 0.0f;
 			alreadyFly = false;
 		}
-
 		else
 		{
 			// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
@@ -490,48 +485,62 @@ void CPlayScene::Update(DWORD dt)
 	else {
 		CMario* mario = dynamic_cast<CMario*>(player);
 		cy = 0;
-		//Mai mot nho doi ve 0.7
 
-		if (mario->teleport == MARIO_TELEPORT_IN && GetTickCount64() - mario->teleport_start <= MARIO_TELEPORT_DURATION && mario->teleport_start != -1)
+		// Kiểm tra nếu vừa chuyển sang scene 2
+		if (justSwitchedToScene2 && !scene2PauseDone)
 		{
-			alreadyTeleport = true;
-			curentCX = 1791;
-			cx = curentCX;
+			if (scene2PauseStart == 0)
+			{
+				scene2PauseStart = GetTickCount64(); // Bắt đầu khoảng dừng
+			}
 
+			ULONGLONG now = GetTickCount64();
+			if (now - scene2PauseStart >= SCENE_2_PAUSE_DURATION)
+			{
+				scene2PauseDone = true; // Kết thúc khoảng dừng
+				justSwitchedToScene2 = false;
+			}
+
+			// Giữ camera cố định trong thời gian dừng
+			cx = curentCX;
 		}
 		else
 		{
-			if (alreadyTeleport == true)
+			// Logic camera bình thường sau khi dừng
+			if (mario->teleport == MARIO_TELEPORT_IN && GetTickCount64() - mario->teleport_start <= MARIO_TELEPORT_DURATION && mario->teleport_start != -1)
 			{
-				alreadyTeleport = false;
-				curentCX += 290;
-				cx = curentCX + 290;
-
+				alreadyTeleport = true;
+				curentCX = 1791;
+				cx = curentCX;
 			}
 			else
 			{
-				if (curentCX + 1 >= 1791 && curentCX < 1982)
+				if (alreadyTeleport == true)
 				{
-					cx = curentCX;
-					curentCX += 0.7;
-
-					cx = curentCX + 0.7;
+					alreadyTeleport = false;
+					curentCX += 290;
+					cx = curentCX + 290;
 				}
-
 				else
 				{
-					curentCX += 0.7;
-
-					cx = curentCX + 0.7;
+					if (curentCX + 1 >= 1791 && curentCX < 1982)
+					{
+						cx = curentCX;
+						curentCX += 0.7;
+						cx = curentCX + 0.7;
+					}
+					else
+					{
+						curentCX += 0.7;
+						cx = curentCX + 0.7;
+					}
 				}
 			}
-
-
-		}
-		if (curentCX > 2310)
-		{
-			curentCX = 2310;
-			cx = 2310;
+			if (curentCX > 2310)
+			{
+				curentCX = 2310;
+				cx = 2310;
+			}
 		}
 	}
 	if (transcript != NULL)
@@ -543,9 +552,9 @@ void CPlayScene::Update(DWORD dt)
 	// Đặt vị trí camera
 	CGame::GetInstance()->SetCamPos(cx, cy);
 
-
 	PurgeDeletedObjects();
 }
+
 void CPlayScene::Render()
 {
 	for (int i = 0; i < objects.size(); i++)
@@ -569,7 +578,6 @@ void CPlayScene::Clear()
 	Unload scene
 
 	TODO: Beside objects, we need to clean up sprites, animations and textures as well
-
 */
 void CPlayScene::Unload()
 {
@@ -603,6 +611,7 @@ void CPlayScene::PurgeDeletedObjects()
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
 }
+
 void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 {
 	if (400 <= objects.size()) {
@@ -612,6 +621,7 @@ void CPlayScene::AddGameObject(LPGAMEOBJECT obj)
 		objects.insert(objects.begin() + 20, obj);
 	}
 }
+
 void CPlayScene::PushBackGameObject(LPGAMEOBJECT obj)
 {
 	objects.push_back(obj);

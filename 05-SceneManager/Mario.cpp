@@ -63,8 +63,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		winDistance += vx * dt;
         if (winDistance >= 140)
             isWon = false;
-        if(x>2815)
+        if (x > 2815)
+        {
             CGame::GetInstance()->InitiateSwitchScene(2);
+        }
         //return;
     }
 	if (vx == 0 &&(state == MARIO_STATE_RUNNING_RIGHT|| state == MARIO_STATE_RUNNING_LEFT))

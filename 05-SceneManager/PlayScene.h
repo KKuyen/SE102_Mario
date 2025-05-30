@@ -30,12 +30,14 @@ protected:
 	bool justSwitchedToScene2 = false;
 	ULONGLONG scene2PauseStart = 0;
 	bool scene2PauseDone = false;
+	ULONGLONG scene2CameraDelayStart = 0; // Delay timer for curentCX logic after scene switch
 	
 public: 
 	bool alreadyTeleport;
 	bool alreadyFly;
 	CPlayScene(int id, LPCWSTR filePath);
 	float curentCX;
+	bool isSwitchedToScene2 = false;
 
 	virtual void Load();
 	virtual void Update(DWORD dt);
@@ -52,6 +54,8 @@ public:
 	int GetIdScene() { return this->id; }
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
+
+	void StartScene2CameraPause(); // Add this function declaration
 };
 
 typedef CPlayScene* LPPLAYSCENE;

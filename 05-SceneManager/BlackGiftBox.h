@@ -30,14 +30,18 @@ protected:
 	float posY;
 	ULONGLONG timer_rotate;
 	bool isEaten;
+	//1: Mushroom, 2: Star, 3: Flower
+	int type;
+
 public:
-	CBlackGiftBox(float x, float y) : CGameObject(x, y)
+	CBlackGiftBox(float x, float y, int type) : CGameObject(x, y)
 	{
 		SetState(GIFTBOX_SPECIAL_STATE_MUSHROOM);
 		posX = x;
 		posY = y;
 		timer_rotate = -1;
 		isEaten = false;
+		this->type = type;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

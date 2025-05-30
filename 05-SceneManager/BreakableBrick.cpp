@@ -14,13 +14,13 @@ void CBreakableBrick::Render()
 		animations->Get(ID_ANI_BREAKABLE_BRICK)->Render(x, y);
 	}
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CBreakableBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BREAKABLE_BRICK_BBOX_WIDTH / 2;
-	t = y - BREAKABLE_BRICK_BBOX_HEIGHT / 2;
+	t = y - BREAKABLE_BRICK_BBOX_HEIGHT / 2+1;
 	r = l + BREAKABLE_BRICK_BBOX_WIDTH;
 	b = t + BREAKABLE_BRICK_BBOX_HEIGHT;
 }

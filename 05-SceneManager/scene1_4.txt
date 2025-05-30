@@ -198,7 +198,7 @@ black_gift_box.txt
 27	1800	185
 
 #Koopas
-3	1078	100	0
+3	1020	100	0
 3	1988	80	0
 
 #Winged red koopas
@@ -214,7 +214,7 @@ black_gift_box.txt
 33	1543	58	8
 
 #Breakable brick
-14	664	58
+14	663	58
 14	1193	74
 14	1208	74
 14	1224	74
@@ -222,7 +222,7 @@ black_gift_box.txt
 14	1544	74
 
 #Hidden button
-16	648	58	3
+16	647	58	3
 16	968	122	2
 
 # MARIO
@@ -237,5 +237,5 @@ black_gift_box.txt
 
 #Black gift box
 6	2451	101	16	16	190003
-37	2451	101
+37	2451	101	1
   

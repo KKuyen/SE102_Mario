@@ -369,7 +369,7 @@ black_gift_box.txt
 6	2785	168	16	16	63004
 
 #Portal 
-#50	120	120	150	184	2
+50	2815	120	2830	184	2
 
 #Colorbox
 #0: pink, 1: blue, 2: green, 3: white
@@ -471,7 +471,7 @@ black_gift_box.txt
 9	656	153	91000	2
 9	704	121	91000	0
 9	1472	137	91000	2
-9	1440	-103	91000	0
+16	1440	-103	3
 
 #Brick Gift Box: x, y, animationId
 14	1952	168	
@@ -578,5 +578,5 @@ black_gift_box.txt
 
 #Black gift box
 6	2691	100	16	16	190003
-37	2691	100
+37	2691	100	3
   

@@ -35,7 +35,7 @@ void CHiddenButton::GetBoundingBox(float& l, float& t, float& r, float& b) {
    else
    {
        l = x - HIDDEN_BUTTON_BBOX_WIDTH / 2;
-       t = y - HIDDEN_BUTTON_BBOX_HEIGHT / 2;
+       t = y - HIDDEN_BUTTON_BBOX_HEIGHT / 2 +1;
        r = l + HIDDEN_BUTTON_BBOX_WIDTH;
        b = t + HIDDEN_BUTTON_BBOX_HEIGHT;
    }

@@ -226,7 +226,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case BLACK_GIFT_BOX:
 	{
-		obj = new CBlackGiftBox(x, y);
+		int type = atoi(tokens[3].c_str());
+		obj = new CBlackGiftBox(x, y, type);
 		objects.push_back(obj);
 	}
 	break;

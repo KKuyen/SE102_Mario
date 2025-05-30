@@ -497,6 +497,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e) {
     CGreenMushroom *mushroom = dynamic_cast<CGreenMushroom *>(e->obj);
     mushroom->SetState(GREEN_MUSHROOM_STATE_EATEN);
+    LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1);
+    LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+    LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+    p->PushBackGameObject(effectPoint);
 }
 void CMario::OnCollisionWithBlackGiftBox(LPCOLLISIONEVENT e) {
     CBlackGiftBox* m = dynamic_cast<CBlackGiftBox*>(e->obj);
@@ -655,6 +659,8 @@ void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
             if (p) p->AddGameObject(giftbox);
             giftbox->Open(this);
+
+
         }
     }
 }

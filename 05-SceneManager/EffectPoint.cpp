@@ -16,6 +16,9 @@ void CEffectPoint::Render()
 	case 200:
 		sprites->Get(ID_ANI_POINT_200)->Draw(x, y);
 		break;
+	case 1:
+		sprites->Get(ID_ANI_1_UP)->Draw(x, y);
+		break;
 	default:
 		ani->Get(point)->Render(x, y);
 		break;

@@ -19,7 +19,23 @@ void CBlackGiftBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CBlackGiftBox::OpenGiftBox()
 {
-	LPGAMEOBJECT effectCoinBox = new CEffectPoint(x, y, ID_ANI_FLOWER_EF);
+	int sprite;
+	switch(type)
+	{
+	case 1: // Mushroom
+		sprite = ID_ANI_MUSHROOM_EF;
+		break;
+	case 2: // Star
+		sprite = ID_ANI_STAR_EF;
+		break;
+	case 3: // Flower
+		sprite = ID_ANI_FLOWER_EF;
+		break;
+	default:
+		sprite = ID_ANI_MUSHROOM_EF;
+		break;
+	}
+	LPGAMEOBJECT effectCoinBox = new CEffectPoint(x, y, sprite);
 	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 	LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
 	p->PushBackGameObject(effectCoinBox);

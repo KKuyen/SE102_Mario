@@ -35,6 +35,7 @@
 #include "GameManager.h"
 #include "WingedRedKoopa.h"
 #include "BlackGiftBox.h"
+#include "SampleKeyEventHandler.h"
 
 #define RENDER_POINT_1  704
 #define RENDER_POINT_2  736
@@ -63,43 +64,39 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         if (winDistance >= 140)
             isWon = false;
         if (x > 2815)
-        {
             CGame::GetInstance()->InitiateSwitchScene(2);
-        }
-        //return;
-
+        return;
     }
     if (teleport_start_out != -1 && GetTickCount64() - teleport_start_out <= MARIO_TELEPORT_DURATION)
 
     {
 
        
-            if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
+        if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
+        {
+            if (x <= CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE + 10)
             {
-                if (x <= CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE + 10)
-                {
-                    x = CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE ;
-                    y += 0.65;
-                    return;
-                }
-                else
-                {
-                    y -= 0.6511;
-
-                    return;
-
-                }
+                x = CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE;
+                y += 0.65;
+                return;
             }
+            else
+            {
+                y -= 0.6511;
 
-        
+                return;
+
+            }
+        }
         else 
         {
 
           
           
-                x = CHIMMNEY_14_POSITION_X + MARIO_TELEPORT_IN_POSITION_X_MOVE + 110;
+                
+            
+                y -= 0.6511;
                 return;
-           
 
         }
       
@@ -174,7 +171,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 }
                 else
                 {
-                    x = x + MARIO_TELEPORT_IN_POSITION_X_MOVE + 110;
+                    x = x + MARIO_TELEPORT_IN_POSITION_X_MOVE + 92;
+                    y += 44;
 
                 }
                 teleport = MARIO_TELEPORT_NONE;
@@ -497,10 +495,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e) {
     CGreenMushroom *mushroom = dynamic_cast<CGreenMushroom *>(e->obj);
     mushroom->SetState(GREEN_MUSHROOM_STATE_EATEN);
-    LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1);
-    LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-    LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-    p->PushBackGameObject(effectPoint);
 }
 void CMario::OnCollisionWithBlackGiftBox(LPCOLLISIONEVENT e) {
     CBlackGiftBox* m = dynamic_cast<CBlackGiftBox*>(e->obj);
@@ -659,8 +653,6 @@ void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
             if (p) p->AddGameObject(giftbox);
             giftbox->Open(this);
-
-
         }
     }
 }
@@ -1850,9 +1842,12 @@ void CMario::SetState(int state)
     {
   
         case MARIO_STATE_HOLD:
-            if (!isHolding) break;
-            break;
+        {
+        if (!isHolding) break;
+        break;
+        }
         case MARIO_STATE_HOLD_RELEASE:
+        {
             hold_start = 0;
             if (isHolding && heldObject != NULL)
             {
@@ -1888,7 +1883,9 @@ void CMario::SetState(int state)
                 }
             }
             break;
+        }
         case MARIO_STATE_RUNNING_RIGHT:
+        {
             if (isSitting) break;
             maxVx = MARIO_RUNNING_SPEED;
             ax = MARIO_ACCEL_RUN_X;
@@ -1896,7 +1893,9 @@ void CMario::SetState(int state)
             StartRunning();
             StartWhip();
             break;
+        }
         case MARIO_STATE_RUNNING_LEFT:
+        {
             if (isSitting) break;
             maxVx = -MARIO_RUNNING_SPEED;
             ax = -MARIO_ACCEL_RUN_X;
@@ -1904,20 +1903,35 @@ void CMario::SetState(int state)
             StartRunning();
             StartWhip();
             break;
+        }
         case MARIO_STATE_WALKING_RIGHT:
+        {
             if (isSitting) break;
             maxVx = MARIO_WALKING_SPEED;
             ax = MARIO_ACCEL_WALK_X;
             nx = 1;
             break;
+        }
         case MARIO_STATE_WALKING_LEFT:
+        {
             if (isSitting) break;
             maxVx = -MARIO_WALKING_SPEED;
             ax = -MARIO_ACCEL_WALK_X;
             nx = -1;
             break;
+        }
         case MARIO_STATE_JUMP:
-            onMovable = false;
+        {
+            CScene* scene = CGame::GetInstance()->GetCurrentScene();
+            CSampleKeyHandler* keyHandler = dynamic_cast<CSampleKeyHandler*>(scene->GetKeyEventHandler());
+            if (keyHandler)
+            {
+                bool holdingS = keyHandler->holdingS;
+                if (!holdingS)
+                {
+                    onMovable = false;
+                }
+            }
             if (isOnPlatform)
             {
                 if (isFlying)
@@ -1930,6 +1944,7 @@ void CMario::SetState(int state)
             }
             else
             {
+
                 if (isFlying && level == MARIO_LEVEL_MAX)
                 {
                     vy = -MARIO_JUMP_FLY_SPEED_Y;
@@ -1937,14 +1952,18 @@ void CMario::SetState(int state)
                 }
             }
             break;
+        }
         case MARIO_STATE_RELEASE_JUMP:
+        {
             if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
             if (vy == 0)
             {
                 vx = 0;
             }
             break;
+        }
         case MARIO_STATE_SIT:
+        {
             isFlying = false;
             StopRunning();
             StopWhip();
@@ -1956,7 +1975,9 @@ void CMario::SetState(int state)
                 y += MARIO_SIT_HEIGHT_ADJUST;
             }
             break;
+        }
         case MARIO_STATE_SIT_RELEASE:
+        {
             if (isSitting)
             {
                 isSitting = false;
@@ -1964,29 +1985,38 @@ void CMario::SetState(int state)
                 y -= MARIO_SIT_HEIGHT_ADJUST;
             }
             break;
+        }
         case MARIO_STATE_IDLE:
+        {
             ax = 0.0f;
             vx = 0.0f;
             break;
+        }
         case MARIO_STATE_DIE:
+        {
             vy = -MARIO_JUMP_DEFLECT_SPEED;
             vx = 0;
             ax = 0;
             break;
+        }
         case MARIO_STATE_SLIP_RIGHT:
+        {
             if (isOnPlatform)
             {
                 maxVx = MARIO_SLIP_SPEED;
                 ax = -MARIO_SLIP_DECEL;
             }
             break;
+        }
         case MARIO_STATE_SLIP_LEFT:
+        {
             if (isOnPlatform)
             {
                 maxVx = -MARIO_SLIP_SPEED;
                 ax = MARIO_SLIP_DECEL;
             }
             break;
+        }
     }
     CGameObject::SetState(state);
 }

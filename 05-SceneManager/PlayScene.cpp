@@ -279,12 +279,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		else if (flowerType == 3) {
 			obj->SetState(FLOWER_STATE_LEFT_POP_UP);
-
 		}
-		if (player != nullptr && dynamic_cast<CMario*>(player)) {
-			((CFlower*)obj)->SetMario((CMario*)player);
-		}
-		break;
+ 		break;
 	}
 	case OBJECT_TYPE_LEAF: obj = new CLeaf(x, y); break;
 	case OBJECT_TYPE_MOVABLEPLATFORM: obj = new CMovablePlatform(x, y); break;
@@ -413,6 +409,16 @@ void CPlayScene::Load()
 	}
 
 	f.close();
+
+	// Sau khi load xong toàn bộ object, gán Mario cho các Flower nếu có
+	if (player != nullptr) {
+		for (size_t i = 0; i < objects.size(); ++i) {
+			CFlower* flower = dynamic_cast<CFlower*>(objects[i]);
+			if (flower) {
+				flower->SetMario((CMario*)player);
+			}
+		}
+	}
 
 	// Đánh dấu nếu vừa chuyển sang scene 2
 	if (id == 2)

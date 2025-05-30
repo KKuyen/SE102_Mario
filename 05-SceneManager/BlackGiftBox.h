@@ -11,6 +11,11 @@
 #define ID_ANI_STAR 372000
 #define ID_ANI_FLOWERBLUE 372001
 
+#define ID_ANI_MUSHROOM_EF 3710000
+#define ID_ANI_FLOWER_EF 3710002
+#define ID_ANI_STAR_EF 3710001
+
+
 #define GIFTBOX_SPECIAL_STATE_MUSHROOM 0
 #define GIFTBOX_SPECIAL_STATE_STAR 1
 #define GIFTBOX_SPECIAL_STATE_FLOWERBLUE 2
@@ -24,6 +29,7 @@ protected:
 	float posX;
 	float posY;
 	ULONGLONG timer_rotate;
+	bool isEaten;
 public:
 	CBlackGiftBox(float x, float y) : CGameObject(x, y)
 	{
@@ -31,6 +37,7 @@ public:
 		posX = x;
 		posY = y;
 		timer_rotate = -1;
+		isEaten = false;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

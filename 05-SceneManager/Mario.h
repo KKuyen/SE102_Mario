@@ -48,6 +48,7 @@
 #define MARIO_STATE_HOLD_RELEASE 801
 #define MARIO_STATE_GROWING 900
 #define MARIO_STATE_SHRINKING 901
+#define MARIO_STATE_WIN 123456
 //#define MARIO_STATE_DIVE_IN_CHIMNNEY 911
 
 
@@ -237,7 +238,8 @@ public:
 	ULONGLONG slow_fall_start;  // Thời gian bắt đầu kìm tốc độ
 	int untouchable;
 	int level;
-
+	bool isWon;
+	float winDistance;
 
 	BOOLEAN isFallingFromHeight;
 
@@ -246,6 +248,7 @@ public:
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 	float maxVx;
+	bool isOpenBlackBox;
 	ULONGLONG run_start;
 
 	bool isVisible;
@@ -275,6 +278,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
 		isBomerangBroRendered = false;
+		isWon = false;
 
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
@@ -288,6 +292,8 @@ public:
 		run_start = 0;
 		whip_start = 0;
 		beforeLand = false;
+		isOpenBlackBox = false;
+		winDistance = 0;
 
 		teleport = 0;
 		teleportState = 0;

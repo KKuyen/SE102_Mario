@@ -55,7 +55,19 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+    if (isWon && isOnPlatform)
+    {
+        vx = 0.08f; // tốc độ chạy liên tục
+        x += vx * dt;
+        winDistance += vx * dt;
+        if (winDistance >= 140)
+            isWon = false;
+        if (x > 2815)
+            CGame::GetInstance()->InitiateSwitchScene(2);
+        //return;
+    }
     if (teleport_start_out != -1 && GetTickCount64() - teleport_start_out <= MARIO_TELEPORT_DURATION)
+
     {
 
        
@@ -485,10 +497,13 @@ void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e) {
 }
 void CMario::OnCollisionWithBlackGiftBox(LPCOLLISIONEVENT e) {
     CBlackGiftBox* m = dynamic_cast<CBlackGiftBox*>(e->obj);
-    if (e->ny > 0) {
-        m->OpenGiftBox();
-        //this->SetState(MARIO_STATE_WIN);
-    }
+   
+     if(isOpenBlackBox==false)
+     {
+         m->OpenGiftBox();
+		 isWon = true;
+         isOpenBlackBox = true;
+     }
 }
 
 void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
@@ -1428,6 +1443,11 @@ int CMario::GetAniIdSmall()
 {
 
     int aniId = -1;
+    if (isWon)
+    {
+        aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
+        return aniId;
+    }
     if (teleport != 0)
     {
         aniId = ID_ANI_MARIO_DIVE_IN;
@@ -1522,7 +1542,13 @@ int CMario::GetAniIdSmall()
 
 int CMario::GetAniIdBig()
 {
+    
     int aniId = -1;
+    if (isWon)
+    {
+ 		aniId = ID_ANI_MARIO_WALKING_RIGHT;
+		return aniId;
+    }
     if (teleport != 0)
     {
         aniId = ID_ANI_MARIO_DIVE_IN;
@@ -1618,11 +1644,20 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdMax()
 {
     int aniId = -1;
+
     if (teleport != 0||(teleport_start_out!=-1&& GetTickCount64()- teleport_start_out<= MARIO_TELEPORT_DURATION))
-    {
+         {
         aniId = ID_ANI_MARIO_DIVE_IN;
         return aniId;
     }
+
+	if (isWon)
+	{
+		aniId = ID_ANI_MARIO_MAX_WALKING_RIGHT;
+		return aniId;
+	}
+ 
+   
     if (isSlowFalling)
     {
         if (nx > 0)
@@ -1765,6 +1800,7 @@ int CMario::GetAniIdMax()
 
 void CMario::Render()
 {
+
     if (isVisible == false)
         return;
     CAnimations* animations = CAnimations::GetInstance();

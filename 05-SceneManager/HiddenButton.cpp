@@ -28,17 +28,20 @@ void CHiddenButton::Render() {
 }
 
 void CHiddenButton::GetBoundingBox(float& l, float& t, float& r, float& b) {  
-   if (type != HIDDEN_BUTTON_TYPE_BUTTON && isActivated == true) // Fixed assignment operator '=' to comparison operator '=='  
-   {  
-      
-   }
-   else
-   {
-       l = x - HIDDEN_BUTTON_BBOX_WIDTH / 2;
-       t = y - HIDDEN_BUTTON_BBOX_HEIGHT / 2 +1;
-       r = l + HIDDEN_BUTTON_BBOX_WIDTH;
-       b = t + HIDDEN_BUTTON_BBOX_HEIGHT;
-   }
- 
+   //if (type != HIDDEN_BUTTON_TYPE_BUTTON && isActivated == true) // Fixed assignment operator '=' to comparison operator '=='  
+   //{  
+   //   
+   //}
+   //else
+   //{
+   //    l = x - HIDDEN_BUTTON_BBOX_WIDTH / 2;
+   //    t = y - HIDDEN_BUTTON_BBOX_HEIGHT / 2 +1;
+   //    r = l + HIDDEN_BUTTON_BBOX_WIDTH;
+   //    b = t + HIDDEN_BUTTON_BBOX_HEIGHT;
+   //}
+    l = x - HIDDEN_BUTTON_BBOX_WIDTH / 2;
+    t = y - HIDDEN_BUTTON_BBOX_HEIGHT / 2 + 1;
+    r = l + HIDDEN_BUTTON_BBOX_WIDTH;
+    b = t + HIDDEN_BUTTON_BBOX_HEIGHT;
   
 }

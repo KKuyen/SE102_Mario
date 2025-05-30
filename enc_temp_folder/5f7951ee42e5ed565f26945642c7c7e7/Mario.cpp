@@ -69,7 +69,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 }
                 else
                 {
-                    y -= 0.6511;
+                    y -= 0.651;
 
                     return;
 

@@ -7,7 +7,7 @@ void CHiddenButton::Render() {
     {
         CAnimations* animations = CAnimations::GetInstance();
         animations->Get(ID_ANI_BREAKABLE_BRICK)->Render(x, y);
-        RenderBoundingBox(); // Có thể bật để debug
+        //RenderBoundingBox();  
 
     }
     else
@@ -16,7 +16,7 @@ void CHiddenButton::Render() {
         {
             CSprites* s = CSprites::GetInstance();
             s->Get(SPRITE_ID_HIDDEN)->Draw(x, y);
-            RenderBoundingBox(); // Có thể bật để debug
+            //RenderBoundingBox();  
         }
         else
         {

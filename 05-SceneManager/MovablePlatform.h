@@ -4,7 +4,6 @@
 #include "Animation.h"
 #include "Animations.h"
 
-
 #define ID_MOVABLE_PLATFORM1 270000
 #define ID_MOVABLE_PLATFORM2 270001
 #define ID_MOVABLE_PLATFORM3 270002

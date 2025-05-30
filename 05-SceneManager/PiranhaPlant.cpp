@@ -107,7 +107,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CPiranhaPlant::Render()
 {
     CAnimations::GetInstance()->Get(PIRANHA_PLANT_ANI_UP_DOWN)->Render(x, y);
-    RenderBoundingBox();
+    //RenderBoundingBox();
 }
 
 void CPiranhaPlant::SetState(int state)

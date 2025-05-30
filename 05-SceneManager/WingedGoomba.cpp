@@ -164,7 +164,7 @@ void CWingedGoomba::Render()
 		aniId = ID_ANI_WINGED_GOOMBA_FLYING_LEFT;
 		CAnimations::GetInstance()->Get(aniId)->Render(x -WINGED_GOOMBA_BBOX_WIDTH / 2, y - WINGED_GOOMBA_BBOX_HEIGHT / 2);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 }
 

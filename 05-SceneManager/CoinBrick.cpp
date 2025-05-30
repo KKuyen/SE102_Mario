@@ -27,7 +27,7 @@ void CCoinBrick::Render()
 		return;
 	}
 	animations->Get(ANI)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void CCoinBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (state == GIFTBOX_STATE_BOUNCE)

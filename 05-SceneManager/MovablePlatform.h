@@ -12,6 +12,7 @@
 #define PLATFORM_SPEED 0.03f
 #define PLATFORM_GRAVITY 0.04f
 #define SCREEN_WIDTH 270
+#define MAX_SCENE_X 2540
 
 class CMovablePlatform : public CGameObject {
 public:

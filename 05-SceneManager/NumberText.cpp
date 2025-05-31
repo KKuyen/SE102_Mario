@@ -4,7 +4,7 @@
 
 void CNumberText::Render() {
 	if (energy>=0) {
-        if (energy == 6)
+        if (energy == MAX_ENEGY)
         {
             CSprites* s = CSprites::GetInstance();
             CAnimations* animations = CAnimations::GetInstance();

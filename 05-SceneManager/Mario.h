@@ -12,8 +12,8 @@
 
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
-#define MARIO_SLIP_SPEED 0.5f       // Tốc độ trượt ban đầu
-#define MARIO_SLIP_DECEL 0.00015f     // Gia tốc giảm dần khi trượt
+#define MARIO_SLIP_SPEED 0.3f       // Tốc độ trượt ban đầu
+#define MARIO_SLIP_DECEL 0.00025f     // Gia tốc giảm dần khi trượt
 
 #define MARIO_JUMP_SPEED_Y		0.40f
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f

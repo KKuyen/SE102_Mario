@@ -13,13 +13,18 @@
 #define BREAKABLE_BRICK_STATE_NORMAL 100
 #define BREAKABLE_BRICK_STATE_BREAK 200
 #define BREAKABLE_BRICK_STATE_INVISIBLE 300
-
-#define BREAKABLE_BRICK_STATE_COIN 400
+ #define BREAKABLE_BRICK_STATE_MOVE 400
+#define BREAKABLE_BRICK_STATE_COIN 455
+#define COIN_STATE_TIMEOUT 5000
+#define BREAKABLE_BRICK_MOVE_SPEED_Y -0.2f
+#define BREAKABLE_BRICK_GRAVITY 0.0025f
 class CBreakableBrick : public CGameObject {
 protected:
-	int state;
+	
 
 public:
+	int state;
+	ULONGLONG coin_state_start;
 	int initx;
 	int inity;
 	CBreakableBrick(float x, float y) : CGameObject(x, y) {
@@ -35,7 +40,7 @@ public:
 
 	void SetState(int state);
 	int IsCollidable() { return 1; }
-	int IsBlocking() { return 1; }
+	int IsBlocking() { return (state == BREAKABLE_BRICK_STATE_NORMAL); }
 
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 };

@@ -51,9 +51,6 @@
 #define BOMERANG_BRO_RENDER_POS 2200
 #define BOMERANG_BRO_X 2105
 #define BOMERANG_BRO_Y 122
-#define MAX_SCENE_X 2815
-#define WIN_RUN_SPEED 0.08f
-#define WIN_RUN_DISTANCE 200
 
 
 
@@ -67,12 +64,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
     if (isWon && isOnPlatform)
     {
-        vx = WIN_RUN_SPEED; 
+        vx = 0.08f; // tốc độ chạy liên tục
         x += vx * dt;
         winDistance += vx * dt;
-        if (winDistance >= WIN_RUN_DISTANCE)
+        if (winDistance >= 140)
             isWon = false;
-        if (x > MAX_SCENE_X)
+        if (x > 2815)
             CGame::GetInstance()->InitiateSwitchScene(2);
         return;
     }
@@ -867,8 +864,6 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
             p->AddGameObject(exp);
             flower->Delete();
-            LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
-            p->PushBackGameObject(effectPoint);
         }
         else if (level > MARIO_LEVEL_SMALL)
         {

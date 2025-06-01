@@ -9,6 +9,7 @@
 #include "GiftBox.h"
 #include "WingedKoopas.h"
 #include "WIngedGoomba.h"
+#include "BreakableBrick.h"
 CWingedKoopas::CWingedKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -49,6 +50,16 @@ void CWingedKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CWingedKoopas*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) {
 		mario = dynamic_cast<CMario*>(e->obj);
+	}
+	if (dynamic_cast<CBreakableBrick*>(e->obj)) {
+		CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
+		if (state == WINGED_KOOPAS_STATE_SHELL_MOVING)
+		{
+			nx = -nx;
+			vx = -vx;
+			brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+		}
+
 	}
 	if (state == WINGED_KOOPAS_STATE_REVERSE &&
 		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))

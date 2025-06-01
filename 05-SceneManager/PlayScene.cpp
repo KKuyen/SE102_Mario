@@ -489,7 +489,7 @@ void CPlayScene::Update(DWORD dt)
 		if (cx < 0) cx = 0;
 		if (cx > RIGH_MAP_LIMIT) cx = RIGH_MAP_LIMIT;
 	}
-	else {
+	else { // Scene ID = 2 (map 1-4)
 		CMario* mario = dynamic_cast<CMario*>(player);
 		cy = 0;
 
@@ -533,13 +533,23 @@ void CPlayScene::Update(DWORD dt)
 					if (curentCX + 1 >= 1791 && curentCX < 1982)
 					{
 						cx = curentCX;
-						curentCX += 0.7;
-						cx = curentCX + 0.7;
+						curentCX += CAM_SPEED_1_4;
+						cx = curentCX + CAM_SPEED_1_4;
 					}
 					else
 					{
-						curentCX += 0.7;
-						cx = curentCX + 0.7;
+						curentCX += CAM_SPEED_1_4;
+						cx = curentCX + CAM_SPEED_1_4;
+					}
+
+ 					float mario_x, mario_y;
+					mario->GetPosition(mario_x, mario_y);
+					if (mario_x <= cx+10)
+					{
+ 						mario->vx = MARIO_AUTO_SPEED;
+						mario->nx = 1;    
+						mario->SetState(MARIO_STATE_WALKING_RIGHT); 
+						DebugOut(L"[INFO] Mario touched left edge of camera at cx = %.1f\n", cx );
 					}
 				}
 			}
@@ -553,7 +563,7 @@ void CPlayScene::Update(DWORD dt)
 	if (transcript != NULL)
 	{
 		//DebugOut(L"[DEBUG] About to call transcript->SetPosition\n");
-		transcript->SetPosition(cx + 10 + 115, cy + 216);
+		transcript->SetPosition(cx + TRANSCRIPT_POSITION_X, cy + TRANSCRIPT_POSITION_Y);
 	}
 
 	// Đặt vị trí camera

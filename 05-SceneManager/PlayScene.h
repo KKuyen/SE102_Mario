@@ -6,7 +6,11 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
-//#include "Koopas.h"
+#define CAM_SPEED_1_4	0.7
+#define MARIO_AUTO_SPEED	0.4f
+#define TRANSCRIPT_POSITION_X 125
+#define TRANSCRIPT_POSITION_Y 216
+
 
 
 class CPlayScene: public CScene

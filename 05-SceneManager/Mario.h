@@ -11,7 +11,8 @@
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_RUN_X	0.0006f
+#define MARIO_ACCEL_RUN_ACTIVE_X	0.0007f
 #define MARIO_SLIP_SPEED 0.3f       // Tốc độ trượt ban đầu
 #define MARIO_SLIP_DECEL 0.00025f     // Gia tốc giảm dần khi trượt
 
@@ -22,7 +23,7 @@
 #define MARIO_MAX_FLY_ACTIVATION_TIME 2350
 #define MARIO_TELEPORT_DURATION 1000
 
-#define MARIO_WHIP_TIME 150 
+#define MARIO_WHIP_TIME 120
 
 
 

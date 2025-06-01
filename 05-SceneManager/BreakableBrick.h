@@ -41,6 +41,6 @@ public:
 	void SetState(int state);
 	int IsCollidable() { return 1; }
 	int IsBlocking() { return (state == BREAKABLE_BRICK_STATE_NORMAL); }
-
+	
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 };

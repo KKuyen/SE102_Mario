@@ -334,6 +334,7 @@ void CKoopas::SetState(int state)
 		revive_start = 0;
 		break;
 	case KOOPAS_STATE_SHELL:
+		y -= 2;
 		
 		vx = 0;
 		

@@ -157,7 +157,7 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// Check if the Winged Koopas is on the ground
 		bool isOnGround = false;
 
-		// Iterate through the list of objects to check if it's standing on a platform, brick, or color box
+		// Iterate through the list of objects to check if it's standing on `a platform, brick, or color box
 		for (LPGAMEOBJECT obj : *coObjects)
 		{
 			if (dynamic_cast<CPlatform*>(obj) || dynamic_cast<CBrick*>(obj) ||

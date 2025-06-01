@@ -651,7 +651,7 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
 {
     CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
-    if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)) && hiddenbutton->isActivated == false)
+    if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)&& e->nx!=0) && hiddenbutton->isActivated == false)
     {
         hiddenbutton->isActivated = true;
         float bx, by;
@@ -716,9 +716,11 @@ void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
 {
-    if (e->ny > 0)
-    {
-        return;
+    if (e->nx != 0) {
+        vx = -0.1f;
+        nx = 1;
+		SetState(MARIO_STATE_WALKING_RIGHT);
+
     }
     onMovable = true;
     CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj);
@@ -728,7 +730,7 @@ void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
         // Mario sẽ bám vận tốc rơi của platform
         y = movablePlatform->y;
         movablePlatform->Falling();
-    }
+    }   
 }
 
 void CMario::OnCollisionWithBomerang(LPCOLLISIONEVENT e)

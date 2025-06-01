@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "GameObject.h"
 #include "Animation.h"
@@ -10,7 +10,7 @@
 #define PLATFORM_WIDTH 48
 #define PLATFORM_HEIGHT 16
 #define PLATFORM_SPEED 0.03f
-#define PLATFORM_GRAVITY 0.04f
+#define PLATFORM_GRAVITY 0.06f
 #define SCREEN_WIDTH 270
 #define MAX_SCENE_X 2540
 
@@ -28,8 +28,8 @@ public:
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int IsBlocking() { return 1; }
-	virtual int IsCollidable() { return 1; };
+	int IsBlocking()  { return 1; } // Đảm bảo platform là vật cản
+	virtual int IsCollidable() { return 1; } // Đảm bảo platform có thể va chạm
 	void Falling();
 	int IsDirectionColliable(float nx, float ny);
 

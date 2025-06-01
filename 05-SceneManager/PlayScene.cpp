@@ -547,8 +547,7 @@ void CPlayScene::Update(DWORD dt)
 					if (mario_x <= cx+10)
 					{
  						mario->vx = MARIO_AUTO_SPEED;
-						mario->nx = 1;    
-						mario->SetState(MARIO_STATE_WALKING_RIGHT); 
+ 						mario->SetState(MARIO_STATE_WALKING_RIGHT); 
 						DebugOut(L"[INFO] Mario touched left edge of camera at cx = %.1f\n", cx );
 					}
 				}

@@ -208,7 +208,7 @@ black_gift_box.txt
 
 #Coin brick
 33	1016	122	11
-33	1543	58	8
+33	1544	58	8
 
 #Breakable brick
 14	663	58

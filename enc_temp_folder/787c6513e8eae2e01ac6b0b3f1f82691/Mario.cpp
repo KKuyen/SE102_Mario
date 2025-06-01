@@ -1071,7 +1071,7 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
             else if (koopas->GetState() == WINGED_KOOPAS_STATE_REVERSE)
             {
                 koopas->SetState(WINGED_KOOPAS_STATE_SHELL_MOVING);
-                if (x <= koopas->x)
+                if (vx > 0)
                     koopas->nx = 1;
                 else
                     koopas->nx = -1;

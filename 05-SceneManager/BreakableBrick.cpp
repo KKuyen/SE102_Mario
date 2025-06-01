@@ -10,7 +10,7 @@
 void CBreakableBrick::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if (state == BREAKABLE_BRICK_STATE_NORMAL) {
+	if (state == BREAKABLE_BRICK_STATE_NORMAL ||state == BREAKABLE_BRICK_STATE_MOVE) {
 		LPANIMATION ani = animations->Get(ID_ANI_BREAKABLE_BRICK);
 		if (ani) {
 			ani->Render(x, y);
@@ -45,7 +45,23 @@ void CBreakableBrick :: Upp(float& t)
 
 void CBreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vx = vy = 0;
+	if (state == BREAKABLE_BRICK_STATE_MOVE)
+	{
+		vy += BREAKABLE_BRICK_GRAVITY * dt; // Apply gravity
+		y += vy * dt; // Update position
+
+		// Check if brick has returned to initial position
+		if (vy > 0 && y >= inity) // Only transition when falling back down
+		{
+			vy = 0;
+			y = inity;
+			SetState(BREAKABLE_BRICK_STATE_NORMAL);
+		}
+	}
+	else
+	{
+		vx = vy = 0;
+	}
 
 	// Check if in coin state and timeout has elapsed
 	if (state == BREAKABLE_BRICK_STATE_COIN && GetTickCount64() - coin_state_start > COIN_STATE_TIMEOUT&& coin_state_start!=0)
@@ -63,7 +79,13 @@ void CBreakableBrick::SetState(int state)
 	this->state = state;
 	switch (state)
 	{
+	case BREAKABLE_BRICK_STATE_MOVE:
+	{
 
+		vy = BREAKABLE_BRICK_MOVE_SPEED_Y;
+		break;
+
+	}
 	case BREAKABLE_BRICK_STATE_NORMAL:
 	{
 		coin_state_start = 0; // Reset timer when returning to normal state
@@ -95,6 +117,7 @@ void CBreakableBrick::SetState(int state)
 		break;
 
 	}
+	
 
 
 	}

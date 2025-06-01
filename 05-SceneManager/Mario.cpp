@@ -580,14 +580,18 @@ void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
     if (brick->state == BREAKABLE_BRICK_STATE_NORMAL)
     {
-        if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0) || e->ny > 0)
+        if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0))
         {
 
             brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
         }
-        else if (e->ny < 0)
+        else if (e->ny > 0)
         {
-
+            if (level == MARIO_LEVEL_SMALL)
+                brick->SetState(BREAKABLE_BRICK_STATE_MOVE);
+            else
+                brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+        
 
         }
     }
@@ -1726,6 +1730,17 @@ int CMario::GetAniIdMax()
                     aniId = ID_ANI_MARIO_MAX_JUMP_WALK_RIGHT;
                 else
                     aniId = ID_ANI_MARIO_MAX_JUMP_WALK_LEFT;
+            }
+            if (nx > 0)
+            {
+                if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+                    aniId = ID_ANI_MARIO_WHIP_RIGHT;
+              
+            }
+            else {
+                if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+                    aniId = ID_ANI_MARIO_WHIP_LEFT;
+
             }
         }
         else

@@ -55,8 +55,6 @@ void CWingedKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
 		if (state == WINGED_KOOPAS_STATE_SHELL_MOVING)
 		{
-			nx = -nx;
-			vx = -vx;
 			brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
 		}
 

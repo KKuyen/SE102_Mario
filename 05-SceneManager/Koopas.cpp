@@ -51,6 +51,17 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (dynamic_cast<CMario*>(e->obj)) {
 		mario = dynamic_cast<CMario*>(e->obj);
 	}
+	if (dynamic_cast<CBreakableBrick*>(e->obj)) {
+		CBreakableBrick*	brick = dynamic_cast<CBreakableBrick*>(e->obj);
+		if (state == KOOPAS_STATE_SHELL_MOVING)
+		{
+			nx = -nx;
+			vx = -vx;
+			
+			brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+		}
+
+	}
 	if (state == KOOPAS_STATE_REVERSE &&
 		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CBreakableBrickChain*>(e->obj)  || dynamic_cast<CGrassPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
 	{

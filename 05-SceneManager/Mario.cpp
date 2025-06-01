@@ -578,15 +578,22 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 {
     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
-    if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0) || e->ny > 0)
+    if (brick->state == BREAKABLE_BRICK_STATE_NORMAL)
     {
-      
-        brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+        if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0) || e->ny > 0)
+        {
+
+            brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+        }
+        else if (e->ny < 0)
+        {
+
+
+        }
     }
-    else if(e->ny<0)
+    else if (brick->state == BREAKABLE_BRICK_STATE_COIN)
     {
-     
-       
+        brick->SetState(BREAKABLE_BRICK_STATE_INVISIBLE);
     }
 }
 
@@ -607,16 +614,10 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
                 if (dynamic_cast<CBreakableBrick*>(objects[i]))
                 {
                     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(objects[i]);
-                    if (brick->GetState() != BREAKABLE_BRICK_STATE_INVISIBLE)
-                    {
-                        float brickX, brickY;
-                        objects[i]->GetPosition(brickX, brickY);
-                        brick->SetState(BREAKABLE_BRICK_STATE_INVISIBLE);
-                        CCoin* coin = new CCoin(brickX, brickY);
-                        LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-                        LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-                        p->AddGameObject(coin);
-                    }
+                 
+                        brick->SetState(BREAKABLE_BRICK_STATE_COIN);
+                        
+                  
                 }
             }
         }

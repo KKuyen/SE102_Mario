@@ -1926,8 +1926,11 @@ void CMario::SetState(int state)
         }
         case MARIO_STATE_JUMP:
         {
-            vx = 0;
-            ax = 0;
+            if (vx == 0)
+            {
+                vx = 0;
+                ax = 0;
+            }
             CScene* scene = CGame::GetInstance()->GetCurrentScene();
             CSampleKeyHandler* keyHandler = dynamic_cast<CSampleKeyHandler*>(scene->GetKeyEventHandler());
             if (keyHandler)
@@ -1962,8 +1965,7 @@ void CMario::SetState(int state)
         }
         case MARIO_STATE_RELEASE_JUMP:
         {
-            vx = 0;
-            ax = 0;
+            
             if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
             if (vy == 0)
             {

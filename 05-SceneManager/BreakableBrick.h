@@ -14,12 +14,19 @@
 #define BREAKABLE_BRICK_STATE_BREAK 200
 #define BREAKABLE_BRICK_STATE_INVISIBLE 300
 
+#define BREAKABLE_BRICK_STATE_COIN 400
 class CBreakableBrick : public CGameObject {
 protected:
 	int state;
 
 public:
-	CBreakableBrick(float x, float y) : CGameObject(x, y) { state = BREAKABLE_BRICK_STATE_NORMAL; }
+	int initx;
+	int inity;
+	CBreakableBrick(float x, float y) : CGameObject(x, y) {
+		state = BREAKABLE_BRICK_STATE_NORMAL;
+		initx = x;
+		inity = y;
+	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
@@ -27,8 +34,8 @@ public:
 	void Upp(float& t);
 
 	void SetState(int state);
-	int IsCollidable() { return state == BREAKABLE_BRICK_STATE_NORMAL; }
-	int IsBlocking() { return state == BREAKABLE_BRICK_STATE_NORMAL; }
+	int IsCollidable() { return 1; }
+	int IsBlocking() { return 1; }
 
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 };

@@ -15,6 +15,8 @@
 CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
+	lastShakeOffset = 0;
+	shakeFrameCounter = 0;
 	this->ay = KOOPAS_GRAVITY;
 	this->nx = -1;
 	this->color = 1;
@@ -190,18 +192,38 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == KOOPAS_STATE_SHELL || state == KOOPAS_STATE_HELD || state == KOOPAS_STATE_REVERSE) &&
-		revive_start != 0 && GetTickCount64() - revive_start >= KOOPAS_REVIVE_TIME)
+	if ((state == KOOPAS_STATE_SHELL || state ==KOOPAS_STATE_HELD || state == KOOPAS_STATE_REVERSE) &&
+		revive_start != 0)
 	{
+		ULONGLONG elapsedTime = GetTickCount64() - revive_start;
+		const DWORD SHAKE_TIME = 500; // 0.5 seconds in milliseconds
 
-		y -= 3;
-		vy = KOOPAS_JUMP_SPEED; // Nảy lên
-		ay = KOOPAS_GRAVITY;    // Áp dụng trọng lực
-		if (nx < 0)
-			SetState(KOOPAS_STATE_WALKING);
-		else
+		// Shaking period (0.5s before revival)
+		if (elapsedTime >= KOOPAS_REVIVE_TIME - SHAKE_TIME && elapsedTime < KOOPAS_REVIVE_TIME)
 		{
-			SetState(KOOPAS_STATE_WALKING_RIGHT);
+			// Toggle-based shaking
+			shakeFrameCounter++;
+			float shakeOffset = (shakeFrameCounter % 10 < 5) ? 1.0f : -1.0f; // Alternate ±1 every 5 frames
+			x += shakeOffset - lastShakeOffset; // Apply relative to previous offset
+			lastShakeOffset = shakeOffset;
+
+			DebugOut(L"[DEBUG] Winged Koopas shaking at (%.1f, %.1f), offset=%.2f, frame=%d\n", x, y, shakeOffset, shakeFrameCounter);
+		}
+		// Revival
+		else if (elapsedTime >=KOOPAS_REVIVE_TIME)
+		{
+			y -= 2;
+			vy = KOOPAS_JUMP_SPEED; // Nảy lên
+			ay = KOOPAS_GRAVITY;
+			// Reset any shaking offset
+			
+			    // Áp dụng trọng lực
+			lastShakeOffset = 0; // Reset shaking
+			shakeFrameCounter = 0; // Reset frame counter
+			if (nx < 0)
+				SetState(KOOPAS_STATE_WALKING);
+			else
+				SetState(KOOPAS_STATE_WALKING_RIGHT);
 		}
 	}
 
@@ -292,16 +314,21 @@ void CKoopas::Render()
 }
 void CKoopas::SetState(int state)
 {
-	y -= 3;
+	
 	CGameObject::SetState(state);
 	switch (state)
 	{
 	case KOOPAS_STATE_WALKING:
+		y -= 2;
+		this->isReverse = false;
+
 		vx = -KOOPAS_WALKING_SPEED;
 		nx = -nx;
 		revive_start = 0;
 		break;
 	case KOOPAS_STATE_WALKING_RIGHT:
+		y -= 2;
+		this->isReverse = false;
 		vx = KOOPAS_WALKING_SPEED;
 		nx = -nx;
 		revive_start = 0;
@@ -309,9 +336,9 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_SHELL:
 		
 		vx = 0;
-		vy = KOOPAS_JUMP_SPEED / 4;
+		
 		ax = 0;
-		ay = KOOPAS_GRAVITY;
+		
 
 
 		StartReviveTimer();
@@ -321,6 +348,7 @@ void CKoopas::SetState(int state)
 		vy = 0;
 		ax = 0;
 		ay = 0;
+	     if(revive_start==0)
 		StartReviveTimer();
 
 		break;

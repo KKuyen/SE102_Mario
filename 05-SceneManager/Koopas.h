@@ -40,7 +40,7 @@ class CKoopas : public CGameObject
 {  
 protected:  
 
-   ULONGLONG revive_start; // Thời điểm bắt đầu đếm để hồi sinh  
+   // Thời điểm bắt đầu đếm để hồi sinh  
 
    virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);  
    virtual void Render();  
@@ -55,6 +55,9 @@ protected:
    virtual void OnCollisionWith(LPCOLLISIONEVENT e);  
    void StartReviveTimer() { revive_start = GetTickCount64(); }  
 public:  
+    ULONGLONG revive_start;
+    float lastShakeOffset; // Track previous shaking offset
+    int shakeFrameCounter; // Count frames for toggle-based shaking
    bool isReverse;  
    float ax;  
    float ay;  

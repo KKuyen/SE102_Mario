@@ -56,8 +56,11 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-	void StartReviveTimer() { revive_start = GetTickCount64(); }
+	void StartReviveTimer() { if(revive_start==0) revive_start = GetTickCount64(); }
 public:
+
+	float lastShakeOffset; // Track previous shaking offset
+	int shakeFrameCounter;
 	bool isReverse;
 	float ax;
 	float ay;

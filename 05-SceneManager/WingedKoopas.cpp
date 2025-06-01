@@ -15,6 +15,8 @@ CWingedKoopas::CWingedKoopas(float x, float y) :CGameObject(x, y)
 	this->ax = 0;
 	this->ay = WINGED_KOOPAS_GRAVITY;
 	this->nx = -1;
+	lastShakeOffset = 0;
+	shakeFrameCounter = 0;
 	this->beforeLand = false;
 	this->canFly = true;
 	this->isReverse = false;
@@ -122,17 +124,32 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	// Kiểm tra nếu đang ở trạng thái SHELL, SHELL_MOVING hoặc HELD và đủ thời gian để hồi sinh
-	if ((state == WINGED_KOOPAS_STATE_SHELL || state == WINGED_KOOPAS_STATE_HELD || state == WINGED_KOOPAS_STATE_REVERSE) &&
-		revive_start != 0 && GetTickCount64() - revive_start >= WINGED_KOOPAS_REVIVE_TIME)
+	if ((state == WINGED_KOOPAS_STATE_SHELL  || state == WINGED_KOOPAS_STATE_REVERSE) &&
+		revive_start != 0)
 	{
-		y -= 3;
-		vy = WINGED_KOOPAS_JUMP_SPEED; // Nảy lên
-		ay = WINGED_KOOPAS_GRAVITY;    // Áp dụng trọng lực
-		if (nx < 0)
-			SetState(WINGED_KOOPAS_STATE_WALKING);
-		else
+		ULONGLONG elapsedTime = GetTickCount64() - revive_start;
+		const DWORD SHAKE_TIME = 500; // 0.5 seconds
+
+		if (elapsedTime >= WINGED_KOOPAS_REVIVE_TIME - SHAKE_TIME && elapsedTime < WINGED_KOOPAS_REVIVE_TIME)
 		{
-			SetState(WINGED_KOOPAS_STATE_WALKING_RIGHT);
+			shakeFrameCounter++;
+			float shakeOffset = (shakeFrameCounter % 10 < 5) ? 1.0f : -1.0f;
+			x += shakeOffset - lastShakeOffset;
+			lastShakeOffset = shakeOffset;
+
+			DebugOut(L"[DEBUG] Winged Koopas shaking at (%.1f, %.1f), offset=%.2f, frame=%d\n", x, y, shakeOffset, shakeFrameCounter);
+		}
+		else if (elapsedTime >= WINGED_KOOPAS_REVIVE_TIME)
+		{
+			y -= 2;
+			vy = WINGED_KOOPAS_JUMP_SPEED;
+			ay = WINGED_KOOPAS_GRAVITY;
+			lastShakeOffset = 0;
+			shakeFrameCounter = 0;
+			if (nx < 0)
+				SetState(WINGED_KOOPAS_STATE_WALKING);
+			else
+				SetState(WINGED_KOOPAS_STATE_WALKING_RIGHT);
 		}
 	}
 	if (canFly&&state!=WINGED_KOOPAS_STATE_SHELL && state != WINGED_KOOPAS_STATE_SHELL_MOVING)
@@ -245,7 +262,7 @@ void CWingedKoopas::Render()
 void CWingedKoopas::SetState(int state)
 {
 	CGameObject::SetState(state);
-	y -= 3;
+	
 	switch (state)
 	{
 	case WINGED_KOOPAS_STATE_INACTIVE:
@@ -254,11 +271,13 @@ void CWingedKoopas::SetState(int state)
 		ax = 0;
 		break;
 	case WINGED_KOOPAS_STATE_WALKING:
+		y -= 3;
 		vx = -WINGED_KOOPAS_WALKING_SPEED;
 		nx = -nx;
 		revive_start = 0;
 		break;
 	case WINGED_KOOPAS_STATE_WALKING_RIGHT:
+		y -= 3;
 		vx = WINGED_KOOPAS_WALKING_SPEED;
 		nx = -nx;
 		revive_start = 0;
@@ -266,9 +285,9 @@ void CWingedKoopas::SetState(int state)
 	case WINGED_KOOPAS_STATE_SHELL:
 	
 		vx = 0;
-		vy = WINGED_KOOPAS_JUMP_SPEED / 4;
+		
 		ax = 0;
-		ay = WINGED_KOOPAS_GRAVITY;
+		
 
 		StartReviveTimer();
 		break;

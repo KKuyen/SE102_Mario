@@ -56,7 +56,7 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-    if (isFlying && GetTickCount64() - fly_timer > MARIO_MAX_FLY_ACTIVATION_TIME+100 && fly_timer!=0)
+    if (isFlying && GetTickCount64() - fly_timer > MARIO_MAX_FLY_ACTIVATION_TIME && fly_timer!=0)
     {
         isFlying = false;
         fly_timer = 0;
@@ -311,21 +311,40 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             untouchable = 0;
         }
         // Update held object position
+
         if (heldObject != NULL)
         {
             float mx, my;
             GetPosition(mx, my);
+            const DWORD SHAKE_TIME = 500; // 0.5 seconds
+            ULONGLONG elapsedHoldTime = GetTickCount64() - hold_start;
+            float shakeOffset = 0.0f;
+
+            // Calculate shaking offset if in shaking window
+            if (elapsedHoldTime >= KOOPAS_REVIVE_TIME - SHAKE_TIME && elapsedHoldTime < KOOPAS_REVIVE_TIME)
+            {
+                shakeFrameCounter++;
+                shakeOffset = (shakeFrameCounter % 10 < 5) ? 1.0f : -1.0f; // Toggle ±1 every 5 frames
+                DebugOut(L"[DEBUG] Held Koopas shaking, offset=%.2f, frame=%d\n", shakeOffset, shakeFrameCounter);
+            }
+            else
+            {
+                shakeOffset = 0.0f; // No shaking outside window
+            }
+
             if (dynamic_cast<CKoopas*>(heldObject))
             {
                 CKoopas* koopas = dynamic_cast<CKoopas*>(heldObject);
-                if (GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
+                if (elapsedHoldTime >= KOOPAS_REVIVE_TIME)
                 {
                     koopas->SetVy(KOOPAS_JUMP_SPEED);
                     koopas->ay = KOOPAS_GRAVITY;
                     koopas->nx = nx;
                     koopas->SetState(KOOPAS_STATE_WALKING);
                     SetHolding(false, nullptr);
-                    hold_start = 0;
+                   
+                    shakeFrameCounter = 0; // Reset shaking
+                    lastShakeOffset = 0;
                     if (level > MARIO_LEVEL_SMALL)
                     {
                         level = level - 1;
@@ -339,20 +358,26 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 }
                 else
                 {
-                    heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
+                    float baseX = mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2);
+                    float baseY = my;
+                    heldObject->SetPosition(baseX, baseY + shakeOffset - lastShakeOffset);
+                    lastShakeOffset = shakeOffset;
                 }
             }
             else if (dynamic_cast<CWingedKoopas*>(heldObject))
             {
                 CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(heldObject);
-                if (GetTickCount64() - hold_start >= KOOPAS_REVIVE_TIME)
+                if (elapsedHoldTime >= KOOPAS_REVIVE_TIME)
                 {
-                    koopas->SetVy(KOOPAS_JUMP_SPEED);
-                    koopas->ay = KOOPAS_GRAVITY;
-                    koopas->nx = nx;
-                    koopas->SetState(KOOPAS_STATE_WALKING);
                     SetHolding(false, nullptr);
-                    hold_start = 0;
+                    koopas->SetVy(WINGED_KOOPAS_JUMP_SPEED);
+                    koopas->ay = WINGED_KOOPAS_GRAVITY;
+                    koopas->nx = nx;
+                    koopas->SetState(WINGED_KOOPAS_STATE_WALKING);
+                  
+               
+                    shakeFrameCounter = 0; // Reset shaking
+                    lastShakeOffset = 0;
                     if (level > MARIO_LEVEL_SMALL)
                     {
                         level = level - 1;
@@ -366,10 +391,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 }
                 else
                 {
-                    heldObject->SetPosition(mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2), my);
+                    float baseX = mx + (nx > 0 ? MARIO_BIG_BBOX_WIDTH / 2 + KOOPAS_BBOX_WIDTH / 2 : -MARIO_BIG_BBOX_WIDTH / 2 - KOOPAS_BBOX_WIDTH / 2);
+                    float baseY = my;
+                    heldObject->SetPosition(baseX+shakeOffset, baseY  - lastShakeOffset);
+                    lastShakeOffset = shakeOffset;
                 }
             }
         }
+
         // Kiểm tra thời gian chờ để biến thành Mario chồn
         if (isWaitingForLevelUp && GetTickCount() - timeWaitingStart >= 400)
         {
@@ -576,6 +605,7 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
                 CGame* game = CGame::GetInstance();
                 if (game->IsKeyDown(DIK_A)) // Run key
                 {
+                    
                     hold_start = GetTickCount64();
                     SetHolding(true, koopas);
                     koopas->SetState(KOOPAS_STATE_HELD);
@@ -591,16 +621,43 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
         }
     }
 }
+bool CMario::IsInWhipRegion(CGameObject* obj)
+{
+    // Get Mario's bounding box
+    float ml, mt, mr, mb;
+    GetBoundingBox(ml, mt, mr, mb);
+
+    // Calculate whip region (bottom half)
+    float marioHeight = mb - mt;
+    float halfHeight = marioHeight * 1.0f / 2.0f;
+    float whipTop = mb - halfHeight; // Top of the whip region
+
+    // Get object's bounding box
+    float l, t, r, b;
+    obj->GetBoundingBox(l, t, r, b);
+
+    // Check if object's vertical range overlaps with Mario's whip region
+    bool isOverlapping = (t <= mb && b >= whipTop);
+
+    DebugOut(L"[DEBUG] Checking whip region for obj at (%.1f, %.1f), t=%.1f, b=%.1f, whip region: %.1f to %.1f, overlap=%d\n",
+        obj->x, obj->y, t, b, whipTop, mb, isOverlapping);
+
+    return isOverlapping;
+}
 
 void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 {
     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
     if (brick->state == BREAKABLE_BRICK_STATE_NORMAL)
     {
+       
         if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0))
         {
+            if (IsInWhipRegion(brick))
+            {
 
-            brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+                brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+            }
         }
         else if (e->ny > 0)
         {
@@ -932,7 +989,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
         else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
         {
             vy = -MARIO_JUMP_DEFLECT_SPEED;
-            koopas->SetState(KOOPAS_STATE_FALL);
+            koopas->SetState(KOOPAS_STATE_SHELL);
             koopas->ax = 0;
 
 
@@ -952,8 +1009,11 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
 
-        koopas->nx = nx;
-        koopas->SetState(KOOPAS_STATE_REVERSE);
+        if (IsInWhipRegion(koopas))
+        {
+            koopas->nx = nx;
+            koopas->SetState(KOOPAS_STATE_REVERSE);
+        }
     }
     else if (isHolding && heldObject != NULL && !dynamic_cast<CKoopas*>(heldObject)) {
         if (areFacingEachOther)
@@ -1035,6 +1095,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
                 CGame* game = CGame::GetInstance();
                 if (game->IsKeyDown(DIK_A)) // Run key
                 {
+                    if(hold_start==0)
                     hold_start = GetTickCount64();
                     SetHolding(true, koopas);
                     koopas->SetState(KOOPAS_STATE_HELD);
@@ -1082,7 +1143,7 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
             else if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING)
             {
                 vy = -MARIO_JUMP_DEFLECT_SPEED;
-                koopas->SetState(KOOPAS_STATE_FALL);
+                koopas->SetState(KOOPAS_STATE_SHELL);
                 koopas->ax = 0;
             }
             else if (koopas->GetState() == WINGED_KOOPAS_STATE_SHELL)
@@ -1160,8 +1221,12 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
-        koopas->nx = nx;
-        koopas->SetState(WINGED_KOOPAS_STATE_REVERSE);
+        if (IsInWhipRegion(koopas))
+        {
+            koopas->nx = nx;
+            koopas->SetState(WINGED_KOOPAS_STATE_REVERSE);
+        }
+     
     }
     else
     {
@@ -1187,6 +1252,7 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
                 CGame* game = CGame::GetInstance();
                 if (game->IsKeyDown(DIK_A))
                 {
+                    if (hold_start == 0)
                     hold_start = GetTickCount64();
                     SetHolding(true, koopas);
                     koopas->SetState(WINGED_KOOPAS_STATE_HELD);

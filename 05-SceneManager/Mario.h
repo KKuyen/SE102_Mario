@@ -246,6 +246,7 @@ class CMario : public CGameObject
 	ULONGLONG hold_start;
 	ULONGLONG lastEnergyUpdate; // Thời điểm cập nhật energy gần nhất
 public:
+	bool IsInWhipRegion(CGameObject* obj);
 	ULONGLONG transition_start; // Thời điểm bắt đầu hiệu ứng
 	int target_level; // Cấp độ mục tiêu (để biết phóng to hay thu nhỏ)
 	BOOLEAN isSlowFalling;      // Trạng thái đang kìm tốc độ rơi
@@ -280,6 +281,8 @@ public:
 	ULONGLONG teleport_start_out;
 	bool onMovable;
 	bool isBomerangBroRendered;
+	int shakeFrameCounter; 
+	float lastShakeOffset;
 	bool typeout;
 	ULONGLONG fly_timer;
 	CMario(float x, float y) : CGameObject(x, y)
@@ -306,6 +309,8 @@ public:
 		isFlying = false;
 		run_start = 0;
 		whip_start = 0;
+		shakeFrameCounter = 0;
+		lastShakeOffset = 0;
 		beforeLand = false;
 		isOpenBlackBox = false;
 		winDistance = 0;
@@ -351,10 +356,7 @@ public:
 	{
 		isHolding = holding;
 		heldObject = obj;
-		if (isHolding)
-			StartHoldTimer(); 
-		else
-			ResetHoldTimer(); 
+		 
 	}
 	void StartHoldTimer() { hold_start = GetTickCount64(); } 
 	void ResetHoldTimer() { hold_start = 0; } 

@@ -20,19 +20,23 @@ void CBreakableBrick::Render()
 void CBreakableBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BREAKABLE_BRICK_BBOX_WIDTH / 2;
-	t = y - BREAKABLE_BRICK_BBOX_HEIGHT / 2+1;
+	t = y - BREAKABLE_BRICK_BBOX_HEIGHT / 2;
 	r = l + BREAKABLE_BRICK_BBOX_WIDTH;
 	b = t + BREAKABLE_BRICK_BBOX_HEIGHT;
 }
 void CBreakableBrick :: Upp(float& t)
 {
-	t += 1;
+	
 }
 
 void CBreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	vx = vy = 0;
+
+	
+	
+
+	
 }
 
 void CBreakableBrick::SetState(int state)
@@ -40,7 +44,7 @@ void CBreakableBrick::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case BREAKABLE_BRICK_STATE_BREAK:
+	case BREAKABLE_BRICK_STATE_BREAK:	
 	{
 		CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 		scene->PushBackGameObject(new CBreakableBrickPart(x, y, -BRICK_PART_SPEED_X, -BRICK_PART_SPEED_Y));
@@ -57,12 +61,22 @@ void CBreakableBrick::SetState(int state)
 
 
 	}
+	case BREAKABLE_BRICK_STATE_COIN:
+	{
+		
+		break;
+
+	}
+
 
 	}
 }
 
 void CBreakableBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+
+	vx = vy = 0;
+
 	if (dynamic_cast<CKoopas*>(e->obj))
 	{
 		CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);

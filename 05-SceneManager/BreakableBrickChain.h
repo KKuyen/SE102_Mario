@@ -16,7 +16,9 @@ public:
 
     
     }
-    void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {}
+    void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+        vx = vy = 0;
+    }
     void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 

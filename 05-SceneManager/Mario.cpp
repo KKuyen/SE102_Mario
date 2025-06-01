@@ -1928,6 +1928,11 @@ void CMario::SetState(int state)
         }
         case MARIO_STATE_JUMP:
         {
+            if (vx == 0)
+            {
+                vx = 0;
+                ax = 0;
+            }
             CScene* scene = CGame::GetInstance()->GetCurrentScene();
             CSampleKeyHandler* keyHandler = dynamic_cast<CSampleKeyHandler*>(scene->GetKeyEventHandler());
             if (keyHandler)
@@ -1957,10 +1962,12 @@ void CMario::SetState(int state)
                     ay = MARIO_GRAVITY_FLY;
                 }
             }
+           
             break;
         }
         case MARIO_STATE_RELEASE_JUMP:
         {
+            
             if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
             if (vy == 0)
             {
@@ -2009,7 +2016,7 @@ void CMario::SetState(int state)
         {
             if (isOnPlatform)
             {
-                maxVx = MARIO_SLIP_SPEED;
+              
                 ax = -MARIO_SLIP_DECEL;
             }
             break;
@@ -2018,7 +2025,7 @@ void CMario::SetState(int state)
         {
             if (isOnPlatform)
             {
-                maxVx = -MARIO_SLIP_SPEED;
+              
                 ax = MARIO_SLIP_DECEL;
             }
             break;

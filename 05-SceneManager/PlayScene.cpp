@@ -187,9 +187,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_KOOPAS:
 	{
-
-		obj = new CKoopas(x, y);
-		break;
+		try {
+			float color = (float)atof(tokens[3].c_str());
+			obj = new CKoopas(x, y,color);
+			break;
+		}
+		catch (const std::exception& error) // Correct exception declaration
+		{
+			obj = new CKoopas(x, y);
+			break;
+		}
+		
+		
 	}
 	case OBJECT_TYPE_BACKGROUND: {
 		float width = (float)atof(tokens[3].c_str());
@@ -331,7 +340,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
-	case OBJECT_TYPE_WINGED_KOOPAS: obj = new CWingedKoopas(x, y); break;
+	case OBJECT_TYPE_WINGED_KOOPAS:
+	{
+		try {
+			int canFlyint = (float)atof(tokens[3].c_str());
+			if(canFlyint)
+			obj = new CWingedKoopas(x, y,true);
+			else
+				obj = new CWingedKoopas(x, y, false);
+			break;
+		}
+		catch (const std::exception& error) // Correct exception declaration
+		{
+			obj = new CWingedKoopas(x, y);
+			break;
+		}
+		obj = new CWingedKoopas(x, y); break;
+	}
 
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);

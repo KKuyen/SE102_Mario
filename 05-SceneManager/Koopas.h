@@ -64,7 +64,7 @@ public:
    int nx;  
    int color;  
    CMario* mario;  
-   CKoopas(float x, float y);  
+   CKoopas(float x, float y,int color=1);  
    virtual void SetState(int state);  
    virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 

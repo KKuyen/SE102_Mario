@@ -10,7 +10,7 @@
 #include "WingedKoopas.h"
 #include "WIngedGoomba.h"
 #include "BreakableBrick.h"
-CWingedKoopas::CWingedKoopas(float x, float y) :CGameObject(x, y)
+CWingedKoopas::CWingedKoopas(float x, float y,bool canFly) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = WINGED_KOOPAS_GRAVITY;
@@ -18,8 +18,9 @@ CWingedKoopas::CWingedKoopas(float x, float y) :CGameObject(x, y)
 	lastShakeOffset = 0;
 	shakeFrameCounter = 0;
 	this->beforeLand = false;
-	this->canFly = true;
+	this->canFly = canFly;
 	this->isReverse = false;
+	this->level = level;
 	SetState(WINGED_KOOPAS_STATE_INACTIVE);
 
 }

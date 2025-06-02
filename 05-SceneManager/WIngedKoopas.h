@@ -67,8 +67,9 @@ public:
 	int nx;
 	bool beforeLand;
 	bool canFly;
+	int level;
 
 	CMario* mario;
-	CWingedKoopas(float x, float y);
+	CWingedKoopas(float x, float y, bool canFly=true);
 	virtual void SetState(int state);
 };

@@ -12,14 +12,14 @@
 #include "CoinBrick.h"
 #include "BreakableBrickChain.h"
 
-CKoopas::CKoopas(float x, float y) :CGameObject(x, y)
+CKoopas::CKoopas(float x, float y,int color) :CGameObject(x, y)
 {
 	this->ax = 0;
 	lastShakeOffset = 0;
 	shakeFrameCounter = 0;
 	this->ay = KOOPAS_GRAVITY;
 	this->nx = -1;
-	this->color = 1;
+	this->color = color;
 	SetState(KOOPAS_STATE_WALKING);
 	this->isReverse = false;
 
@@ -173,7 +173,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 
 		// Nếu đang trên mặt phẳng, kiểm tra rìa
-		if (isOnPlatform)
+		if (isOnPlatform&&color==1)
 		{
 			float nextX = x + vx * dt; // Vị trí tiếp theo của Koopas
 

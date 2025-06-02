@@ -56,6 +56,15 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+    if (!onMovable)
+    {
+        if (vy > MARIO_GRAVITY_MAX)
+        {
+            vy = 0;
+       }
+        
+  
+    }
     if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
         float mx, my;
@@ -491,13 +500,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::OnNoCollision(DWORD dt)
 {
     x += vx * dt;
-  
+    if (onMovable)
+    {
+        onMovable = false;
+        vy = 0;
+        ay=0;
+    }
     if (!onMovable)
     {
+        
+        
 
         y += vy * dt;
+
         isOnPlatform = false;
     }
+ 
     }
  
 

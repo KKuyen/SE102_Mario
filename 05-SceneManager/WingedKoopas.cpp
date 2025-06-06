@@ -65,7 +65,7 @@ void CWingedKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	}
 	if (state == WINGED_KOOPAS_STATE_REVERSE &&
-		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj)))
+		(dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBox*>(e->obj) || dynamic_cast<CBrick*>(e->obj))})
 	{
 		ax = 0;
 		vx = 0;

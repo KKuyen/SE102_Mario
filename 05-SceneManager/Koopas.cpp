@@ -115,13 +115,10 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 	}
 }
-#define ADJUST_TURN_BACK 6
-#define ADJUST_TURN_BACK_BRICK 16
-#define KOOPAS_SHAKE_TIME
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	if(x> KOOPAS_DIE_POS_X &&y> KOOPAS_DIE_POS_Y)
+	if(x>2230&&y>185)
 	{
 		isDeleted = true;
 	}
@@ -155,7 +152,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				obj->GetBoundingBox(l, t, r, b);
 				if (dynamic_cast<CBreakableBrickChain*>(obj))
 				{
-					l -= ADJUST_TURN_BACK_BRICK;
+					l -= 16;
 				}
  
 
@@ -169,15 +166,15 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 
 					isOnPlatform = true;
-					platformLeft = l - ADJUST_TURN_BACK;
-					platformRight = r + ADJUST_TURN_BACK;
+					platformLeft = l - 6;
+					platformRight = r + 6;
 					break;
 				}
 			}
 		}
 
 		// Nếu đang trên mặt phẳng, kiểm tra rìa
-		if (isOnPlatform&&color== KOOPAS_COLOR_ORANGE)
+		if (isOnPlatform&&color==1)
 		{
 			float nextX = x + vx * dt; // Vị trí tiếp theo của Koopas
 
@@ -200,7 +197,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		revive_start != 0)
 	{
 		ULONGLONG elapsedTime = GetTickCount64() - revive_start;
-		const DWORD SHAKE_TIME = KOOPAS_SHAKE_TIME; // 0.5 seconds in milliseconds
+		const DWORD SHAKE_TIME = 500; // 0.5 seconds in milliseconds
 
 		// Shaking period (0.5s before revival)
 		if (elapsedTime >= KOOPAS_REVIVE_TIME - SHAKE_TIME && elapsedTime < KOOPAS_REVIVE_TIME)
@@ -216,7 +213,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// Revival
 		else if (elapsedTime >=KOOPAS_REVIVE_TIME)
 		{
-			y -= KOOPAS_DEFLECT_Y;
+			y -= 2;
 			vy = KOOPAS_JUMP_SPEED; // Nảy lên
 			ay = KOOPAS_GRAVITY;
 			// Reset any shaking offset
@@ -243,7 +240,7 @@ void CKoopas::Render()
 {
 	int aniId;
 	
-	if (color == KOOPAS_COLOR_ORANGE)
+	if (color == 1)
 	{
 		
 		aniId = ID_ANI_KOOPAS_WALKING;

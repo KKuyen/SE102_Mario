@@ -10,7 +10,8 @@
 #include "WingedKoopas.h"
 #include "WIngedGoomba.h"
 #include "BreakableBrick.h"
-#include "Koopas.cpp"
+#define KOOPAS_DEFLECT_Y 2
+#define KOOPAS_ACTIVATION_RANGE 255
 CWingedKoopas::CWingedKoopas(float x, float y,bool canFly) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -120,7 +121,7 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state == WINGED_KOOPAS_STATE_INACTIVE) {
 		float cx, cy;
 		CGame::GetInstance()->GetCamPos(cx, cy);
-		if (x < cx + 250) {
+		if (x < cx + KOOPAS_ACTIVATION_RANGE) {
 			SetState(WINGED_KOOPAS_STATE_WALKING);
 		}
 	}
@@ -143,7 +144,7 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else if (elapsedTime >= WINGED_KOOPAS_REVIVE_TIME)
 		{
-			y -= KOOPAS_DEFLECT_Y;
+			y -= 2;
 			vy = WINGED_KOOPAS_JUMP_SPEED;
 			ay = WINGED_KOOPAS_GRAVITY;
 			lastShakeOffset = 0;

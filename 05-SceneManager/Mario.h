@@ -193,6 +193,7 @@
 #define MARIO_SLOW_FALL_SPEED_Y 0.05f  // Tốc độ rơi chậm khi kìm
 #define MARIO_SLOW_FALL_GRAVITY 0.0005f // Trọng lực giảm khi kìm
 #define MARIO_SLOW_FALL_MAX_TIME 250  // Thời gian tối đa có thể kìm (ms)
+#defint WEASEL_TRANSFORM_TIME 400
 
 
 #define MARIO_TRANSITION_TIME 500

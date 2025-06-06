@@ -23,8 +23,8 @@
 #define MARIO_MAX_FLY_ACTIVATION_TIME 2350
 #define MARIO_TELEPORT_DURATION 1000
 
-#define MARIO_WHIP_TIME 120
-
+#define MARIO_WHIP_TIME 160
+#define MARIO_WHIP_TIME_SHORT 80
 
 
 
@@ -86,7 +86,8 @@
 #define ID_ANI_MARIO_HOLD_IDLE_RIGHT 1004
 #define ID_ANI_MARIO_HOLD_IDLE_LEFT 1005
 #define ID_ANI_MARIO_DIVE_IN 1006
-
+#define ID_ANI_MARIO_SMALL_DIVE_IN 1016
+#define ID_ANI_MARIO_BIG_DIVE_IN 1026
 
 // SMALL MARIO
 #define ID_ANI_MARIO_SMALL_IDLE_RIGHT 1100
@@ -179,7 +180,10 @@
 
 #define MARIO_TELEPORT_IN 1
 #define MARIO_TELEPORT_IN_POSITION_Y 200
+#define MARIO_TELEPORT_IN_POSITION_Y_MOVE 44
 #define MARIO_TELEPORT_IN_POSITION_X_MOVE 163
+#define MARIO_TELEPORT_IN_POSITION_X_MOVE_2 153
+#define MARIO_TELEPORT_IN_POSITION_X_MOVE_3 255
 #define MARIO_TELEPORT_OUT 2
 #define MARIO_TELEPORT_OUT_POSITION_Y 160
 #define MARIO_TELEPORT_NONE 0
@@ -208,7 +212,7 @@ class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
 	
-
+	int breakObjCount;
 
 
 	ULONGLONG untouchable_start;
@@ -295,6 +299,7 @@ public:
 		typeout = 1;
 		onMovable = false;
 		isVisible = true;
+		breakObjCount = 0;
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;

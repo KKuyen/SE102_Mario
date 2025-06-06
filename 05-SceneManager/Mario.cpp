@@ -51,6 +51,8 @@
 #define BOMERANG_BRO_RENDER_POS 2200
 #define BOMERANG_BRO_X 2105
 #define BOMERANG_BRO_Y 122
+#define MARIO_CHIMNEY_DIVE_SPEED 0.6511
+
 
 
 
@@ -65,7 +67,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         
   
     }
-    if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+    if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME_SHORT)
     {
         float mx, my;
         GetPosition(mx, my);
@@ -100,13 +102,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 // Check if the brick is within the 16px range
                 if (bl < checkRight && br > checkLeft && bt < checkBottom && bb > checkTop && IsInWhipRegion(obj))
                 {
-                    obj->SetState(BREAKABLE_BRICK_STATE_BREAK);
+                    if (breakObjCount == 0)
+                    {
+                        breakObjCount++;
+                        obj->SetState(BREAKABLE_BRICK_STATE_BREAK);
+                    }
+
                 }
             }
         }
     }
+    else
+        breakObjCount = 0;
   
-    if (isFlying && GetTickCount64() - fly_timer > MARIO_MAX_FLY_ACTIVATION_TIME && fly_timer!=0)
+    if (isFlying && GetTickCount64() - fly_timer > MARIO_MAX_FLY_ACTIVATION_TIME+200 && fly_timer!=0)
     {
         isFlying = false;
         fly_timer = 0;
@@ -134,15 +143,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
        
         if (CGame::GetInstance()->GetCurrentScene()->GetId() == 1)
         {
-            if (x <= CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE + 10)
+            if (x <= CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE_2)
             {
                 x = CHIMMNEY_1_POSITION_X - MARIO_TELEPORT_IN_POSITION_X_MOVE;
-                y += 0.65;
+                y += MARIO_CHIMNEY_DIVE_SPEED;
                 return;
             }
             else
             {
-                y -= 0.6511;
+                y -= MARIO_CHIMNEY_DIVE_SPEED;
 
                 return;
 
@@ -155,7 +164,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
           
                 
             
-                y -= 0.6511;
+                y -= MARIO_CHIMNEY_DIVE_SPEED;
                 return;
 
         }
@@ -232,8 +241,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 }
                 else
                 {
-                    x = x + MARIO_TELEPORT_IN_POSITION_X_MOVE + 92;
-                    y += 44;
+                    x = x + MARIO_TELEPORT_IN_POSITION_X_MOVE_3;
+                    y += MARIO_TELEPORT_IN_POSITION_Y_MOVE;
 
                 }
                 teleport = MARIO_TELEPORT_NONE;
@@ -272,13 +281,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                     {
                         x = CHIMMNEY_14_POSITION_X;
                     }
-                    y = y + 0.65;
+                    y = y + MARIO_CHIMNEY_DIVE_SPEED;
                     return;
                 }
                 else
                 {
                     x = CHIMMNEY_2_POSITION_X;
-                    y = y - 0.65;
+                    y = y - MARIO_CHIMNEY_DIVE_SPEED;
                     return;
 
                 }
@@ -709,15 +718,7 @@ void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
     if (brick->state == BREAKABLE_BRICK_STATE_NORMAL)
     {
        
-        if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0))
-        {
-            if (IsInWhipRegion(brick))
-            {
-
-                brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
-            }
-        }
-        else if (e->ny > 0)
+         if (e->ny > 0)
         {
             if (level == MARIO_LEVEL_SMALL)
                 brick->SetState(BREAKABLE_BRICK_STATE_MOVE);
@@ -1615,9 +1616,11 @@ int CMario::GetAniIdSmall()
         aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
         return aniId;
     }
-    if (teleport != 0)
+    if (teleport != 0|| (teleport_start_out != -1 && GetTickCount64() - teleport_start_out <= MARIO_TELEPORT_DURATION))
     {
-        aniId = ID_ANI_MARIO_DIVE_IN;
+      
+            aniId = ID_ANI_MARIO_SMALL_DIVE_IN;
+       
         return aniId;
     }
     if (isHolding)
@@ -1743,9 +1746,10 @@ int CMario::GetAniIdBig()
  		aniId = ID_ANI_MARIO_WALKING_RIGHT;
 		return aniId;
     }
-    if (teleport != 0)
+    if (teleport != 0 || (teleport_start_out != -1 && GetTickCount64() - teleport_start_out <= MARIO_TELEPORT_DURATION))
     {
-        aniId = ID_ANI_MARIO_DIVE_IN;
+         
+            aniId = ID_ANI_MARIO_BIG_DIVE_IN;
 		return aniId;
     }
     if (isHolding)
@@ -1874,7 +1878,8 @@ int CMario::GetAniIdMax()
 
     if (teleport != 0||(teleport_start_out!=-1&& GetTickCount64()- teleport_start_out<= MARIO_TELEPORT_DURATION))
          {
-        aniId = ID_ANI_MARIO_DIVE_IN;
+        
+            aniId = ID_ANI_MARIO_DIVE_IN;
         return aniId;
     }
 

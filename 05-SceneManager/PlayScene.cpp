@@ -455,9 +455,9 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
-#define MAX_CY -215
+#define MAX_CY -170
 #define ALR_FLY_CY -160
-#define NOT_ALR_FLY_CY   -40
+#define NOT_ALR_FLY_CY   0
 #define SECENE_2_CAMERA_MOVE_CX 0.7
 #define SECENE_2_CAMERA_MAX_CX 2310
 #define SECENE_2_CAMERA_BEFORE_TELEPORT_CX 1791
@@ -497,11 +497,11 @@ void CPlayScene::Update(DWORD dt)
 		{
 			cy = MAX_CY;
 		}
-		else if (cy < ALR_FLY_CY)
+		else if (cy < ALR_FLY_CY&&mario->isFlying)
 		{
 			alreadyFly = true;
 		}
-		else if (cy > NOT_ALR_FLY_CY)
+		else if (cy > 0)
 		{
 			cy = 0.0f;
 			alreadyFly = false;

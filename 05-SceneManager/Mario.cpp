@@ -63,15 +63,10 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-    if (!onMovable)
-    {
-        if (vy > MARIO_GRAVITY_MAX)
-        {
-            vy = 0;
-       }
-        
+    
+    
   
-    }
+    
     if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME_SHORT)
     {
         float mx, my;
@@ -333,7 +328,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     
         vy += ay * dt;
         vx += ax * dt;
-
+        if (vy > MARIO_GRAVITY_MAX)
+        {
+            vy = MARIO_GRAVITY_MAX;
+        }
         if (abs(vx) > abs(maxVx)) vx = maxVx;
 
         if (!isOnPlatform)
@@ -517,8 +515,10 @@ void CMario::OnNoCollision(DWORD dt)
     if (onMovable)
     {
         onMovable = false;
-        vy = 0;
-        ay=0;
+       
+
+           
+       
     }
     if (!onMovable)
     {
@@ -770,7 +770,7 @@ void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
 {
     CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
 
-    if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)) && hiddenbutton->isActivated == false&& IsInWhipRegion(hiddenbutton))
+    if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && IsInWhipRegion(hiddenbutton))) && hiddenbutton->isActivated == false)
 
     {
         hiddenbutton->isActivated = true;
@@ -1198,10 +1198,10 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
 {
     CWingedKoopas* koopas = dynamic_cast<CWingedKoopas*>(e->obj);
     koopas->mario = this;
-    bool areFacingEachOther = 1;
+    bool areFacingEachOther = true;
     if((nx > 0 && koopas->vx > 0 && koopas->x < x)|| (nx < 0 && koopas->vx < 0 && koopas->x > x))
     {
-        areFacingEachOther = 0;
+        areFacingEachOther = false;
     }
 
     if (e->ny < 0)

@@ -11,7 +11,7 @@
 #include "GrassPlatform.h"
 #include "CoinBrick.h"
 #include "BreakableBrickChain.h"
-
+#define KOOPAS_DEFLECT_Y 2
 CKoopas::CKoopas(float x, float y,int color) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -51,7 +51,8 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
 	if (dynamic_cast<CMario*>(e->obj)) {
-		mario = dynamic_cast<CMario*>(e->obj);
+		
+		return;
 	}
 	if (dynamic_cast<CBreakableBrick*>(e->obj)) {
 		CBreakableBrick*	brick = dynamic_cast<CBreakableBrick*>(e->obj);
@@ -319,7 +320,7 @@ void CKoopas::SetState(int state)
 	switch (state)
 	{
 	case KOOPAS_STATE_WALKING:
-		y -= 2;
+		y -= KOOPAS_DEFLECT_Y;
 		this->isReverse = false;
 
 		vx = -KOOPAS_WALKING_SPEED;
@@ -327,14 +328,14 @@ void CKoopas::SetState(int state)
 		revive_start = 0;
 		break;
 	case KOOPAS_STATE_WALKING_RIGHT:
-		y -= 2;
+		y -= KOOPAS_DEFLECT_Y;
 		this->isReverse = false;
 		vx = KOOPAS_WALKING_SPEED;
 		nx = -nx;
 		revive_start = 0;
 		break;
 	case KOOPAS_STATE_SHELL:
-		y -= 2;
+		y -= KOOPAS_DEFLECT_Y;
 		
 		vx = 0;
 		
@@ -354,6 +355,7 @@ void CKoopas::SetState(int state)
 
 		break;
 	case KOOPAS_STATE_SHELL_MOVING:
+		y -= KOOPAS_DEFLECT_Y;
 		vx = nx * KOOPAS_SHELL_MOVING_SPEED;
 		vy = 0;
 		ay = KOOPAS_GRAVITY;

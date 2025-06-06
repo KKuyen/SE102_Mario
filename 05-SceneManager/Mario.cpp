@@ -52,7 +52,7 @@
 #define BOMERANG_BRO_X 2105
 #define BOMERANG_BRO_Y 122
 
-#define MARIO_CHIMNEY_DIVE_SPEED 0.6511
+#define MARIO_CHIMNEY_DIVE_SPEED 0.6512
 
 
 #define MAX_SCENE_X 2815
@@ -65,7 +65,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
     
     
-  
+   
     
     if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME_SHORT)
     {
@@ -484,25 +484,30 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         int& energy = CGameManager::GetInstance()->energy;
         ULONGLONG now = GetTickCount64();
         const int ENERGY_MAX = 6;
-        const DWORD ENERGY_INTERVAL = 200;
+        static ULONGLONG run_start = 0;
 
-        if (lastEnergyUpdate == 0) lastEnergyUpdate = now;
-
-        if (runningState)
+        if (isFlying) // Nếu đang bay thì luôn đầy năng lượng
         {
-            if (energy < ENERGY_MAX && now - lastEnergyUpdate >= ENERGY_INTERVAL)
-            {
-                energy++;
-                if (energy > ENERGY_MAX) energy = ENERGY_MAX;
-                lastEnergyUpdate = now;
-            }
+            energy = ENERGY_MAX;
+            run_start = 0; // Reset để tránh tích tụ thời gian chạy
+        }
+        else if (runningState)
+        {
+            if (run_start == 0) run_start = now;
+
+            ULONGLONG elapsed = now - run_start;
+            float ratio = (float)elapsed / MARIO_FLY_ACTIVATION_TIME;
+            ratio = min(ratio, 1.0f); // không vượt quá 100%
+
+            energy = floor(ratio * ENERGY_MAX);
         }
         else
         {
-            if (energy > 0 && now - lastEnergyUpdate >= ENERGY_INTERVAL)
+            run_start = 0;
+
+            if (energy > 0 && now - lastEnergyUpdate >= 100)
             {
                 energy--;
-                if (energy < 0) energy = 0;
                 lastEnergyUpdate = now;
             }
         }
@@ -1184,7 +1189,16 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
                 }
                 else
                 {
-                    koopas->nx = this->nx;
+                    if (x <= koopas->x)
+                    {
+                        koopas->nx = 1;
+                        vx = abs(vx);
+                    }
+                    else
+                    {
+                        koopas->nx = -1;
+                        vx = -abs(vx);
+                    }
                     koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
                 }
 
@@ -1439,7 +1453,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
             }
         }
     }
-    else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+    else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME&&goomba->GetState()!= GOOMBA_STATE_FALL)
+
+
     {
         goomba->nx = nx;
         goomba->SetState(GOOMBA_STATE_FALL);
@@ -1570,7 +1586,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
             }
         }
     }
-    else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+    else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME&&goomba->GetState()!=WINGED_GOOMBA_STATE_FALL)
     {
         goomba->nx = nx;
 

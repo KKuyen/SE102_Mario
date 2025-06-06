@@ -501,7 +501,7 @@ void CPlayScene::Update(DWORD dt)
 		{
 			alreadyFly = true;
 		}
-		else if (cy > 0)
+		else if (cy > 0||mario->isOnPlatform)
 		{
 			cy = 0.0f;
 			alreadyFly = false;

@@ -5,6 +5,14 @@
 
 #define CELL_WIDTH 16
 #define CELL_HEIGHT 16
+#define PINK_BASE_ID 70000
+#define BLUE_BASE_ID 71000
+#define GREEN_BASE_ID 72000
+#define WHITE_BASE_ID 73000
+#define SHADOW_BASE_ID 74000
+#define SHADOW_END_ID 75000
+
+
 
 class CColorBox : public CGameObject
 {
@@ -21,11 +29,11 @@ public:
         this->heightCells = heightCells;
         switch (color)
         {
-        case 0: baseSpriteId = 70000; break; // Pink
-        case 1: baseSpriteId = 71000; break; // Blue
-        case 2: baseSpriteId = 72000; break; // Green
-        case 3: baseSpriteId = 73000; break; // White
-        default: baseSpriteId = 71000; break; // Blue
+        case 0: baseSpriteId = PINK_BASE_ID; break; // Pink
+        case 1: baseSpriteId = BLUE_BASE_ID; break; // Blue
+        case 2: baseSpriteId = GREEN_BASE_ID; break; // Green
+        case 3: baseSpriteId = WHITE_BASE_ID; break; // White
+        default: baseSpriteId = BLUE_BASE_ID; break; // Blue
         }
         this->isPlatform = isPlatform;
     }

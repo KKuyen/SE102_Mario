@@ -68,11 +68,11 @@ void CColorBox::Render()
     {
         int shadowSpriteId;
         if (row == 0)
-            shadowSpriteId = 74000;
+            shadowSpriteId = SHADOW_BASE_ID;
         else if (row == heightCells - 1)
-            shadowSpriteId = 75000;
+            shadowSpriteId = SHADOW_END_ID;
         else
-            shadowSpriteId = 75000;
+            shadowSpriteId = SHADOW_END_ID;
 
         LPSPRITE shadowSprite = s->Get(shadowSpriteId);
         if (shadowSprite == nullptr)

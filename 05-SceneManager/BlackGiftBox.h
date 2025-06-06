@@ -47,6 +47,8 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void OpenGiftBox();
-	int IsCollidable() { return 1; }
-	int GetAniId();
+ 	int GetAniId();
+	int IsBlocking() {
+		return 0;  
+	}
 };

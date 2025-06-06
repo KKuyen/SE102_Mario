@@ -51,8 +51,13 @@
 #define BOMERANG_BRO_RENDER_POS 2200
 #define BOMERANG_BRO_X 2105
 #define BOMERANG_BRO_Y 122
+
 #define MARIO_CHIMNEY_DIVE_SPEED 0.6511
 
+
+#define MAX_SCENE_X 2815
+#define WIN_RUN_SPEED 0.08f
+#define WIN_RUN_DISTANCE 200
 
 
 
@@ -123,12 +128,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
     if (isWon && isOnPlatform)
     {
-        vx = 0.08f; // tốc độ chạy liên tục
+        vx = WIN_RUN_SPEED; 
         x += vx * dt;
         winDistance += vx * dt;
-        if (winDistance >= 140)
+        if (winDistance >= WIN_RUN_DISTANCE)
             isWon = false;
-        if (x > 2815)
+        if (x > MAX_SCENE_X)
             CGame::GetInstance()->InitiateSwitchScene(2);
         return;
     }
@@ -764,7 +769,9 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
 {
     CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
+
     if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)) && hiddenbutton->isActivated == false&& IsInWhipRegion(hiddenbutton))
+
     {
         hiddenbutton->isActivated = true;
         float bx, by;
@@ -829,9 +836,11 @@ void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
 {
-    if (e->ny > 0)
-    {
-        return;
+    if (e->nx != 0) {
+        vx = -0.1f;
+        nx = 1;
+		SetState(MARIO_STATE_WALKING_RIGHT);
+
     }
     onMovable = true;
     CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj);
@@ -841,7 +850,7 @@ void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
         // Mario sẽ bám vận tốc rơi của platform
         y = movablePlatform->y;
         movablePlatform->Falling();
-    }
+    }   
 }
 
 void CMario::OnCollisionWithBomerang(LPCOLLISIONEVENT e)
@@ -980,6 +989,8 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
             p->AddGameObject(exp);
             flower->Delete();
+            LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+            p->PushBackGameObject(effectPoint);
         }
         else if (level > MARIO_LEVEL_SMALL)
         {

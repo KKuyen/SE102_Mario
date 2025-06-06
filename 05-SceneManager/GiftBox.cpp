@@ -57,11 +57,11 @@ void CGiftBox::Open(CMario* mario)
 	{
 		return;
 	}
-	if (type == 0)
+	if (type == GIFT_BOX_TYPE_COIN)
 	{
 		OpenCoinBox();
 	}
-	else if (type == 2)
+	else if (type == GIFT_BOX_TYPE_MUSHROOM_OR_LEAF)
 	{
 		if (mario->level == MARIO_LEVEL_SMALL)
 		{
@@ -72,7 +72,7 @@ void CGiftBox::Open(CMario* mario)
 			OpenLeafBox();
 		}
  	}
-	else if (type == 3)
+	else if (type == GIFT_BOX_TYPE_GREEN_MUSHROOM)
 	{
 		OpenGreenMushroomBox(mario);
 	}

@@ -16,6 +16,7 @@
 #define NUMBER_TEXT_9 230009
 #define NUMBER_TEXT_P_ANI 230013
 #define NUMBER_TEXT_P 230011
+#define MAX_ENEGY 6
 
 
 class CNumberText : public CGameObject {

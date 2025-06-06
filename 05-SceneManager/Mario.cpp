@@ -67,7 +67,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         if (GetTickCount64() - grow_start_time >= 1000) {
              SetLevel(MARIO_LEVEL_BIG);
             isGrowing = false;
-            SetState(MARIO_STATE_WALKING_RIGHT);
+            if(nx>0)
+                SetState(MARIO_STATE_WALKING_RIGHT);
+			else
+				SetState(MARIO_STATE_WALKING_LEFT);
             grow_start_time = 0;
         }
          return;
@@ -468,9 +471,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 }
             }
         }
-
-        // Kiểm tra thời gian chờ để biến thành Mario chồn
-        if (isWaitingForLevelUp && GetTickCount() - timeWaitingStart >= 400)
+         // Kiểm tra thời gian chờ để biến thành Mario chồn
+        if (isWaitingForLevelUp && GetTickCount() - timeWaitingStart >= WEASEL_TRANSFORM_TIME)
         {
             SetLevel(MARIO_LEVEL_MAX);
             isVisible = true;
@@ -525,6 +527,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::OnNoCollision(DWORD dt)
 {
+ 
     x += vx * dt;
     if (onMovable)
     {
@@ -2112,7 +2115,7 @@ void CMario::Render()
 			aniId = growAniId;
 		else
 			aniId = growAniIdLeft;
-         animations->Get(aniId)->Render(x, y);
+         animations->Get(aniId)->Render(x, y-5);
         return;
     }
 

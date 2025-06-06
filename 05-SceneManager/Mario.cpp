@@ -841,12 +841,20 @@ void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
 {
+    if (e->ny > 0)
+    {
+        onMovable = false;
+     
+        vy = 0;
+        return;
+    }
     if (e->nx != 0) {
         vx = -0.1f;
         nx = 1;
 		SetState(MARIO_STATE_WALKING_RIGHT);
 
     }
+ 
     onMovable = true;
     CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj);
     if (e->ny < 0) {
@@ -856,6 +864,7 @@ void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
         y = movablePlatform->y;
         movablePlatform->Falling();
     }   
+   
 }
 
 void CMario::OnCollisionWithBomerang(LPCOLLISIONEVENT e)

@@ -37,8 +37,6 @@
 #define KOOPAS_REVIVE_TIME 4000   
 #define KOOPAS_COLOR_ORANGE 1
 #define KOOPAS_COLOR_GREEN 2
-#define KOOPAS_DIE_POS_X 2230
-#define KOOPAS_DIE_POS_Y 185
 class CKoopas : public CGameObject  
 {  
 protected:  

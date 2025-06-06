@@ -10,7 +10,6 @@
 #include "WingedKoopas.h"
 #include "WIngedGoomba.h"
 #include "BreakableBrick.h"
-#include "Koopas.cpp"
 CWingedKoopas::CWingedKoopas(float x, float y,bool canFly) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -143,7 +142,7 @@ void CWingedKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else if (elapsedTime >= WINGED_KOOPAS_REVIVE_TIME)
 		{
-			y -= KOOPAS_DEFLECT_Y;
+			y -= 2;
 			vy = WINGED_KOOPAS_JUMP_SPEED;
 			ay = WINGED_KOOPAS_GRAVITY;
 			lastShakeOffset = 0;
@@ -273,13 +272,13 @@ void CWingedKoopas::SetState(int state)
 		ax = 0;
 		break;
 	case WINGED_KOOPAS_STATE_WALKING:
-		y -= KOOPAS_DEFLECT_Y;
+		y -= 3;
 		vx = -WINGED_KOOPAS_WALKING_SPEED;
 		nx = -nx;
 		revive_start = 0;
 		break;
 	case WINGED_KOOPAS_STATE_WALKING_RIGHT:
-		y -= KOOPAS_DEFLECT_Y;
+		y -= 3;
 		vx = WINGED_KOOPAS_WALKING_SPEED;
 		nx = -nx;
 		revive_start = 0;

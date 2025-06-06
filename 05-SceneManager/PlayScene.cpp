@@ -455,7 +455,13 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
-
+#define MAX_CY -215
+#define ALR_FLY_CY -160
+#define NOT_ALR_FLY_CY   -40
+#define SECENE_2_CAMERA_MOVE_CX 0.7
+#define SECENE_2_CAMERA_MAX_CX 2310
+#define SECENE_2_CAMERA_BEFORE_TELEPORT_CX 1791
+#define SECENE_2_TELEPORT_CX 290
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
@@ -487,22 +493,24 @@ void CPlayScene::Update(DWORD dt)
 		cy -= game->GetBackBufferHeight() / 2;
 
 		CMario* mario = dynamic_cast<CMario*>(player);
-		if (cy < -215)
+		if (cy < MAX_CY)
 		{
-			cy = -215;
+			cy = MAX_CY;
 		}
-		else if (cy < -160)
+		else if (cy < ALR_FLY_CY)
 		{
 			alreadyFly = true;
 		}
-		else if (mario->vy > 0 && alreadyFly == true)
-		{
-		}
-		else if (cy > -40)
+		else if (cy > NOT_ALR_FLY_CY)
 		{
 			cy = 0.0f;
 			alreadyFly = false;
 		}
+		else if (mario->vy > 0 && alreadyFly == true)
+		{
+		}
+		
+		
 		else
 		{
 			// Khi không bay, giữ camera ở vị trí mặc định theo trục Y
@@ -542,7 +550,7 @@ void CPlayScene::Update(DWORD dt)
 			if (mario->teleport == MARIO_TELEPORT_IN && GetTickCount64() - mario->teleport_start <= MARIO_TELEPORT_DURATION && mario->teleport_start != -1)
 			{
 				alreadyTeleport = true;
-				curentCX = 1791;
+				curentCX = SECENE_2_CAMERA_BEFORE_TELEPORT_CX;
 				cx = curentCX;
 			}
 			else
@@ -550,28 +558,28 @@ void CPlayScene::Update(DWORD dt)
 				if (alreadyTeleport == true)
 				{
 					alreadyTeleport = false;
-					curentCX += 290;
-					cx = curentCX + 290;
+					curentCX += SECENE_2_TELEPORT_CX;
+					cx = curentCX + SECENE_2_TELEPORT_CX;
 				}
 				else
 				{
-					if (curentCX + 1 >= 1791 && curentCX < 1982)
+					if (curentCX  >= SECENE_2_CAMERA_BEFORE_TELEPORT_CX-1 && curentCX < SECENE_2_CAMERA_BEFORE_TELEPORT_CX+200)
 					{
 						cx = curentCX;
-						curentCX += 0.7;
-						cx = curentCX + 0.7;
+						curentCX += SECENE_2_CAMERA_MOVE_CX;
+						cx = curentCX + SECENE_2_CAMERA_MOVE_CX;
 					}
 					else
 					{
-						curentCX += 0.7;
-						cx = curentCX + 0.7;
+						curentCX += SECENE_2_CAMERA_MOVE_CX;
+						cx = curentCX + SECENE_2_CAMERA_MOVE_CX;
 					}
 				}
 			}
-			if (curentCX > 2310)
+			if (curentCX > SECENE_2_CAMERA_MAX_CX)
 			{
-				curentCX = 2310;
-				cx = 2310;
+				curentCX = SECENE_2_CAMERA_MAX_CX;
+				cx = SECENE_2_CAMERA_MAX_CX;
 			}
 		}
 	}

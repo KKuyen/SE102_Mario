@@ -764,7 +764,7 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
 {
     CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
-    if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)) && hiddenbutton->isActivated == false)
+    if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)) && hiddenbutton->isActivated == false&& IsInWhipRegion(hiddenbutton))
     {
         hiddenbutton->isActivated = true;
         float bx, by;
@@ -1892,7 +1892,7 @@ int CMario::GetAniIdMax()
 	}
  
    
-    if (isSlowFalling)
+    if (isSlowFalling&&!isFlying)
     {
         if (nx > 0)
         {

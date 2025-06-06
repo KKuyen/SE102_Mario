@@ -252,6 +252,12 @@ class CMario : public CGameObject
 	int GetAniIdMax();
 	ULONGLONG hold_start;
 	ULONGLONG lastEnergyUpdate; // Thời điểm cập nhật energy gần nhất
+		// --- Add these for mushroom grow animation ---
+	bool isGrowing = false;
+	ULONGLONG grow_start_time = 0;
+	int growAniId = 44443; // aniId for enlarge animation
+	int growAniIdLeft = 55553; // aniId for small grow animation
+
 public:
 	bool IsInWhipRegion(CGameObject* obj);
 	ULONGLONG transition_start; // Thời điểm bắt đầu hiệu ứng
@@ -384,6 +390,9 @@ public:
 	void StartSlowFalling() { isSlowFalling = true; slow_fall_start = GetTickCount64(); }
 	void StopSlowFalling() { isSlowFalling = false; slow_fall_start = 0; ay = MARIO_GRAVITY; }
 	BOOLEAN IsSlowFalling() { return isSlowFalling; }
-	
 
+	// Add these getters for grow state (optional, for clarity)
+	bool IsGrowing() const { return isGrowing; }
+	void StartGrowing() { isGrowing = true; grow_start_time = GetTickCount64(); }
+	void StopGrowing() { isGrowing = false; grow_start_time = 0; }
 };

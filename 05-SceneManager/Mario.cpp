@@ -63,6 +63,15 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+    if (isGrowing) {
+        if (GetTickCount64() - grow_start_time >= 1000) {
+             SetLevel(MARIO_LEVEL_BIG);
+            isGrowing = false;
+            SetState(MARIO_STATE_WALKING_RIGHT);
+            grow_start_time = 0;
+        }
+         return;
+    }
     
     
    
@@ -942,12 +951,15 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
     DebugOut(L"[INFO] Mario collided with Mushroom, nx = %f, ny = %f\n", e->nx, e->ny);
     CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
     mushroom->SetState(MUSHROOM_STATE_EATEN);
-    if (level == MARIO_LEVEL_SMALL)
-        SetLevel(MARIO_LEVEL_BIG);
-    LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
-    LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-    LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-    p->PushBackGameObject(effectPoint);
+
+    if (level == MARIO_LEVEL_SMALL && !isGrowing) {
+        StartGrowing();
+    } else if (level != MARIO_LEVEL_SMALL) {
+        LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 1000);
+        LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+        LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+        p->PushBackGameObject(effectPoint);
+    }
 }
 
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
@@ -2094,6 +2106,15 @@ void CMario::Render()
         return;
     CAnimations* animations = CAnimations::GetInstance();
     int aniId = -1;
+
+    if (isGrowing) {
+		if (nx > 0)
+			aniId = growAniId;
+		else
+			aniId = growAniIdLeft;
+         animations->Get(aniId)->Render(x, y);
+        return;
+    }
 
     if (state == MARIO_STATE_DIE)
         aniId = ID_ANI_MARIO_DIE;

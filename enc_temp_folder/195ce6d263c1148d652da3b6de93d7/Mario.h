@@ -196,7 +196,6 @@
 
 
 #define MARIO_TRANSITION_TIME 500
-#define MARIO_BLINK_PERIOD  100
 struct MarioState {
     float x, y; // Vị trí
     float vx, vy; // Vận tốc

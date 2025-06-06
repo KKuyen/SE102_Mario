@@ -58,7 +58,6 @@
 #define MAX_SCENE_X 2815
 #define WIN_RUN_SPEED 0.08f
 #define WIN_RUN_DISTANCE 200
-#define BUTTON_MOVE_Y 16
 
 
 
@@ -780,6 +779,7 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
         }
     }
 }
+
 void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
 {
     CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
@@ -791,7 +791,7 @@ void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
         float bx, by;
         hiddenbutton->GetPosition(bx, by);
         float buttonX = bx;
-        float buttonY = by - BUTTON_MOVE_Y;
+        float buttonY = by - 16.0f;
         if (hiddenbutton->type == HIDDEN_BUTTON_TYPE_BUTTON)
         {
             CButton* button = new CButton(buttonX, buttonY);
@@ -1389,6 +1389,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
     float goomba_vx, goomba_vy;
     goomba->GetSpeed(goomba_vx, goomba_vy);
+    float epsilon = 0.01f;
     bool areFacingEachOther = 1;
     if ((nx > 0 && goomba_vx > 0 && goomba->x < x) || (nx < 0 && goomba_vx < 0 && goomba->x > x))
     {
@@ -1513,8 +1514,8 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
     CWingedGoomba* goomba = dynamic_cast<CWingedGoomba*>(e->obj);
     float goomba_vx, goomba_vy;
     goomba->GetSpeed(goomba_vx, goomba_vy);
-
-    bool areFacingEachOther = true;
+    float epsilon = 0.01f;
+    bool areFacingEachOther = 1;
     if((nx > 0 && goomba_vx > 0 && goomba->x < x)|| (nx < 0 && goomba_vx < 0 && goomba->x > x))
     {
         areFacingEachOther = 0;
@@ -2098,7 +2099,6 @@ int CMario::GetAniIdMax()
     return aniId;
 }
 
-
 void CMario::Render()
 {
 
@@ -2128,7 +2128,7 @@ void CMario::Render()
     if (untouchable == 1)
     {
         ULONGLONG now = GetTickCount64();
-        int blinkPeriod = MARIO_BLINK_PERIOD;
+        int blinkPeriod = 100;
         int blinkState = ((now - untouchable_start) % blinkPeriod) < (blinkPeriod / 2);
         if (blinkState)
         {

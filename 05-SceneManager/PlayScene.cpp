@@ -563,12 +563,17 @@ void CPlayScene::Update(DWORD dt)
 				}
 				else
 				{
-					if (curentCX  >= SECENE_2_CAMERA_BEFORE_TELEPORT_CX-1 && curentCX < SECENE_2_CAMERA_BEFORE_TELEPORT_CX+200)
+					if (curentCX+1  >= SECENE_2_CAMERA_BEFORE_TELEPORT_CX && curentCX < SECENE_2_CAMERA_BEFORE_TELEPORT_CX+200)
 					{
 						cx = curentCX;
 
-						curentCX += CAM_SPEED_1_4;
-						cx = curentCX + CAM_SPEED_1_4;
+						
+					}
+					else if(mario->teleport_start_out != -1 && GetTickCount64() - mario->teleport_start_out <= MARIO_TELEPORT_DURATION)
+					{
+						cx = curentCX;
+
+
 					}
 					else
 					{

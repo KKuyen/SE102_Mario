@@ -25,7 +25,7 @@ private:
 	CEffectPoint(float x, float y, int pointt) : CEffect(x, y) {
 		this->point = pointt;
 		this->vy = POINT_VY_START;
- 		if(pointt>0 && pointt<=1000)
+ 		if(pointt>1 && pointt<=1000)
 			CGameManager::GetInstance()->points += pointt;
 		 
 	};

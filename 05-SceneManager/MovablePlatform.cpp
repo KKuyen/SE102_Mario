@@ -26,15 +26,17 @@ void CMovablePlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isActive == 1) {
 		x += vx * dt;
 		y += vy * dt;
+
+		float mario_x, mario_y;
+		
 	}
 	else {
 		float cx, cy;
 		CGame::GetInstance()->GetCamPos(cx, cy);
- 		if(cx<2540)
+ 		if(cx< MAX_SCENE_X)
 			if (x < cx + SCREEN_WIDTH) {
  				isActive = 1;
 			}
-		
 	}
 }
  
@@ -47,7 +49,9 @@ void CMovablePlatform::Falling() {
 }
 int CMovablePlatform::IsDirectionColliable(float nx, float ny)
 {
-	if (nx == 0 && ny == -1) return 1;
-	else return 0;
+	return 1;
 }
+
+// Đảm bảo IsBlocking và IsCollidable trả về 1
+// Nếu đã có trong header thì không cần thêm ở đây
 

@@ -47,8 +47,7 @@ void CBomerangBro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     vy += ay * dt;
     vx += ax * dt;
 
-    // ?i?u ch?nh h??ng theo Mario
-    if (mario != nullptr)
+     if (mario != nullptr)
     {
         float mario_x, mario_y;
         mario->GetPosition(mario_x, mario_y);
@@ -62,8 +61,7 @@ void CBomerangBro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             vx = -vx;
         }
 
-        // Ném boomerang: 2 l?n liên ti?p, sau ?ó ngh?
-        ULONGLONG now = GetTickCount64();
+         ULONGLONG now = GetTickCount64();
         if (state != BOMERANG_BRO_STATE_DIE && state != BOMERANG_BRO_STATE_FALL)
         {
             if (throw_count < 2 && (throw_start == -1 || now - throw_start > BOMERANG_BRO_THROW_INTERVAL))
@@ -72,8 +70,7 @@ void CBomerangBro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                 throw_start = now;
                 throw_count++;
 
-                // T?o boomerang
-                float direction = isMarioRight ? 1.0f : -1.0f;
+                 float direction = isMarioRight ? 1.0f : -1.0f;
                 CBoomerang* boomerang = new CBoomerang(x, y, direction, this);
                 CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
                 if (currentScene)
@@ -83,27 +80,24 @@ void CBomerangBro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             }
             else if (throw_count >= 2 && now - throw_start > BOMERANG_BRO_THROW_COOLDOWN)
             {
-                throw_count = 0; // Reset ?? b?t ??u chu k? ném m?i
+                throw_count = 0;  
                 throw_start = -1;
             }
         }
 
-        // K?t thúc tr?ng thái ném
-        if (state == BOMERANG_BRO_STATE_THROW && now - throw_start > BOMERANG_BRO_THROW_PAUSE)
+         if (state == BOMERANG_BRO_STATE_THROW && now - throw_start > BOMERANG_BRO_THROW_PAUSE)
         {
             SetState(isMarioRight ? BOMERANG_BRO_STATE_WALKING_RIGHT : BOMERANG_BRO_STATE_WALKING_LEFT);
         }
     }
 
-    // X? lý tr?ng thái ch?t
-    if ((state == BOMERANG_BRO_STATE_DIE) && (GetTickCount64() - die_start > BOMERANG_BRO_DIE_TIMEOUT))
+     if ((state == BOMERANG_BRO_STATE_DIE) && (GetTickCount64() - die_start > BOMERANG_BRO_DIE_TIMEOUT))
     {
         isDeleted = true;
         return;
     }
 
-    // C?p nh?t tr?ng thái di chuy?n
-    if (vx < 0)
+     if (vx < 0)
     {
         if (state == BOMERANG_BRO_STATE_WALKING_RIGHT)
             SetState(BOMERANG_BRO_STATE_WALKING_LEFT);

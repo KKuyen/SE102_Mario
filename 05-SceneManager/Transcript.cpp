@@ -42,35 +42,35 @@ void CTranscript::InitUI()
 	isInitUI = true;
 	LPSCENE s = CGame::GetInstance()->GetCurrentScene();
 	CPlayScene* p = dynamic_cast<CPlayScene*>(s);
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < TIMER_CHARACTERS_LENGTH; i++)
 	{
 		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		p->PushBackGameObject(numtext);
 		timer.push_back(numtext);
 	}
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < COINS_CHARACTERS_LENGTH; i++)
 	{
 		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		p->PushBackGameObject(numtext);
 		coins.push_back(numtext);
 	}
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < POINTS_CHARACTERS_LENGTH; i++)
 	{
 		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		p->PushBackGameObject(numtext);
 		points.push_back(numtext);
 	}
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < LIFES_CHARACTERS_LENGTH; i++)
 	{
 		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		p->PushBackGameObject(numtext);
 		lifes.push_back(numtext);
 	}
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < ENERGY_CHARACTERS_LENGTH; i++)
 	{
 		LPGAMEOBJECT numtext = new CNumberText(x, y, -1);
 		CNumberText* temp = dynamic_cast<CNumberText*>(numtext);
-		temp->SetIdSprite(230010);
+		temp->SetIdSprite(ENEGY_BLACK_SPRITE);
 		p->PushBackGameObject(numtext);
 		energy.push_back(numtext);
 	}
@@ -125,7 +125,7 @@ void CTranscript::UpdateElements(vector<LPGAMEOBJECT>& elements, DWORD value)
 	for (int i = valueStr.length() - 1; i >= 0 && index >= 0; --i, --index)
 	{
 		int digit = valueStr[i] - '0';
-		dynamic_cast<CNumberText*>(elements[index])->SetIdSprite(230000 + digit);
+		dynamic_cast<CNumberText*>(elements[index])->SetIdSprite(NUMBER_BASE_SPRITE + digit);
 	}
 }
 
@@ -136,11 +136,11 @@ void CTranscript::UpdateEnergy(vector<LPGAMEOBJECT>& energy, int value)
 	{
 		if (i < value)
 		{
-			dynamic_cast<CNumberText*>(energy[i])->SetIdSprite(230014);
+			dynamic_cast<CNumberText*>(energy[i])->SetIdSprite(ENEGY_WHITE_SPRITE);
 		}
 		else
 		{
-			dynamic_cast<CNumberText*>(energy[i])->SetIdSprite(230010);
+			dynamic_cast<CNumberText*>(energy[i])->SetIdSprite(ENEGY_BLACK_SPRITE);
 		}
 	}
 }

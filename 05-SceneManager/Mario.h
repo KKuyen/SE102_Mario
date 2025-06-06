@@ -12,21 +12,22 @@
 
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
-#define MARIO_SLIP_SPEED 0.5f       // Tốc độ trượt ban đầu
-#define MARIO_SLIP_DECEL 0.00015f     // Gia tốc giảm dần khi trượt
+#define MARIO_SLIP_SPEED 0.3f       // Tốc độ trượt ban đầu
+#define MARIO_SLIP_DECEL 0.00025f     // Gia tốc giảm dần khi trượt
 
 #define MARIO_JUMP_SPEED_Y		0.40f
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f
-#define MARIO_JUMP_FLY_SPEED_Y 0.5f
+#define MARIO_JUMP_FLY_SPEED_Y -0.3f
 #define MARIO_FLY_ACTIVATION_TIME 1100
+#define MARIO_MAX_FLY_ACTIVATION_TIME 2350
 #define MARIO_TELEPORT_DURATION 1000
 
-#define MARIO_WHIP_TIME 250 
+#define MARIO_WHIP_TIME 150 
 
 
 
 #define MARIO_GRAVITY			0.00100f
-#define MARIO_GRAVITY_FLY		0.00100f
+#define MARIO_GRAVITY_FLY		0.000300f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.2f
 
@@ -184,7 +185,7 @@
 
 #define MARIO_SLOW_FALL_SPEED_Y 0.05f  // Tốc độ rơi chậm khi kìm
 #define MARIO_SLOW_FALL_GRAVITY 0.0005f // Trọng lực giảm khi kìm
-#define MARIO_SLOW_FALL_MAX_TIME 700  // Thời gian tối đa có thể kìm (ms)
+#define MARIO_SLOW_FALL_MAX_TIME 150  // Thời gian tối đa có thể kìm (ms)
 
 
 #define MARIO_TRANSITION_TIME 500
@@ -280,7 +281,7 @@ public:
 	bool onMovable;
 	bool isBomerangBroRendered;
 	bool typeout;
-
+	ULONGLONG fly_timer;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		CGame* cgame = CGame::GetInstance();
@@ -294,7 +295,7 @@ public:
 		ay = MARIO_GRAVITY;
 		isBomerangBroRendered = false;
 		isWon = false;
-
+		fly_timer = 0;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;

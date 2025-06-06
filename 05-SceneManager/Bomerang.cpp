@@ -38,8 +38,7 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
     ULONGLONG now = GetTickCount();
     DWORD elapsed = now - startTime;
-    float cycleTime = 2500.0f;  
-    float angle = (elapsed % (DWORD)cycleTime) * 2 * 3.14159 / cycleTime;
+     float angle = (elapsed % (DWORD)CYCLE_TIME) * 2 * PI / CYCLE_TIME;
 
      if (!isReturning)
     {

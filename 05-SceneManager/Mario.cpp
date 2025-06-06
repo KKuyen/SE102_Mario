@@ -51,21 +51,34 @@
 #define BOMERANG_BRO_RENDER_POS 2200
 #define BOMERANG_BRO_X 2105
 #define BOMERANG_BRO_Y 122
+#define MAX_SCENE_X 2815
+#define WIN_RUN_SPEED 0.08f
+#define WIN_RUN_DISTANCE 200
 
 
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+    if (isFlying && GetTickCount64() - fly_timer > MARIO_MAX_FLY_ACTIVATION_TIME+100 && fly_timer!=0)
+    {
+        isFlying = false;
+        fly_timer = 0;
+    }
+
     if (isWon && isOnPlatform)
     {
-        vx = 0.08f; // tốc độ chạy liên tục
+        vx = WIN_RUN_SPEED; 
         x += vx * dt;
         winDistance += vx * dt;
-        if (winDistance >= 140)
+        if (winDistance >= WIN_RUN_DISTANCE)
             isWon = false;
-        if (x > 2815)
+        if (x > MAX_SCENE_X)
             CGame::GetInstance()->InitiateSwitchScene(2);
         return;
+    }
+    if (!isOnPlatform)
+    {
+        run_start = 0;
     }
     if (teleport_start_out != -1 && GetTickCount64() - teleport_start_out <= MARIO_TELEPORT_DURATION)
 
@@ -104,6 +117,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     if (vx == 0 && (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNING_LEFT))
     {
         isFlying = false;
+        fly_timer = 0;
         run_start = 0;
 
     }
@@ -229,6 +243,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             isSlowFalling = false;
             slow_fall_start = 0;
         }
+      
         if (level == MARIO_LEVEL_MAX && vy > 0 && isSlowFalling)
         {
             // Kiểm tra thời gian kìm tối đa
@@ -244,6 +259,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
                     vy = MARIO_SLOW_FALL_SPEED_Y;
                 ay = MARIO_SLOW_FALL_GRAVITY;
             }
+        }
+        if (level == MARIO_LEVEL_MAX && isFlying)
+        {
+            ay = MARIO_GRAVITY_FLY;
         }
         else if (!isSlowFalling && vy > 0)
         {
@@ -262,6 +281,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
         if (isOnPlatform && beforeLand)
         {
             isFlying = false;
+            fly_timer = 0;
             run_start = 0;
             beforeLand = false;
         }
@@ -578,15 +598,26 @@ void CMario::OnCollisionWithWingedRedKoopa(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e)
 {
     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(e->obj);
-    if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0) || e->ny > 0)
+    if (brick->state == BREAKABLE_BRICK_STATE_NORMAL)
     {
-      
-        brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+        if ((level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME && e->nx != 0))
+        {
+
+            brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+        }
+        else if (e->ny > 0)
+        {
+            if (level == MARIO_LEVEL_SMALL)
+                brick->SetState(BREAKABLE_BRICK_STATE_MOVE);
+            else
+                brick->SetState(BREAKABLE_BRICK_STATE_BREAK);
+        
+
+        }
     }
-    else if(e->ny<0)
+    else if (brick->state == BREAKABLE_BRICK_STATE_COIN)
     {
-     
-       
+        brick->SetState(BREAKABLE_BRICK_STATE_INVISIBLE);
     }
 }
 
@@ -607,16 +638,10 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
                 if (dynamic_cast<CBreakableBrick*>(objects[i]))
                 {
                     CBreakableBrick* brick = dynamic_cast<CBreakableBrick*>(objects[i]);
-                    if (brick->GetState() != BREAKABLE_BRICK_STATE_INVISIBLE)
-                    {
-                        float brickX, brickY;
-                        objects[i]->GetPosition(brickX, brickY);
-                        brick->SetState(BREAKABLE_BRICK_STATE_INVISIBLE);
-                        CCoin* coin = new CCoin(brickX, brickY);
-                        LPSCENE s = CGame::GetInstance()->GetCurrentScene();
-                        LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
-                        p->AddGameObject(coin);
-                    }
+                 
+                        brick->SetState(BREAKABLE_BRICK_STATE_COIN);
+                        
+                  
                 }
             }
         }
@@ -626,7 +651,7 @@ void CMario::OnCollisionWithButton(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCHiddenButton(LPCOLLISIONEVENT e)
 {
     CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
-    if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)) && hiddenbutton->isActivated == false)
+    if ((e->ny > 0 || (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)&& e->nx!=0) && hiddenbutton->isActivated == false)
     {
         hiddenbutton->isActivated = true;
         float bx, by;
@@ -691,9 +716,11 @@ void CMario::OnCollisionWithCPiranhaPlant(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
 {
-    if (e->ny > 0)
-    {
-        return;
+    if (e->nx != 0) {
+        vx = -0.1f;
+        nx = 1;
+		SetState(MARIO_STATE_WALKING_RIGHT);
+
     }
     onMovable = true;
     CMovablePlatform* movablePlatform = dynamic_cast<CMovablePlatform*>(e->obj);
@@ -703,7 +730,7 @@ void CMario::OnCollisionWithCMovablePlatform(LPCOLLISIONEVENT e)
         // Mario sẽ bám vận tốc rơi của platform
         y = movablePlatform->y;
         movablePlatform->Falling();
-    }
+    }   
 }
 
 void CMario::OnCollisionWithBomerang(LPCOLLISIONEVENT e)
@@ -758,17 +785,21 @@ void CMario::OnCollisionWithBomerangBro(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithChimney(LPCOLLISIONEVENT e)
 {
     CChimney* chimney = dynamic_cast<CChimney*>(e->obj);
-    if (e->ny < 0 && chimney->getType() == 2&&teleport==0)
+    CGame* game = CGame::GetInstance();
+    if (e->ny < 0 && chimney->getType() == 2&&teleport==0&& game->IsKeyDown(DIK_DOWN))
     {
-        DebugOut(L"alo");
-        teleport = MARIO_TELEPORT_IN;
-        teleport_start = GetTickCount64();
+      
+            DebugOut(L"alo");
+            teleport = MARIO_TELEPORT_IN;
+            teleport_start = GetTickCount64();
+        
     }
-    if (chimney->getType() == 3 && teleport == 0)
+    if (chimney->getType() == 3 && teleport == 0&& game->IsKeyDown(DIK_UP))
     {
-        DebugOut(L"alo");
-        teleport = MARIO_TELEPORT_OUT;
-        teleport_start = GetTickCount64();
+       
+            teleport = MARIO_TELEPORT_OUT;
+            teleport_start = GetTickCount64();
+        
     }
 }
 
@@ -838,6 +869,8 @@ void CMario::OnCollisionWithFlower(LPCOLLISIONEVENT e)
             LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
             p->AddGameObject(exp);
             flower->Delete();
+            LPGAMEOBJECT effectPoint = new CEffectPoint(x, y, 100);
+            p->PushBackGameObject(effectPoint);
         }
         else if (level > MARIO_LEVEL_SMALL)
         {
@@ -898,7 +931,7 @@ void CMario::OnCollisionWithKooPas(LPCOLLISIONEVENT e)
         {
             koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
 
-            if (vx > 0)
+            if (x<=koopas->x)
                 koopas->nx = 1;
             else
                 koopas->nx = -1;
@@ -1070,7 +1103,7 @@ void CMario::OnCollisionWithWingedKoopas(LPCOLLISIONEVENT e)
             else if (koopas->GetState() == WINGED_KOOPAS_STATE_REVERSE)
             {
                 koopas->SetState(WINGED_KOOPAS_STATE_SHELL_MOVING);
-                if (vx > 0)
+                if (x <= koopas->x)
                     koopas->nx = 1;
                 else
                     koopas->nx = -1;
@@ -1726,6 +1759,17 @@ int CMario::GetAniIdMax()
                 else
                     aniId = ID_ANI_MARIO_MAX_JUMP_WALK_LEFT;
             }
+            if (nx > 0)
+            {
+                if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+                    aniId = ID_ANI_MARIO_WHIP_RIGHT;
+              
+            }
+            else {
+                if (GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
+                    aniId = ID_ANI_MARIO_WHIP_LEFT;
+
+            }
         }
         else
         if (isSitting)
@@ -1926,6 +1970,11 @@ void CMario::SetState(int state)
         }
         case MARIO_STATE_JUMP:
         {
+            if (vx == 0)
+            {
+                vx = 0;
+                ax = 0;
+            }
             CScene* scene = CGame::GetInstance()->GetCurrentScene();
             CSampleKeyHandler* keyHandler = dynamic_cast<CSampleKeyHandler*>(scene->GetKeyEventHandler());
             if (keyHandler)
@@ -1939,7 +1988,10 @@ void CMario::SetState(int state)
             if (isOnPlatform)
             {
                 if (isFlying)
-                    vy = -MARIO_JUMP_FLY_SPEED_Y;
+                {
+                    vy = MARIO_JUMP_FLY_SPEED_Y;
+                    fly_timer = GetTickCount64();
+                }
                 else if (abs(this->vx) == MARIO_RUNNING_SPEED)
                     vy = -MARIO_JUMP_RUN_SPEED_Y;
                 else
@@ -1951,14 +2003,16 @@ void CMario::SetState(int state)
 
                 if (isFlying && level == MARIO_LEVEL_MAX)
                 {
-                    vy = -MARIO_JUMP_FLY_SPEED_Y;
-                    ay = MARIO_GRAVITY_FLY;
+                    vy = MARIO_JUMP_FLY_SPEED_Y;
+                  
                 }
             }
+           
             break;
         }
         case MARIO_STATE_RELEASE_JUMP:
         {
+            
             if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
             if (vy == 0)
             {
@@ -1969,6 +2023,7 @@ void CMario::SetState(int state)
         case MARIO_STATE_SIT:
         {
             isFlying = false;
+            fly_timer = 0;
             StopRunning();
             StopWhip();
             if (isOnPlatform && level != MARIO_LEVEL_SMALL)
@@ -2007,7 +2062,7 @@ void CMario::SetState(int state)
         {
             if (isOnPlatform)
             {
-                maxVx = MARIO_SLIP_SPEED;
+              
                 ax = -MARIO_SLIP_DECEL;
             }
             break;
@@ -2016,7 +2071,7 @@ void CMario::SetState(int state)
         {
             if (isOnPlatform)
             {
-                maxVx = -MARIO_SLIP_SPEED;
+              
                 ax = MARIO_SLIP_DECEL;
             }
             break;

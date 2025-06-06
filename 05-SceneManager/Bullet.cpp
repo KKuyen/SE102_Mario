@@ -33,42 +33,42 @@ void CBullet::SetUpAngle(float marioX, float marioY)
 {
 	float deltaX = marioX - x;
 	float deltaY = -(marioY - y);
-	float angle = atan2(deltaY, deltaX) * 180.0f / M_PI;
+	float angle = atan2(deltaY, deltaX) * CONST180 / M_PI;
 	float angleFire;
 
-	if (angle >= -90 && angle <= -10)
+	if (angle >= -ANGLE_90 && angle <= -ANGLE_10)
 	{
-		angleFire = -45;
+		angleFire = -ANGLE_45;
 	}
-	else if (angle > -10 && angle <= 0) 
+	else if (angle > -ANGLE_10 && angle <= 0) 
 	{
-		angleFire = -20;
+		angleFire = -ANGLE_20;
 	}
-	else if (angle > 0 && angle <= 30) 
+	else if (angle > 0 && angle <= ANGLE_30) 
 	{
-		angleFire = 20;
+		angleFire = ANGLE_20;
 	}
-	else if (angle > 30 && angle <= 90) 
+	else if (angle > ANGLE_30 && angle <= ANGLE_90) 
 	{
-		angleFire = 45;
+		angleFire = ANGLE_45;
 	}
-	else if (angle > 90 && angle <= 160) 
+	else if (angle > ANGLE_90 && angle <= ANGLE_160) 
 	{
-		angleFire = 135;
+		angleFire = ANGLE_135;
 	}
-	else if (angle > 160 && angle <= 180) 
+	else if (angle > ANGLE_160 && angle <= ANGLE_180) 
 	{
-		angleFire = 160;
+		angleFire = ANGLE_160;
 	}
-	else if (angle > -180 && angle <= -145) 
+	else if (angle > -ANGLE_180 && angle <= -ANGLE_145) 
 	{
-		angleFire = -160;
+		angleFire = -ANGLE_160;
 	}
 	else
 	{
-		angleFire = -135;
+		angleFire = -ANGLE_135;
 	}
 
-	vx = BULLET_V * cos(angleFire * M_PI / 180.0f);
-	vy = -BULLET_V * sin(angleFire * M_PI / 180.0f);
+	vx = BULLET_V * cos(angleFire * M_PI / CONST180);
+	vy = -BULLET_V * sin(angleFire * M_PI / CONST180);
 }

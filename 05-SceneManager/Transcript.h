@@ -5,6 +5,14 @@
 #include "Animations.h"
 #include "PlayScene.h"
 #include "NumberText.h"
+#define ENEGY_BLACK_SPRITE 230010
+#define ENEGY_WHITE_SPRITE 230014
+#define NUMBER_BASE_SPRITE 230000
+#define TIMER_CHARACTERS_LENGTH 3
+#define COINS_CHARACTERS_LENGTH 2
+#define POINTS_CHARACTERS_LENGTH 7
+#define LIFES_CHARACTERS_LENGTH 2
+#define ENERGY_CHARACTERS_LENGTH 6
 
 class CTranscript : public CGameObject {
 protected:

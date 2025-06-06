@@ -39,15 +39,15 @@ void CFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			leftZoneX = FIRE_LEFT_ZONE_X2;
 			rightZoneX = FIRE_RIGHT_ZONE_X2;
-			leftEdgeX = 1856;
-			rightEdgeX = 1887;
+			leftEdgeX = LEFT_EDGE_X2;
+			rightEdgeX = RIGHT_EDGE_X2;
 		}
 		else
 		{
 			leftZoneX = FIRE_LEFT_ZONE_X;
 			rightZoneX = FIRE_RIGHT_ZONE_X;
-			leftEdgeX = 352;
-			rightEdgeX = 384;
+			leftEdgeX = LEFT_EDGE_X1;
+			rightEdgeX = RIGHT_EDGE_X1;
 
 		}
 		if(mario_x< leftZoneX || mario_x> rightZoneX)

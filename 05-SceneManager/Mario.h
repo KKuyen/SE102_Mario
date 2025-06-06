@@ -20,7 +20,7 @@
 #define MARIO_JUMP_RUN_SPEED_Y	0.45f
 #define MARIO_JUMP_FLY_SPEED_Y -0.3f
 #define MARIO_FLY_ACTIVATION_TIME 1100
-#define MARIO_MAX_FLY_ACTIVATION_TIME 2350
+#define MARIO_MAX_FLY_ACTIVATION_TIME 2550
 #define MARIO_TELEPORT_DURATION 1000
 
 #define MARIO_WHIP_TIME 160
@@ -192,7 +192,7 @@
 
 #define MARIO_SLOW_FALL_SPEED_Y 0.05f  // Tốc độ rơi chậm khi kìm
 #define MARIO_SLOW_FALL_GRAVITY 0.0005f // Trọng lực giảm khi kìm
-#define MARIO_SLOW_FALL_MAX_TIME 150  // Thời gian tối đa có thể kìm (ms)
+#define MARIO_SLOW_FALL_MAX_TIME 250  // Thời gian tối đa có thể kìm (ms)
 
 
 #define MARIO_TRANSITION_TIME 500

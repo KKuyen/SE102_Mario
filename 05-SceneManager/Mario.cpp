@@ -115,7 +115,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     else
         breakObjCount = 0;
   
-    if (isFlying && GetTickCount64() - fly_timer > MARIO_MAX_FLY_ACTIVATION_TIME+200 && fly_timer!=0)
+    if (isFlying && GetTickCount64() - fly_timer > MARIO_MAX_FLY_ACTIVATION_TIME && fly_timer!=0)
     {
         isFlying = false;
         fly_timer = 0;
@@ -1430,8 +1430,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
-        
+        goomba->nx = nx;
         goomba->SetState(GOOMBA_STATE_FALL);
+       
         CExplodeAni* exp = new CExplodeAni(x, y);
         float x, y;
         goomba->GetPosition(x, y);
@@ -1560,6 +1561,7 @@ void CMario::OnCollisionWithWingedGoomba(LPCOLLISIONEVENT e)
     }
     else if (level == MARIO_LEVEL_MAX && whip_start != 0 && GetTickCount64() - whip_start <= MARIO_WHIP_TIME)
     {
+        goomba->nx = nx;
 
         goomba->SetState(WINGED_GOOMBA_STATE_FALL);
         float x, y;

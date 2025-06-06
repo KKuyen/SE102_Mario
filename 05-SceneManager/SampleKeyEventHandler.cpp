@@ -85,7 +85,8 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	// Kiểm tra trạng thái kìm tốc độ rơi
 	if (game->IsKeyDown(DIK_S) && mario->level == MARIO_LEVEL_MAX && mario->vy > 0 && mario->isOnPlatform==false)
 	{
-		if (!mario->IsSlowFalling()&&holdingS==false)
+		
+		if (holdingS==false)
 		{
 			holdingS = true;
 			mario->StartSlowFalling();
@@ -93,7 +94,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	}
 	else
 	{
-		mario->StopSlowFalling();
+
 	}
 	if (mario->IsHolding())
 	{

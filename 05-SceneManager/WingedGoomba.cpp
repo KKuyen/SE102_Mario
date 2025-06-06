@@ -191,7 +191,7 @@ void CWingedGoomba::SetState(int state)
 		break;
 	case WINGED_GOOMBA_STATE_FALL:
 		die_start = GetTickCount64();
-		vx = WINGED_GOOMBA_FALL_SPEED_HORIZONTAL;
+		vx = nx*WINGED_GOOMBA_FALL_SPEED_HORIZONTAL;
 		vy = WINGED_GOOMBA_FALL_SPEED; // Nảy lên
 		ay = WINGED_GOOMBA_GRAVITY; // Trọng lực sẽ kéo xuống
 		break;

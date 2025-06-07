@@ -3,9 +3,9 @@
 #include "GameObject.h"
 #include "Animation.h"
 #include "Animations.h"
-#define BOX_WIDTH 16
-#define BOX_BBOX_WIDTH 16
-#define BOX_BBOX_HEIGHT 16
+#define BOX_WIDTH 15
+#define BOX_BBOX_WIDTH 15
+#define BOX_BBOX_HEIGHT 15
 #define GIFTBOX_STATE_SHOWING 100
 #define GIFTBOX_STATE_BOUNCE 200
 #define GIFTBOX_STATE_HIDDEN 300

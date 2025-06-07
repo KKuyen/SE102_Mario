@@ -204,7 +204,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (dynamic_cast<CBreakableBrick*>(obj))
 				{
 					l -= 15;
-					r += 44;
+					r += 14*3;
 				}
  
 

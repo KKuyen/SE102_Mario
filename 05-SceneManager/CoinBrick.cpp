@@ -94,7 +94,7 @@ void CCoinBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 void CCoinBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BOX_BBOX_WIDTH / 2 + 2;
-	t = y - BOX_BBOX_HEIGHT / 2 + 1;
+	t = y - BOX_BBOX_HEIGHT / 2 ;
 	r = l + BOX_BBOX_WIDTH;
 	b = t + BOX_BBOX_HEIGHT;
 }

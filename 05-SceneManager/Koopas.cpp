@@ -11,6 +11,11 @@
 #include "GrassPlatform.h"
 #include "CoinBrick.h"
 #include "BreakableBrickChain.h"
+#include "HiddenButton.h"
+#include "ExplodeAni.h"
+#include "Button.h"
+#include "Button.h"
+#include "PlayScene.h"
 #define KOOPAS_DEFLECT_Y 2
 CKoopas::CKoopas(float x, float y,int color) :CGameObject(x, y)
 {
@@ -46,6 +51,7 @@ void CKoopas::OnNoCollision(DWORD dt)
 	x += vx * dt;
 	y += vy * dt;
 }
+#define BUTTON_MOVE_Y 16
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
@@ -54,9 +60,54 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		
 		return;
 	}
+	if(dynamic_cast<CHiddenButton*>(e->obj))
+	{ 
+		CHiddenButton* hiddenbutton = dynamic_cast<CHiddenButton*>(e->obj);
+		hiddenbutton->isActivated = true;
+		  float bx, by;
+        hiddenbutton->GetPosition(bx, by);
+        float buttonX = bx;
+        float buttonY = by - BUTTON_MOVE_Y;
+		CScene* scene = CGame::GetInstance()->GetCurrentScene();
+		CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
+		CMario* mario = nullptr;
+		if (playScene) {
+			mario = dynamic_cast<CMario*>(playScene->GetPlayer());
+		}
+		if (hiddenbutton->type == HIDDEN_BUTTON_TYPE_BUTTON)
+		{
+			
+			CButton* button = new CButton(buttonX, buttonY);
+			CExplodeAni* explode = new CExplodeAni(buttonX, buttonY);
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			if (p) p->AddGameObject(explode);
+			if (p) p->AddGameObject(button);
+		}
+		if (hiddenbutton->type == HIDDEN_BUTTON_TYPE_GIFT_BOX_LEAF)
+		{
+			
+			CGiftBox* giftbox = new CGiftBox(bx, by, 91000, 2);
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			if (p) p->AddGameObject(giftbox);
+			giftbox->Open(mario);
+		}
+		if (hiddenbutton->type == HIDDEN_BUTTON_TYPE_GIFT_BOX_GREEN_MUSHROOM)
+		{
+			CGiftBox* giftbox = new CGiftBox(bx, by, 91000, 3);
+			LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+			LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+			if (p) p->AddGameObject(giftbox);
+			giftbox->Open(mario);
+		}
+	}
 	if (dynamic_cast<CBreakableBrick*>(e->obj)) {
 		CBreakableBrick*	brick = dynamic_cast<CBreakableBrick*>(e->obj);
-		if (state == KOOPAS_STATE_SHELL_MOVING)
+		if (e->ny != 0)
+		{
+		}
+		else if (state == KOOPAS_STATE_SHELL_MOVING )
 		{
 			nx = -nx;
 			vx = -vx;

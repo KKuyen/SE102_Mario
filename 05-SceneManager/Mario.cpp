@@ -2286,10 +2286,6 @@ void CMario::SetState(int state)
         }
         case MARIO_STATE_SIT:
         {
-            isFlying = false;
-            fly_timer = 0;
-            StopRunning();
-            StopWhip();
             if (isOnPlatform && level != MARIO_LEVEL_SMALL)
             {
                 state = MARIO_STATE_IDLE;
@@ -2297,6 +2293,15 @@ void CMario::SetState(int state)
                 vx = 0; vy = 0.0f;
                 y += MARIO_SIT_HEIGHT_ADJUST;
             }
+            if (!onMovable)
+            {
+                isFlying = false;
+                fly_timer = 0;
+                StopRunning();
+                StopWhip();
+               
+            }
+
             break;
         }
         case MARIO_STATE_SIT_RELEASE:

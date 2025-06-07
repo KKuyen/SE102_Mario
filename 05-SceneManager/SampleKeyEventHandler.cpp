@@ -14,8 +14,13 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
-		if(!(mario->isFlying&&!mario->isOnPlatform))
-		mario->SetState(MARIO_STATE_SIT);
+		if (alreadySit == false)
+		{
+			alreadySit = true;
+			if (!(mario->isFlying && !mario->isOnPlatform))
+
+				mario->SetState(MARIO_STATE_SIT);
+		}
 		break;
 	case DIK_A:
 		mario->whip_start = 0;
@@ -56,6 +61,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		holdingS = false;
 		break;
 	case DIK_DOWN:
+		alreadySit = false;
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
 	case DIK_A: 
@@ -83,6 +89,28 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	// Kiểm tra trạng thái kìm tốc độ rơi
+	if (game->IsKeyDown(DIK_DOWN))
+	{
+		
+		if (game->IsKeyDown(DIK_LEFT) || game->IsKeyDown(DIK_RIGHT))
+		{
+			if (alreadySit)
+			{
+				alreadySit = false;
+				mario->SetState(MARIO_STATE_SIT_RELEASE);
+			}
+		}
+		else
+		{
+			
+			if (!alreadySit)
+			{
+				alreadySit = true;
+				if (!(mario->isFlying && !mario->isOnPlatform))
+					mario->SetState(MARIO_STATE_SIT);
+			}
+		}
+	}
 	if (game->IsKeyDown(DIK_S) && mario->level == MARIO_LEVEL_MAX && mario->vy > 0 && mario->isOnPlatform==false)
 	{
 		
@@ -102,6 +130,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	}	
 	if (game->IsKeyDown(DIK_RIGHT) &&mario->teleport == 0)
 	{
+	
 	
 		mario->maxVx = MARIO_RUNNING_SPEED;
 		mario->ax = MARIO_ACCEL_RUN_X;

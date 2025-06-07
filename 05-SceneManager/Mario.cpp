@@ -52,8 +52,8 @@
 #define BOMERANG_BRO_X 2105
 #define BOMERANG_BRO_Y 122
 
-#define MARIO_CHIMNEY_DIVE_SPEED 0.6512
-
+#define MARIO_CHIMNEY_DIVE_SPEED 0.6511
+#define MARIO_CHIMNEY_DIVE_SPEED_UP 0.6512
 
 #define MAX_SCENE_X 2815
 #define WIN_RUN_SPEED 0.08f
@@ -164,7 +164,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
             }
             else
             {
-                y -= MARIO_CHIMNEY_DIVE_SPEED;
+                y -= MARIO_CHIMNEY_DIVE_SPEED_UP;
 
                 return;
 
@@ -177,7 +177,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
           
                 
             
-                y -= MARIO_CHIMNEY_DIVE_SPEED;
+                y -= MARIO_CHIMNEY_DIVE_SPEED_UP;
                 return;
 
         }

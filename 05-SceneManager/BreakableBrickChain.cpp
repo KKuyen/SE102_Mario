@@ -33,9 +33,5 @@ CBreakableBrickChain::CBreakableBrickChain(float x, float y, int length, int cha
 #define BRICK_WIDTH 15
 void CBreakableBrickChain::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-<<<<<<< HEAD
-    
-=======
-     
->>>>>>> ba902ca415e1d18789f119c9d7690c5004fbc09b
+
 }

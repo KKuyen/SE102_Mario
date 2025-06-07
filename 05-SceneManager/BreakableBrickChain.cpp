@@ -32,15 +32,5 @@ CBreakableBrickChain::CBreakableBrickChain(float x, float y, int length, int cha
 }
 void CBreakableBrickChain::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-    if (chainType == BREAKABLE_BRICK_CHAIN_TYPE_HORIZONTAL)
-    {
-        l = x - BREAKABLE_BRICK_BBOX_WIDTH / 2;
-        t = y - BREAKABLE_BRICK_BBOX_HEIGHT / 2;
-        r = l + BREAKABLE_BRICK_BBOX_WIDTH * length;
-        b = t + BREAKABLE_BRICK_BBOX_HEIGHT;
-    }
-    else // VERTICAL
-    {
-        l = t = r = b = 0; // Không cần bounding box cho vertical
-    }
+     
 }

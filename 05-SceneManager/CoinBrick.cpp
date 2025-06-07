@@ -84,6 +84,7 @@ void CCoinBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
          }
      }
 
+
      LPGAMEOBJECT effectCoinBox = new CEffectGiftBoxCoin(x, y - 16);
      p->AddGameObject(effectCoinBox);
      currentQuantity++;
@@ -91,6 +92,20 @@ void CCoinBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
      SetState(GIFTBOX_STATE_BOUNCE);
      vy = -GIFTBOX_BOUNCE_SPEED;
  }
+ void CCoinBrick::OpenFullCoinBox() {
+	 if (state == GIFTBOX_STATE_HIDDEN || state == GIFTBOX_STATE_BOUNCE)
+	 {
+		 return;
+	 }
+	 LPSCENE s = CGame::GetInstance()->GetCurrentScene();
+	 LPPLAYSCENE p = dynamic_cast<CPlayScene*>(s);
+	 LPGAMEOBJECT effectCoinBox = new CEffectGiftBoxCoin(x  , y - 16);
+	 p->AddGameObject(effectCoinBox);
+	 currentQuantity =11;
+	 SetState(GIFTBOX_STATE_BOUNCE);
+	 vy = -GIFTBOX_BOUNCE_SPEED;
+ }
+
 void CCoinBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x - BOX_BBOX_WIDTH / 2 + 2;

@@ -102,6 +102,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			giftbox->Open(mario);
 		}
 	}
+	if (dynamic_cast<CCoinBrick*>(e->obj))
+	{
+		CCoinBrick* hiddenbutton = dynamic_cast<CCoinBrick*>(e->obj);
+		if (state == KOOPAS_STATE_SHELL_MOVING)
+			hiddenbutton->OpenFullCoinBox();
+	}
 	if (dynamic_cast<CBreakableBrick*>(e->obj)) {
 		CBreakableBrick*	brick = dynamic_cast<CBreakableBrick*>(e->obj);
 		if (e->ny != 0)

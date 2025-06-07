@@ -17,6 +17,10 @@
 #include "Button.h"
 #include "PlayScene.h"
 #define KOOPAS_DEFLECT_Y 2
+#define ADJUST_BREAKBABLEBRICK_L 15
+#define ADJUST_BREAKBABLEBRICK_R 44
+#define KOOPAS_DIE_POS_X	2230
+#define KOOPAS_DIE_POS_Y	185
 CKoopas::CKoopas(float x, float y,int color) :CGameObject(x, y)
 {
 	this->ax = 0;
@@ -166,10 +170,12 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 	}
 }
+
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	if(x>2230&&y>185)
+	if(x>  KOOPAS_DIE_POS_X	
+		&&y> KOOPAS_DIE_POS_Y)
 	{
 		isDeleted = true;
 	}
@@ -201,10 +207,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				float l, t, r, b;
 				obj->GetBoundingBox(l, t, r, b);
-				if (dynamic_cast<CBreakableBrick*>(obj))
+				if (dynamic_cast<CBreakableBrick*>(obj)&& currentScene->GetId() == 2)
 				{
-					l -= 15;
-					r += 44;
+					l -= ADJUST_BREAKBABLEBRICK_L;
+					r += ADJUST_BREAKBABLEBRICK_R;
 				}
  
 

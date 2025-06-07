@@ -61,7 +61,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define MAX_SCENE_LINE 1024
 #define CAMERA_POSITION_HIDDEN_MAP_Y 192
 #define RIGH_MAP_LIMIT 2540
-#define SCENE_2_PAUSE_DURATION 2000 // 2 giây dừng camera
+#define SCENE_2_PAUSE_DURATION 1000 // 2 giây dừng camera
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
